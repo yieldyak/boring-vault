@@ -40,7 +40,7 @@ contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
         configureDeployment.saveDeploymentDetails = true;
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.balancerVault = balancerVault;
-        configureDeployment.WETH = address(WETH);
+        configureDeployment.WETH = address(WETH); // this token has to be created in anvil
 
         // Save deployer.
         deployer = Deployer(configureDeployment.deployerAddress);
@@ -57,7 +57,7 @@ contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
 
         // Define Accountant Parameters.
         accountantParameters.payoutAddress = liquidPayoutAddress;
-        accountantParameters.base = WETH;
+        accountantParameters.base = WETH; // this token has to be created in anvil
         // Decimals are in terms of `base`.
         accountantParameters.startingExchangeRate = 1e18;
         //  4 decimals
