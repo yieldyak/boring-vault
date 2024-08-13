@@ -152,4 +152,22 @@ contract ContractNames {
     string public constant SWETHRateProviderName = "SWETH Generic Rate Provider V0.0";
     string public constant SFRXETHRateProviderName = "SFRXETH Generic Rate Provider V0.0";
     string public constant WEETHRateProviderName = "weETH Generic Rate Provider V0.0";
+
+    // Anvil names
+    string public constant AnvilVaultRolesAuthorityName = "Anvil Token Vault RolesAuthority V0.0";
+    string public constant AnvilVaultName = "Anvil Token Vault V0.0";
+    string public constant AnvilVaultManagerName = "Anvil Token Vault Manager With Merkle Verification V0.0";
+    string public constant AnvilVaultAccountantName = "Anvil Token Vault Accountant With Rate Providers V0.0";
+    string public constant AnvilVaultTellerName = "Anvil Token Vault Teller With Multi Asset Support V0.0";
+    string public constant AnvilVaultDecoderAndSanitizerName = "Anvil Token Vault Decoder and Sanitizer V0.0";
+    string public constant AnvilVaultDelayedWithdrawer = "Anvil Token Vault Delayed Withdrawer V0.0";
+
+    // Seplia names
+    string public constant SepoliaVaultRolesAuthorityName = "Sepolia Token Vault RolesAuthority V0.0";
+    string public constant SepoliaVaultName = "Sepolia Token Vault V0.0";
+    string public constant SepoliaVaultManagerName = "Sepolia Token Vault Manager With Merkle Verification V0.0";
+    string public constant SepoliaVaultAccountantName = "Sepolia Token Vault Accountant With Rate Providers V0.0";
+    string public constant SepoliaVaultTellerName = "Sepolia Token Vault Teller With Multi Asset Support V0.0";
+    string public constant SepoliaVaultDecoderAndSanitizerName = "Sepolia Token Vault Decoder and Sanitizer V0.0";
+    string public constant SepoliaVaultDelayedWithdrawer = "Sepolia Token Vault Delayed Withdrawer V0.0";
 }
