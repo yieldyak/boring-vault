@@ -35,3 +35,17 @@ Add tokens you want to use in `DeploySepoliaBTCb.s.sol` and `SepliaAddresses.sol
  ```bash
   forge script script/ArchitectureDeployments/Seplia/DeploySepoliaBTCb.s.sol:DeploySepoliaBTCb --with-gas-price 30000000000 --slow --broadcast -vvvvv
  ```
+
+## Deploy MerkleRoot
+
+***TBD***
+
+## Uses:
+
+- Mint underlying ERC20 to an address.
+- Authorize for this address underlying ERC20 to be managed by the BoringVault contract
+- Deposit the ERC20 through Teller contract.
+- Setup Withdraw Asset throught the DelayerWithdraw contract, defining delay, completition window, fee, max loss and token.
+- Withdraw through the DelayerWithdraw
+
+Note: all addresses are located on deployments folder.
