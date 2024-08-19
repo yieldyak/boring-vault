@@ -20,7 +20,7 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
 
     // Deployment parameters
     string public boringVaultName = "BTCb Vault";
-    string public boringVaultSymbol = "BBV";
+    string public boringVaultSymbol = "BVbtc";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
 
@@ -41,6 +41,7 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.balancerVault = balancerVault;
         configureDeployment.WETH = address(WETH);
+        configureDeployment.pullFundsFromVault = true;
 
         // Save deployer.
         deployer = Deployer(configureDeployment.deployerAddress);
@@ -79,9 +80,19 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         // Setup withdraw assets.
         // none
 
+        withdrawAssets.push(
+            WithdrawAsset({
+                asset: BTCb,
+                withdrawDelay: 300 seconds,
+                completionWindow: 1500 seconds,
+                withdrawFee: 0,
+                maxLoss: 0.01e4
+            })
+        );
+
         bool allowPublicDeposits = true;
         bool allowPublicWithdraws = true;
-        uint64 shareLockPeriod = 1 days;
+        uint64 shareLockPeriod = 0;
         address delayedWithdrawFeeAddress = liquidPayoutAddress;
 
         vm.startBroadcast(privateKey);

@@ -7,7 +7,8 @@
  ```
 - Verify and update environment variables:
  ```bash
-  set -a; source .env.anvil
+  set -a
+  source .env.anvil
  ```
 - Confirm addresses in Anvil, check `test/resources/AnvilAddresses.sol`
 
@@ -25,9 +26,9 @@
 ### Token Deployment
 - Set token parameters:
  ```bash
-  TOKEN_NAME="Wrapped Ether"
-  TOKEN_SYMBOL="WETH"
-  INITIAL_SUPPLY="10000000000000000000"
+  export TOKEN_NAME="Wrapped Ether"
+  export TOKEN_SYMBOL="WETH"
+  export INITIAL_SUPPLY="10000000000000000000"
  ```
 - Deploy the token:
  ```bash

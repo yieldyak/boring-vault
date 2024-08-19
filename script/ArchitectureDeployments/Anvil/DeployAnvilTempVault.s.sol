@@ -10,7 +10,7 @@ import {EtherFiLiquidEthDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/EtherFiLiquidEthDecoderAndSanitizer.sol";
 
 /**
- *  source .env && forge script script/ArchitectureDeployments/anvil/DeployAnvilTempVault.s.sol:DeployAnvilVaultScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+ *  source .env && forge script script/ArchitectureDeployments/Anvil/DeployAnvilTempVault.s.sol:DeployAnvilVaultScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
 contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
@@ -40,7 +40,8 @@ contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
         configureDeployment.saveDeploymentDetails = true;
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.balancerVault = balancerVault;
-        configureDeployment.WETH = address(WETH); // this token has to be created in anvil
+        configureDeployment.WETH = address(WETH);
+        configureDeployment.initiatePullFundsFromVault = true;
 
         // Save deployer.
         deployer = Deployer(configureDeployment.deployerAddress);
@@ -57,7 +58,7 @@ contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
 
         // Define Accountant Parameters.
         accountantParameters.payoutAddress = liquidPayoutAddress;
-        accountantParameters.base = WETH; // this token has to be created in anvil
+        accountantParameters.base = WETH;
         // Decimals are in terms of `base`.
         accountantParameters.startingExchangeRate = 1e18;
         //  4 decimals
@@ -79,9 +80,19 @@ contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
         // Setup withdraw assets.
         // none
 
+        withdrawAssets.push(
+            WithdrawAsset({
+                asset: WETH,
+                withdrawDelay: 60 seconds,
+                completionWindow: 180 seconds,
+                withdrawFee: 0,
+                maxLoss: 0.01e4
+            })
+        );
+
         bool allowPublicDeposits = true;
         bool allowPublicWithdraws = true;
-        uint64 shareLockPeriod = 1 days;
+        uint64 shareLockPeriod = 0 days;
         address delayedWithdrawFeeAddress = liquidPayoutAddress;
 
         vm.startBroadcast(privateKey);

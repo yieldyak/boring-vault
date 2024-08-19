@@ -40,7 +40,7 @@ contract DeplpoySepoliaAvax is DeployArcticArchitecture, SepoliaAddresses {
         configureDeployment.saveDeploymentDetails = true;
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.balancerVault = balancerVault;
-        configureDeployment.WETH = address(WAVAX);
+        configureDeployment.WETH = address(WETH); // to be changed in avalanche to WAVAX
 
         // Save deployer.
         deployer = Deployer(configureDeployment.deployerAddress);
@@ -81,8 +81,18 @@ contract DeplpoySepoliaAvax is DeployArcticArchitecture, SepoliaAddresses {
 
         bool allowPublicDeposits = true;
         bool allowPublicWithdraws = true;
-        uint64 shareLockPeriod = 1 days;
+        uint64 shareLockPeriod = 0 days;
         address delayedWithdrawFeeAddress = liquidPayoutAddress;
+
+        withdrawAssets.push(
+            WithdrawAsset({
+                asset: WAVAX,
+                withdrawDelay: 1 days,
+                completionWindow: 3 days,
+                withdrawFee: 0,
+                maxLoss: 0.01e4
+            })
+        );
 
         vm.startBroadcast(privateKey);
 
