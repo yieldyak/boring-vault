@@ -15,6 +15,7 @@ contract ChainValues {
     string public constant arbitrum = "arbitrum";
     string public constant optimism = "optimism";
     string public constant base = "base";
+    string public constant sepolia = "sepolia";
 
     // Bridging constants.
     uint64 public constant ccipArbitrumChainSelector = 4949039107694359620;
@@ -62,6 +63,7 @@ contract ChainValues {
         _addBaseValues();
         _addArbitrumValues();
         _addOptimismValues();
+        _addSepoliaValues();
     }
 
     function _addMainnetValues() private {
@@ -918,5 +920,68 @@ contract ChainValues {
         values[optimism]["velodromeRouter"] = 0xa062aE8A9c5e11aaA026fc2670B0D65cCc8B2858.toBytes32();
         values[optimism]["velodromeNonFungiblePositionManager"] = 0x416b433906b1B72FA758e166e239c43d68dC6F29.toBytes32();
         values[optimism]["velodrome_Weth_Wsteth_v3_1_gauge"] = 0xb2218A2cFeF38Ca30AE8C88B41f2E2BdD9347E3e.toBytes32();
+    }
+
+    function _addSepoliaValues() private {
+        // Liquid Ecosystem
+        values[sepolia]["deployerAddress"] = 0x35C7EBd98D056E52bb91bD1a91F1908261bc151B.toBytes32();
+        values[sepolia]["dev0Address"] = 0xf68462E4b667E3B16b0C0E818eb550612196a5ef.toBytes32();
+        values[sepolia]["dev1Address"] = 0xfFF4224c953682C0866cb45643512D8Eee6eB608.toBytes32();
+        values[sepolia]["liquidPayoutAddress"] = 0xCF6Bc0d1bD5fd4A47bf2c0cCdCD80aD8177BaB32.toBytes32();
+        // values[sepolia]["liquidV1PriceRouter"] = 0x693799805B502264f9365440B93C113D86a4fFF5.toBytes32();
+        // values[sepolia]["liquidMultisig"] = 0xCEA8039076E35a825854c5C2f85659430b06ec96.toBytes32();
+
+        // DeFi Ecosystem
+        values[sepolia]["ETH"] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.toBytes32();
+        // values[sepolia]["uniV3Router"] = 0xE592427A0AEce92De3Edee1F18E0157C05861564.toBytes32();
+        // values[sepolia]["uniV2Router"] = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D.toBytes32();
+
+        // ERC20s
+        // values[sepolia]["USDC"] = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48.toBytes32();
+        values[sepolia]["WETH"] = 0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9.toBytes32();
+        values[sepolia]["BTCb"] = 0x64Db7fAC414cbd3754Ce02f92533eFf58134f518.toBytes32();
+        // values[sepolia]["USDT"] = 0xdAC17F958D2ee523a2206206994597C13D831ec7.toBytes32();
+
+        // Aave V3 Tokens
+        // values[sepolia]["aV3WETH"] = 0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8.toBytes32();
+
+        // Balancer V2 Addresses
+        // values[sepolia]["BB_A_USD"] = 0xfeBb0bbf162E64fb9D0dfe186E517d84C395f016.toBytes32();
+
+        // Mainnet Balancer Specific Addresses
+        // values[sepolia]["vault"] = 0xBA12222222228d8Ba445958a75a0704d566BF2C8.toBytes32();
+        // values[sepolia]["balancerVault"] = 0xBA12222222228d8Ba445958a75a0704d566BF2C8.toBytes32();
+        // values[sepolia]["relayer"] = 0xfeA793Aa415061C483D2390414275AD314B3F621.toBytes32();
+        // values[sepolia]["minter"] = 0x239e55F427D44C3cc793f49bFB507ebe76638a2b.toBytes32();
+        // values[sepolia]["USDC_DAI_USDT_BPT"] = 0x79c58f70905F734641735BC61e45c19dD9Ad60bC.toBytes32();
+
+        // Rate Providers
+        // values[sepolia]["cbethRateProvider"] = 0x7311E4BB8a72e7B300c5B8BDE4de6CdaA822a5b1.toBytes32();
+
+        // From Crispy's curve tests
+
+        // Curve Pools and Tokens
+        // values[sepolia]["TriCryptoPool"] = 0xD51a44d3FaE010294C616388b506AcdA1bfAAE46.toBytes32();
+
+        // Uniswap V3
+        // values[sepolia]["WSTETH_WETH_100"] = 0x109830a1AAaD605BbF02a9dFA7B0B92EC2FB7dAa.toBytes32();
+        // values[sepolia]["WSTETH_WETH_500"] = 0xD340B57AAcDD10F96FC1CF10e15921936F41E29c.toBytes32();
+        // values[sepolia]["DAI_USDC_100"] = 0x5777d92f208679DB4b9778590Fa3CAB3aC9e2168.toBytes32();
+        // values[sepolia]["uniswapV3NonFungiblePositionManager"] = 0xC36442b4a4522E871399CD717aBDD847Ab11FE88.toBytes32();
+
+        // Etherfi
+        // values[sepolia]["EETH_LIQUIDITY_POOL"] = 0x308861A430be4cce5502d0A12724771Fc6DaF216.toBytes32();
+        // values[sepolia]["withdrawalRequestNft"] = 0x7d5706f6ef3F89B3951E23e557CDFBC3239D4E2c.toBytes32();
+
+
+        // Aave V3
+        // values[sepolia]["v3Pool"] = 0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2.toBytes32();
+
+        // Uniswap V3 Pools
+
+
+        // Symbiotic
+        values[sepolia]["DC_btc.b"] = 0x4132aCf612637A3B821427C92312e19e7bae84f2.toBytes32();
+        values[sepolia]["DC_sAVAX"] = 0xC5B8BEd342903aD9cEe6A31a212910D5cB8b4b9F.toBytes32();
     }
 }

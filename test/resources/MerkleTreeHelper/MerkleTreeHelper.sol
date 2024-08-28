@@ -3094,6 +3094,66 @@ contract MerkleTreeHelper is CommonBase, ChainValues {
         }
     }
 
+    // ========================================= Suzaku =========================================
+
+    function _addSuzakuApproveAndDepositLeaf(ManageLeaf[] memory leafs, address defaultCollateral) internal {
+        ERC4626 dc = ERC4626(defaultCollateral);
+        ERC20 depositAsset = dc.asset();
+        // Approve
+        if (!tokenToSpenderToApprovalInTree[address(depositAsset)][defaultCollateral]) {
+            unchecked {
+                leafIndex++;
+            }
+            leafs[leafIndex] = ManageLeaf(
+                address(depositAsset),
+                false,
+                "approve(address,uint256)",
+                new address[](1),
+                string.concat("Approve Suzaku ", dc.name(), " to spend ", depositAsset.symbol()),
+                getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            );
+            leafs[leafIndex].argumentAddresses[0] = defaultCollateral;
+            tokenToSpenderToApprovalInTree[address(depositAsset)][defaultCollateral] = true;
+        }
+        // Deposit
+        unchecked {
+            leafIndex++;
+        }
+        leafs[leafIndex] = ManageLeaf(
+            defaultCollateral,
+            false,
+            "deposit(address,uint256)",
+            new address[](1),
+            string.concat("Deposit ", depositAsset.symbol(), " into Suzaku ", ERC20(defaultCollateral).name()),
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
+    }
+
+    function _addSuzakuLeafs(ManageLeaf[] memory leafs, address[] memory defaultCollaterals) internal {
+        for (uint256 i; i < defaultCollaterals.length; i++) {
+            _addSuzakuApproveAndDepositLeaf(leafs, defaultCollaterals[i]);
+            // Withdraw
+            unchecked {
+                leafIndex++;
+            }
+            leafs[leafIndex] = ManageLeaf(
+                defaultCollaterals[i],
+                false,
+                "withdraw(address,uint256)",
+                new address[](1),
+                string.concat(
+                    "Withdraw ",
+                    ERC20(defaultCollaterals[i]).symbol(),
+                    " from Suzaku ",
+                    ERC20(defaultCollaterals[i]).name()
+                ),
+                getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            );
+            leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
+        }
+    }
+
     // ========================================= ITB Karak =========================================
 
     function _addLeafsForITBKarakPositionManager(

@@ -191,11 +191,18 @@ It uses the ManagerWithMerkleVerification address.
 - SymbioticUManager to SuzakuUManager: A micro-manager that enforces additional checks.
 - DeploySymbioticUManager to DeploySepoliaSuzakuUManager: deployment
 - mainet/CreateSuperSymbioticLRTMerkleRoot.s to Sepolia/CreateSepoliaSuzakuMerkleRoot
+- src/micro-managers/SuzakuUManager.sol
+
+Still unused:
+
+- src/base/DecodersAndSanitizers/Protocols/SuzakuDecoderAndSanitizer.sol
+- src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol -> should make it more minimialist
+- src/micro-managers/SuzakuUManager.sol
 
 ### Workflow:
 
-- Strategists submit actions along with Merkle proofs.
-- ManagerWithMerkleVerification verifies these proofs against the stored Merkle root.
+- `Strategists` submit actions along with Merkle proofs.
+- `ManagerWithMerkleVerification` verifies these proofs against the stored Merkle root.
 - If verified, the action is executed on the BoringVault.
 
 ### To redeploy for your own purposes:
