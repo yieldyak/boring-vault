@@ -21,13 +21,14 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
 
     uint256 public privateKey;
 
-    address public managerAddress = 0x665D7b78f10A5693A335e9036d70622cC4305111;
-    address public rawDataDecoderAndSanitizer = 0xF95Bb47300D90810Cf8f839b0352488475094f96;
-    BoringVault public boringVault = BoringVault(payable(0x8F9e0408DCc0Dfe1Ca9c1A8620A78AaEF0561Fd9));
+    address public managerAddress = 0x478741b38BC8c721C525bcee5620Dd6ab9133519;
+    address public rawDataDecoderAndSanitizer = 0x85296ce2381922e4A0826b16f812FF7E43F36717;
+    BoringVault public boringVault = BoringVault(payable(0x11Ce42c6FE827f42BE7Bbb7BECBcc0E80A69880f));
     ManagerWithMerkleVerification public manager =
-        ManagerWithMerkleVerification(0x665D7b78f10A5693A335e9036d70622cC4305111);
-    address public accountantAddress = 0x1eC5abe5A1789ba8e3E1f09b80C4065FD1767fbd;
+        ManagerWithMerkleVerification(0x478741b38BC8c721C525bcee5620Dd6ab9133519);
+    address public accountantAddress = 0x3DC53B40F03bc6A873f3E8A2eD1AecdA491cD32b;
     RolesAuthority public rolesAuthority;
+    address public rolesAuthorities = 0x13D7bb576BB5e8781d6243c08302e71DbeE1ee92;
     SuzakuUManager public suzakuUManager;
 
     Deployer public deployer;
@@ -54,24 +55,26 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         console.log("Deployer address:", getAddress(sourceChain, "deployerAddress"));
         deployer = Deployer(getAddress(sourceChain, "deployerAddress"));
 
-        rolesAuthority = RolesAuthority(deployer.getAddress(SevenSeasRolesAuthorityName));
+        // rolesAuthority = RolesAuthority(deployer.getAddress(SevenSeasRolesAuthorityName));
         setAddress(false, sepolia, "boringVault", address(boringVault));
         setAddress(false, sepolia, "managerAddress", managerAddress);
         setAddress(false, sepolia, "accountantAddress", accountantAddress);
         setAddress(false, sepolia, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
+        setAddress(false, sepolia, "rolesAuthority", rolesAuthorities);
 
-
-        ManageLeaf[] memory leafs = new ManageLeaf[](4);
+        ManageLeaf[] memory leafs = new ManageLeaf[](2);
         _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_btc.b"));
-        _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX"));
+        // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX"));
 
         string memory filePath = "./leafs/sepoliaSuzakuSniperLeafs.json";
 
         bytes32[][] memory merkleTree = _generateMerkleTree(leafs);
 
-        _generateLeafs(filePath, leafs, merkleTree[merkleTree.length - 1][0], merkleTree);
+        _generateLeafs(filePath, leafs, merkleTree[merkleTree.length - 1][0], merkleTree); // wasn't created???
 
         vm.startBroadcast(privateKey);
+
+        rolesAuthority = RolesAuthority(rolesAuthorities);
 
         suzakuUManager = new SuzakuUManager(
             getAddress(sourceChain, "dev0Address"), rolesAuthority, address(manager), address(boringVault)
@@ -80,11 +83,23 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         console.log("SuzakuUManager deployed at:", address(suzakuUManager));
         console.log("Caller address:", msg.sender);
         console.log("RolesAuthority address:", address(rolesAuthority));
+        // console.log("Merkle tree root:", merkleTree[merkleTree.length - 1][0]);
+        console.log("Merkle tree length:", merkleTree.length);
 
         // Assign the necessary role to the caller
-        rolesAuthority.setUserRole(msg.sender, STRATEGIST_MULTISIG_ROLE, true);        
 
-        suzakuUManager.updateMerkleTree(merkleTree, false);
+        if (!rolesAuthority.doesUserHaveRole(getAddress(sourceChain, "dev1Address"), STRATEGIST_MULTISIG_ROLE)) {
+            rolesAuthority.setUserRole(getAddress(sourceChain, "dev1Address"), STRATEGIST_MULTISIG_ROLE, true);
+        }
+
+        // suzakuUManager.updateMerkleTree(merkleTree, false);
+        try suzakuUManager.updateMerkleTree(merkleTree, false) {
+            console.log("Merkle tree updated successfully");
+        } catch Error(string memory reason) {
+            console.log("Error updating merkle tree:", reason);
+        } catch {
+            console.log("Low-level error updating merkle tree");
+        }
 
         suzakuUManager.setConfiguration(
             DefaultCollateral(getAddress(sourceChain, "DC_btc.b")), 1e18, rawDataDecoderAndSanitizer
@@ -105,12 +120,19 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         rolesAuthority.setRoleCapability(
             SNIPER_ROLE, address(suzakuUManager), SuzakuUManager.fullAssemble.selector, true
         );
+        rolesAuthority.setRoleCapability(
+            SNIPER_ROLE, address(suzakuUManager), ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector, true
+        );
 
-        rolesAuthority.transferOwnership(getAddress(sourceChain, "dev1Address"));
+        // rolesAuthority.transferOwnership(getAddress(sourceChain, "dev1Address")); //why tho
         suzakuUManager.transferOwnership(getAddress(sourceChain, "dev1Address"));
 
-        /// Note need to give strategist role to suzakuUManager
-        /// Note need to set merkle root in the manager
+        /// Note need to give strategist role to suzakuUManager DONE. Changed to use roleauth already deployed
+        /// Note need to set merkle root in the manager THIS IS MISSING
+
+        // rolesAuthority.setUserRole(dev1Address, 7, true);
+        // rolesAuthority.setUserRole(dev1Address, 8, true);
+        // ManagerWithMerkleVerification(managerAddress).setManageRoot(address(suzakuUManager), manageTree[manageTree.length - 1][0]); // done manually
 
         vm.stopBroadcast();
     }

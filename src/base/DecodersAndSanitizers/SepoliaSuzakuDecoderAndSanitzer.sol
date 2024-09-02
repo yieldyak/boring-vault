@@ -20,7 +20,7 @@ import {LidoDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
 import {ERC4626DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/ERC4626DecoderAndSanitizer.sol";
 
-contract SymbioticLRTDecoderAndSanitizer is
+contract SepoliaSuzakuDecoderAndSanitzer is
     BaseDecoderAndSanitizer,
     UniswapV3DecoderAndSanitizer,
     SuzakuDecoderAndSanitizer,

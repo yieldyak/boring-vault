@@ -6,16 +6,17 @@ import {ManagerWithMerkleVerification} from "src/base/Roles/ManagerWithMerkleVer
 import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {Auth, Authority} from "@solmate/auth/Auth.sol";
 import {SSTORE2} from "lib/solmate/src/utils/SSTORE2.sol";
-import {SymbioticDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SymbioticDecoderAndSanitizer.sol";
+import {SuzakuDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SuzakuDecoderAndSanitizer.sol";
 import {DefaultCollateral} from "src/interfaces/DefaultCollateral.sol";
+import "forge-std/console.sol";
 
-contract SymbioticUManager is Auth {
+contract SuzakuUManager is Auth {
     using FixedPointMathLib for uint256;
 
     // ========================================= STRUCTS =========================================
 
     /**
-     * @notice Configuration for a symbiotic default collateral.
+     * @notice Configuration for a suzaku default collateral.
      * @param minimumDeposit The minimum amount of the DefaultCollateral.asset() that can be deposited.
      * @param decoderAndSanitizer The decoder and sanitizer to use to sanitize the call.
      */
@@ -38,7 +39,7 @@ contract SymbioticUManager is Auth {
     // ========================================= STATE =========================================
 
     /**
-     * @notice The configuration for each symbiotic default collateral.
+     * @notice The configuration for each suzaku default collateral.
      */
     mapping(address => Configuration) public configurations;
 
@@ -49,13 +50,13 @@ contract SymbioticUManager is Auth {
 
     //============================== ERRORS ===============================
 
-    error SymbioticUManager__BadHash(bytes32 leafA, bytes32 leafB, bytes32 expectedLeafAB, bytes32 actualLeafAB);
-    error SymbioticUManager__InvalidMerkleTree();
-    error SymbioticUManager__DepositAmountExceedsLimit(uint256 amount, uint256 limitDelta);
-    error SymbioticUManager__DepositAmountExceedsBalance(uint256 amount, uint256 balance);
-    error SymbioticUManager__DepositAmountTooSmall(uint256 amount, uint256 minimumDeposit);
-    error SymbioticUManager__DecoderAndSanitizerNotSet();
-    error SymbioticUManager__MinimumDepositNotSet();
+    error SuzakuUManager__BadHash(bytes32 leafA, bytes32 leafB, bytes32 expectedLeafAB, bytes32 actualLeafAB);
+    error SuzakuUManager__InvalidMerkleTree();
+    error SuzakuUManager__DepositAmountExceedsLimit(uint256 amount, uint256 limitDelta);
+    error SuzakuUManager__DepositAmountExceedsBalance(uint256 amount, uint256 balance);
+    error SuzakuUManager__DepositAmountTooSmall(uint256 amount, uint256 minimumDeposit);
+    error SuzakuUManager__DecoderAndSanitizerNotSet();
+    error SuzakuUManager__MinimumDepositNotSet();
 
     //============================== EVENTS ===============================
 
@@ -84,51 +85,58 @@ contract SymbioticUManager is Auth {
 
     // ========================================= ADMIN FUNCTIONS =========================================
 
+    // Add these event definitions at the contract level
+    event MerkleTreeValidationFailed(string reason, uint256 level, uint256 index);
+    event RootMismatch(bytes32 proposedRoot, bytes32 managerRoot);
+
     /**
      * @notice Update the merkle tree.
      * @param _merkleTree The new merkle tree.
      * @param validateMerkleTree If true, the merkle tree will be validated.
      * @dev Callable by STRATEGIST_MULTISIG_ROLE
      */
+
     function updateMerkleTree(bytes32[][] calldata _merkleTree, bool validateMerkleTree) external requiresAuth {
         if (validateMerkleTree) {
             // Check that the tree is valid.
             for (uint256 i; i < _merkleTree.length - 1; ++i) {
                 uint256 levelLength = _merkleTree[i].length;
-                if (levelLength % 2 != 0) revert SymbioticUManager__InvalidMerkleTree();
+                if (levelLength % 2 != 0) {
+                    emit MerkleTreeValidationFailed("Invalid level length", i, 0);
+                    revert SuzakuUManager__InvalidMerkleTree();
+                }
                 uint256 nextLevelLength = _merkleTree[i + 1].length;
-                if (levelLength / 2 != nextLevelLength) revert SymbioticUManager__InvalidMerkleTree();
-
+                if (levelLength / 2 != nextLevelLength) {
+                    emit MerkleTreeValidationFailed("Invalid next level length", i, 0);
+                    revert SuzakuUManager__InvalidMerkleTree();
+                }
                 for (uint256 j; j < _merkleTree[i].length; j += 2) {
                     bytes32 leafA = _merkleTree[i][j];
                     bytes32 leafB = _merkleTree[i][j + 1];
                     bytes32 expectedLeafAB = _merkleTree[i + 1][j / 2];
-
                     bytes32 actualLeafAB = _hashPair(leafA, leafB);
-
                     if (actualLeafAB != expectedLeafAB) {
-                        revert SymbioticUManager__BadHash(leafA, leafB, expectedLeafAB, actualLeafAB);
+                        emit MerkleTreeValidationFailed("Hash mismatch", i, j);
+                        revert SuzakuUManager__BadHash(leafA, leafB, expectedLeafAB, actualLeafAB);
                     }
                 }
             }
-
             // Check that the root of this tree matches the root in the manager contract.
             bytes32 proposedRoot = _merkleTree[_merkleTree.length - 1][0];
             bytes32 managerRoot = manager.manageRoot(address(this));
             if (proposedRoot != managerRoot) {
-                revert SymbioticUManager__InvalidMerkleTree();
+                emit RootMismatch(proposedRoot, managerRoot);
+                revert SuzakuUManager__InvalidMerkleTree();
             }
         }
-
         bytes memory data = abi.encode(_merkleTree);
         address _pointer = SSTORE2.write(data);
         pointer = _pointer;
-
         emit MerkleLeafsUpdated(_pointer);
     }
 
     /**
-     * @notice Set the configuration for a symbiotic default collateral.
+     * @notice Set the configuration for a suzaku default collateral.
      * @param defaultCollateral The default collateral to set the configuration for.
      * @param minimumDeposit The minimum amount of the DefaultCollateral.asset() that can be deposited.
      * @param decoderAndSanitizer The decoder and sanitizer to use to sanitize the call.
@@ -139,10 +147,10 @@ contract SymbioticUManager is Auth {
         requiresAuth
     {
         if (decoderAndSanitizer == address(0)) {
-            revert SymbioticUManager__DecoderAndSanitizerNotSet();
+            revert SuzakuUManager__DecoderAndSanitizerNotSet();
         }
         if (minimumDeposit == 0) {
-            revert SymbioticUManager__MinimumDepositNotSet();
+            revert SuzakuUManager__MinimumDepositNotSet();
         }
         configurations[address(defaultCollateral)] = Configuration(minimumDeposit, decoderAndSanitizer);
 
@@ -196,7 +204,7 @@ contract SymbioticUManager is Auth {
         bytes32[][] memory merkleTree = viewMerkleTree();
         bytes32[][] memory unoProof = new bytes32[][](1);
         if (unoDecoderAndSanitizer[0] == address(0)) {
-            revert SymbioticUManager__DecoderAndSanitizerNotSet();
+            revert SuzakuUManager__DecoderAndSanitizerNotSet();
         }
         address[] memory unoTarget = new address[](1);
         bytes[] memory unoTargetData = new bytes[](1);
@@ -266,10 +274,10 @@ contract SymbioticUManager is Auth {
             // Bot wants to deposit a specific amount.
             // Revert early if the amount is too high.
             if (amount > limitDelta) {
-                revert SymbioticUManager__DepositAmountExceedsLimit(amount, limitDelta);
+                revert SuzakuUManager__DepositAmountExceedsLimit(amount, limitDelta);
             }
             if (amount > assetBalance) {
-                revert SymbioticUManager__DepositAmountExceedsBalance(amount, assetBalance);
+                revert SuzakuUManager__DepositAmountExceedsBalance(amount, assetBalance);
             }
             max = amount;
         } else {
@@ -280,7 +288,7 @@ contract SymbioticUManager is Auth {
 
         // Make sure we meet the minimum deposit requirement.
         if (max < minimumDeposit) {
-            revert SymbioticUManager__DepositAmountTooSmall(max, minimumDeposit);
+            revert SuzakuUManager__DepositAmountTooSmall(max, minimumDeposit);
         }
     }
 

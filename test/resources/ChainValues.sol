@@ -922,9 +922,10 @@ contract ChainValues {
         values[optimism]["velodrome_Weth_Wsteth_v3_1_gauge"] = 0xb2218A2cFeF38Ca30AE8C88B41f2E2BdD9347E3e.toBytes32();
     }
 
+    // Modify this function to add the values for the new chain
     function _addSepoliaValues() private {
         // Liquid Ecosystem
-        values[sepolia]["deployerAddress"] = 0x35C7EBd98D056E52bb91bD1a91F1908261bc151B.toBytes32();
+        values[sepolia]["deployerAddress"] = 0x2660362e16C44199B83f813aC89A9BF80d7dC52a.toBytes32();
         values[sepolia]["dev0Address"] = 0xf68462E4b667E3B16b0C0E818eb550612196a5ef.toBytes32();
         values[sepolia]["dev1Address"] = 0xfFF4224c953682C0866cb45643512D8Eee6eB608.toBytes32();
         values[sepolia]["liquidPayoutAddress"] = 0xCF6Bc0d1bD5fd4A47bf2c0cCdCD80aD8177BaB32.toBytes32();

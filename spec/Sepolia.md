@@ -15,7 +15,7 @@
  ```
 - Deploy the Deployer script:
  ```bash
-  forge script script/ArchitectureDeployments/Seplia/DeployDeployer.s.sol:DeployDeployerScript --with-gas-price 30000000000 --slow --broadcast -vvvvvv
+  forge script script/ArchitectureDeployments/Sepolia/DeployDeployer.s.sol:DeployDeployerScript --with-gas-price 30000000000 --slow --broadcast -vvvvvv
  ```
 - Update the Deployer address in `SepliaAddresses.sol` and rebuild.
 
@@ -66,6 +66,15 @@ Request withdraw:
 
 This doesn't work as it's stuck in memepool, during deployment
 
+
+Merkle:
+
+- Add in test/resources/ChainValues.sol the new deployer and replace all other relevant addresses
+- Add in script/MerkleRootCreation/Sepolia/CreateSepoliaSuzakuMerkleRoot.s.sol the relevant - addresess
+- Add in script/DeploySepoliaSuzakuUManager.s.sol the relevant addresses
+- IMPORTANT: delete/change name of leafs/SuperSuzakuStrategistLeafs.json and sepoliaSuzakuSniperLeafs.json if it's a new deployment
+- Sniper should also grant the correct role and permissions for the uManager to be able to use the manageVaultWithMerkleVerification function  
+- Add MerkleRoot created by the sniper with strategist: uManager, merkleroot in the sniper
 
 
 Merkle:
@@ -218,3 +227,6 @@ Remember, the leaves define what actions are possible, the Merkle root summarize
 
 setManageRoot function allows to update the root 
 (other important functions here)
+
+
+#
