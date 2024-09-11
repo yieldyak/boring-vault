@@ -984,5 +984,6 @@ contract ChainValues {
         // Symbiotic
         values[sepolia]["DC_btc.b"] = 0x4132aCf612637A3B821427C92312e19e7bae84f2.toBytes32();
         values[sepolia]["DC_sAVAX"] = 0xC5B8BEd342903aD9cEe6A31a212910D5cB8b4b9F.toBytes32();
+        values[sepolia]["DC_btc.b_vault_shares"] = 0x0854a63185b0CFD013E8cE389C8B0E5d7C1934C9.toBytes32();
     }
 }

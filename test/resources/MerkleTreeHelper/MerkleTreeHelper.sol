@@ -3094,7 +3094,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues {
         }
     }
 
-    // ========================================= Suzaku =========================================
+    // ========================================= Suzaku Collateral =========================================
 
     function _addSuzakuApproveAndDepositLeaf(ManageLeaf[] memory leafs, address defaultCollateral) internal {
         ERC4626 dc = ERC4626(defaultCollateral);
@@ -3152,6 +3152,87 @@ contract MerkleTreeHelper is CommonBase, ChainValues {
             );
             leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
         }
+    }
+
+    // ========================================= Suzaku Vault Shares =========================================
+
+    function _addSuzakuVaultApproveAndDepositLeaf(ManageLeaf[] memory leafs, address vault) internal {
+        console.log("Processing vault:", vault);
+        IVault vlt = IVault(vault);
+        address depositAsset = vlt.collateral();
+        console.log("Deposit asset:", depositAsset);
+        
+        // Approve
+        if (!tokenToSpenderToApprovalInTree[depositAsset][vault]) {
+            unchecked {
+                leafIndex++;
+            }
+            console.log("Adding approve leaf for vault:", vault);
+            leafs[leafIndex] = ManageLeaf(
+                depositAsset,
+                false,
+                "approve(address,uint256)",
+                new address[](1),
+                string.concat("Approve Suzaku Vault to spend ", ERC20(depositAsset).symbol()),
+                getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            );
+            leafs[leafIndex].argumentAddresses[0] = vault;
+            tokenToSpenderToApprovalInTree[depositAsset][vault] = true;
+        }
+
+        // Deposit
+        unchecked {
+            leafIndex++;
+        }
+        console.log("Adding deposit leaf for vault:", vault);
+        leafs[leafIndex] = ManageLeaf(
+            vault,
+            false,
+            "deposit(address,uint256)",
+            new address[](1),
+            string.concat("Deposit into Suzaku Vault"),
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+        leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
+    }
+
+    function _addSuzakuVaultLeafs(ManageLeaf[] memory leafs, address[] memory vaults) internal {
+        console.log("Starting to add Suzaku Vault leafs");
+        for (uint256 i; i < vaults.length; i++) {
+            console.log("Processing vault index:", i);
+            _addSuzakuVaultApproveAndDepositLeaf(leafs, vaults[i]);
+
+            // Withdraw
+            unchecked {
+                leafIndex++;
+            }
+            console.log("Adding withdraw leaf for vault:", vaults[i]);
+            leafs[leafIndex] = ManageLeaf(
+                vaults[i],
+                false,
+                "withdraw(address,uint256)",
+                new address[](1),
+                "Withdraw from Suzaku Vault",
+                getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            );
+            leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
+
+            // Claim
+            unchecked {
+                leafIndex++;
+            }
+            console.log("Adding claim leaf for vault:", vaults[i]);
+            leafs[leafIndex] = ManageLeaf(
+                vaults[i],
+                false,
+                "claim(address,uint256)",
+                new address[](1),
+                "Claim from Suzaku Vault",
+                getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+            );
+            leafs[leafIndex].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
+        }
+        console.log("Finished adding Suzaku Vault leafs");
     }
 
     // ========================================= ITB Karak =========================================

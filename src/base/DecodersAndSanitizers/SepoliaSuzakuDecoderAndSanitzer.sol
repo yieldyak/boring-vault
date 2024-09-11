@@ -7,18 +7,10 @@ import {SuzakuDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocol
 import {EtherFiDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/EtherFiDecoderAndSanitizer.sol";
 import {NativeWrapperDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/NativeWrapperDecoderAndSanitizer.sol";
-import {OneInchDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/OneInchDecoderAndSanitizer.sol";
-import {EigenLayerLSTStakingDecoderAndSanitizer} from
-    "src/base/DecodersAndSanitizers/Protocols/EigenLayerLSTStakingDecoderAndSanitizer.sol";
-import {SwellSimpleStakingDecoderAndSanitizer} from
-    "src/base/DecodersAndSanitizers/Protocols/SwellSimpleStakingDecoderAndSanitizer.sol";
-import {ZircuitSimpleStakingDecoderAndSanitizer} from
-    "src/base/DecodersAndSanitizers/Protocols/ZircuitSimpleStakingDecoderAndSanitizer.sol";
 import {FluidFTokenDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/FluidFTokenDecoderAndSanitizer.sol";
-import {LidoDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/LidoDecoderAndSanitizer.sol";
-import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
 import {ERC4626DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/ERC4626DecoderAndSanitizer.sol";
+import {VaultDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SuzakuVaultDecoderAndSanitizer.sol";
 
 contract SepoliaSuzakuDecoderAndSanitzer is
     BaseDecoderAndSanitizer,
@@ -26,13 +18,8 @@ contract SepoliaSuzakuDecoderAndSanitzer is
     SuzakuDecoderAndSanitizer,
     EtherFiDecoderAndSanitizer,
     NativeWrapperDecoderAndSanitizer,
-    OneInchDecoderAndSanitizer,
-    SwellSimpleStakingDecoderAndSanitizer,
-    ZircuitSimpleStakingDecoderAndSanitizer,
-    FluidFTokenDecoderAndSanitizer,
-    LidoDecoderAndSanitizer,
-    AaveV3DecoderAndSanitizer,
-    ERC4626DecoderAndSanitizer
+    ERC4626DecoderAndSanitizer,
+    VaultDecoderAndSanitizer
 {
     constructor(address _boringVault, address _uniswapV3NonfungiblePositionManager)
         BaseDecoderAndSanitizer(_boringVault)
@@ -40,30 +27,11 @@ contract SepoliaSuzakuDecoderAndSanitzer is
     {}
 
     // //============================== HANDLE FUNCTION COLLISIONS ===============================
-    function wrap(uint256)
-        external
-        pure
-        override(EtherFiDecoderAndSanitizer, LidoDecoderAndSanitizer)
-        returns (bytes memory addressesFound)
-    {
-        // Nothing to sanitize or return
-        return addressesFound;
-    }
-
-    function unwrap(uint256)
-        external
-        pure
-        override(EtherFiDecoderAndSanitizer, LidoDecoderAndSanitizer)
-        returns (bytes memory addressesFound)
-    {
-        // Nothing to sanitize or return
-        return addressesFound;
-    }
 
     function withdraw(address recipient, uint256 /*amount*/ )
         external
         pure
-        override(SuzakuDecoderAndSanitizer, ZircuitSimpleStakingDecoderAndSanitizer)
+        override(SuzakuDecoderAndSanitizer, VaultDecoderAndSanitizer)
         returns (bytes memory addressesFound)
     {
         addressesFound = abi.encodePacked(recipient);
@@ -79,12 +47,12 @@ contract SepoliaSuzakuDecoderAndSanitzer is
         return addressesFound;
     }
 
-    function withdraw(address _token, uint256, /*_amount*/ address _receiver)
+    function deposit(address recipient, uint256 /*amount*/)
         external
         pure
-        override(SwellSimpleStakingDecoderAndSanitizer, AaveV3DecoderAndSanitizer)
+        override(SuzakuDecoderAndSanitizer, VaultDecoderAndSanitizer)
         returns (bytes memory addressesFound)
     {
-        addressesFound = abi.encodePacked(_token, _receiver);
+        addressesFound = abi.encodePacked(recipient);
     }
 }

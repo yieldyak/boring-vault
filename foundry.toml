@@ -17,10 +17,10 @@ avalanche = "${AVALANCHE_RPC_URL}"
 arbitrum = "${ARBITRUM_RPC_URL}"
 optimism = "${OPTIMISM_RPC_URL}"
 base = "${BASE_RPC_URL}"
-sepost = "${SEPOST_RPC_URL}"
+sepolia = "${SEPOLIA_RPC_URL}"
 anvil = "${ANVIL_RPC_URL}"
 
-# [etherscan]
+[etherscan]
 # mainnet = { key = "${ETHERSCAN_KEY}", url = "https://api.etherscan.io/api" }
 # polygon = { key = "${POLYGONSCAN_KEY}" }
 # bsc = { key = "${BSCSCAN_KEY}" }
@@ -28,6 +28,7 @@ anvil = "${ANVIL_RPC_URL}"
 # arbitrum = { key = "${ARBISCAN_KEY}" }
 # optimism = { key = "${OPTIMISMSCAN_KEY}" }
 # base = { key = "${BASESCAN_KEY}" }
+sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api-sepolia.etherscan.io/api" }
 
 [fmt]
 FOUNDRY_FMT_LINE_LENGTH = 120
