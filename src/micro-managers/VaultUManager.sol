@@ -132,7 +132,7 @@ contract VaultUManager is Auth {
     }
 
     /**
-     * @notice Set the configuration for a suzaku default collateral.
+     * @notice Set the configuration for a suzaku vault.
      * @param vault The vault to set the configuration for.
      * @param minimumDeposit The minimum amount of the vault asset that can be deposited.
      * @param decoderAndSanitizer The decoder and sanitizer to use to sanitize the call.
@@ -157,7 +157,7 @@ contract VaultUManager is Auth {
     // ========================================= SNIPER FUNCTIONS =========================================
 
     /**
-     * @notice Assemble a specific amount of a default collateral.
+     * @notice Assemble a specific amount of a vault asset.
      * @param vault The vault to assemble.
      * @param amount The amount to assemble.
      * @dev Callable by SNIPER_ROLE
@@ -169,7 +169,7 @@ contract VaultUManager is Auth {
     }
 
     /**
-     * @notice Assemble as much as possible of a default collateral.
+     * @notice Assemble as much as possible of a vault. Needs to be modified.
      * @param vault The vault to assemble.
      * @dev Callable by SNIPER_ROLE
      */
@@ -182,7 +182,7 @@ contract VaultUManager is Auth {
     // ========================================= HELPER FUNCTIONS =========================================
 
     /**
-     * @notice Helper function to handle approving and depositing into a default collateral.
+     * @notice Helper function to handle approving and depositing into a vault.
      * @return the amount assembled.
      */
 
@@ -252,9 +252,9 @@ contract VaultUManager is Auth {
     }
 
     /**
-     * @notice Calculate the maximum amount that can be deposited into a default collateral.
+     * @notice Calculate the maximum amount that can be deposited into a vault.
      * @param vault The vault to deposit into.
-     * @param asset The asset to deposit.
+     * @param collateral The collateral asset to deposit.
      * @param amount The amount to deposit.
      * @param minimumDeposit The minimum amount that can be deposited.
      * @return max The maximum amount that can be deposited.
