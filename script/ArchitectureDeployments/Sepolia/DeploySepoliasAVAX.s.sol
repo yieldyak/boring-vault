@@ -3,30 +3,29 @@ pragma solidity 0.8.21;
 
 import {DeployArcticArchitecture, ERC20, Deployer} from "script/ArchitectureDeployments/DeployArcticArchitecture.sol";
 import {AddressToBytes32Lib} from "src/helper/AddressToBytes32Lib.sol";
-import {AnvilAddresses} from "test/resources/AnvilAddresses.sol";
+import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
 
 // Import Decoder and Sanitizer to deploy.
-import {EtherFiLiquidEthDecoderAndSanitizer} from
-    "src/base/DecodersAndSanitizers/EtherFiLiquidEthDecoderAndSanitizer.sol";
+import {EtherFiLiquidEthDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/EtherFiLiquidEthDecoderAndSanitizer.sol";
 
 /**
- *  source .env && forge script script/ArchitectureDeployments/Anvil/DeployAnvilTempVault.s.sol:DeployAnvilVaultScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+ *  source .env && forge script script/ArchitectureDeployments/sepolia/DeplpoySepoliaAvax.s.sol:DeplpoySepoliaAvax --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
-contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
+contract DeplpoySepoliaAvax is DeployArcticArchitecture, SepoliaAddresses {
     using AddressToBytes32Lib for address;
 
     uint256 public privateKey;
 
     // Deployment parameters
-    string public boringVaultName = "S Temp Vault";
-    string public boringVaultSymbol = "BTS";
+    string public boringVaultName = "sAVAX Vault";
+    string public boringVaultSymbol = "suzLRTsAVAX";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
 
     function setUp() external {
         privateKey = vm.envUint("ETHERFI_LIQUID_DEPLOYER");
-        vm.createSelectFork("anvil");
+        vm.createSelectFork("sepolia");
     }
 
     function run() external {
@@ -40,25 +39,24 @@ contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
         configureDeployment.saveDeploymentDetails = true;
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.balancerVault = balancerVault;
-        configureDeployment.WETH = address(WETH);
-        configureDeployment.initiatePullFundsFromVault = true;
+        configureDeployment.WETH = address(WETH); // to be changed in avalanche to WAVAX
 
         // Save deployer.
         deployer = Deployer(configureDeployment.deployerAddress);
 
         // Define names to determine where contracts are deployed.
-        names.rolesAuthority = AnvilVaultRolesAuthorityName;
+        names.rolesAuthority = SepoliaVaultRolesAuthorityName;
         names.lens = ArcticArchitectureLensName;
-        names.boringVault = AnvilVaultName;
-        names.manager = AnvilVaultManagerName;
-        names.accountant = AnvilVaultAccountantName;
-        names.teller = AnvilVaultTellerName;
-        names.rawDataDecoderAndSanitizer = AnvilVaultDecoderAndSanitizerName;
-        names.delayedWithdrawer = AnvilVaultDelayedWithdrawer;
+        names.boringVault = SepoliaVaultName;
+        names.manager = SepoliaVaultManagerName;
+        names.accountant = SepoliaVaultAccountantName;
+        names.teller = SepoliaVaultTellerName;
+        names.rawDataDecoderAndSanitizer = SepoliaVaultDecoderAndSanitizerName;
+        names.delayedWithdrawer = SepoliaVaultDelayedWithdrawer;
 
         // Define Accountant Parameters.
         accountantParameters.payoutAddress = liquidPayoutAddress;
-        accountantParameters.base = WETH;
+        accountantParameters.base = sAVAX;
         // Decimals are in terms of `base`.
         accountantParameters.startingExchangeRate = 1e18;
         //  4 decimals
@@ -70,9 +68,12 @@ contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
         accountantParameters.minimumUpateDelayInSeconds = 1 days / 4;
 
         // Define Decoder and Sanitizer deployment details.
-        bytes memory creationCode = type(EtherFiLiquidEthDecoderAndSanitizer).creationCode;
-        bytes memory constructorArgs =
-            abi.encode(deployer.getAddress(names.boringVault), uniswapV3NonFungiblePositionManager);
+        bytes memory creationCode = type(EtherFiLiquidEthDecoderAndSanitizer)
+            .creationCode;
+        bytes memory constructorArgs = abi.encode(
+            deployer.getAddress(names.boringVault),
+            uniswapV3NonFungiblePositionManager
+        );
 
         // Setup extra deposit assets.
         // none
@@ -80,25 +81,25 @@ contract DeployAnvilTempVault is DeployArcticArchitecture, AnvilAddresses {
         // Setup withdraw assets.
         // none
 
-        withdrawAssets.push(
-            WithdrawAsset({
-                asset: WETH,
-                withdrawDelay: 60 seconds,
-                completionWindow: 180 seconds,
-                withdrawFee: 0,
-                maxLoss: 0.01e4
-            })
-        );
-
         bool allowPublicDeposits = true;
         bool allowPublicWithdraws = true;
         uint64 shareLockPeriod = 0 days;
         address delayedWithdrawFeeAddress = liquidPayoutAddress;
 
+        withdrawAssets.push(
+            WithdrawAsset({
+                asset: sAVAX,
+                withdrawDelay: 1 days,
+                completionWindow: 3 days,
+                withdrawFee: 0,
+                maxLoss: 0.01e4
+            })
+        );
+
         vm.startBroadcast(privateKey);
 
         _deploy(
-            "AnvilDeployment.json",
+            "SepoliaDeployment.json",
             owner,
             boringVaultName,
             boringVaultSymbol,

@@ -6,8 +6,7 @@ import {AddressToBytes32Lib} from "src/helper/AddressToBytes32Lib.sol";
 import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
 
 // Import Decoder and Sanitizer to deploy.
-import {EtherFiLiquidEthDecoderAndSanitizer} from
-    "src/base/DecodersAndSanitizers/EtherFiLiquidEthDecoderAndSanitizer.sol";
+import {EtherFiLiquidEthDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/EtherFiLiquidEthDecoderAndSanitizer.sol";
 
 /**
  *  source .env && forge script script/ArchitectureDeployments/sepolia/DeploySepoliaBTCb.s.sol:DeploySepoliaVaultScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
@@ -20,7 +19,7 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
 
     // Deployment parameters
     string public boringVaultName = "BTCb Vault";
-    string public boringVaultSymbol = "BVbtc";
+    string public boringVaultSymbol = "suzLRTBTCb";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
 
@@ -70,9 +69,12 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         accountantParameters.minimumUpateDelayInSeconds = 1 days / 4;
 
         // Define Decoder and Sanitizer deployment details.
-        bytes memory creationCode = type(EtherFiLiquidEthDecoderAndSanitizer).creationCode;
-        bytes memory constructorArgs =
-            abi.encode(deployer.getAddress(names.boringVault), uniswapV3NonFungiblePositionManager);
+        bytes memory creationCode = type(EtherFiLiquidEthDecoderAndSanitizer)
+            .creationCode;
+        bytes memory constructorArgs = abi.encode(
+            deployer.getAddress(names.boringVault),
+            uniswapV3NonFungiblePositionManager
+        );
 
         // Setup extra deposit assets.
         // none
