@@ -8,6 +8,7 @@ import {ERC4626} from "@solmate/tokens/ERC4626.sol";
 import {ManagerWithMerkleVerification} from "src/base/Roles/ManagerWithMerkleVerification.sol";
 import {MerkleTreeHelper} from "test/resources/MerkleTreeHelper/MerkleTreeHelper.sol";
 import "forge-std/Script.sol";
+import "forge-std/console.sol";
 
 /**
  *  source .env && forge script script/MerkleRootCreation/Sepolia/CreateSepoliaSuzakuMerkleRoot.s.sol:CreateSepoliaSuzakuMerkleRoot --rpc-url $MAINNET_RPC_URL
@@ -18,7 +19,7 @@ contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
     address public boringVault = 0x11Ce42c6FE827f42BE7Bbb7BECBcc0E80A69880f;
     address public managerAddress = 0x478741b38BC8c721C525bcee5620Dd6ab9133519;
     address public accountantAddress = 0x3DC53B40F03bc6A873f3E8A2eD1AecdA491cD32b;
-    address public rawDataDecoderAndSanitizer = 0x85296ce2381922e4A0826b16f812FF7E43F36717;
+    address public rawDataDecoderAndSanitizer = 0x4Fb29DE25f853f0A4eb5d1dE45883D706D784488;
 
     function setUp() external {}
 
@@ -38,10 +39,12 @@ contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
         setAddress(false, sepolia, "accountantAddress", accountantAddress);
         setAddress(false, sepolia, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
 
-        ManageLeaf[] memory leafs = new ManageLeaf[](2);
+        ManageLeaf[] memory leafs = new ManageLeaf[](4);
         leafIndex = type(uint256).max;
         _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_btc.b"));
         // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX"));
+        _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_btc.b_vault_shares"));
+        // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX_vault_shares"));
 
         string memory filePath = "./leafs/sepoliaSuzakuSniperLeafs.json";
 
@@ -61,12 +64,18 @@ contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
 
         ManageLeaf[] memory leafs = new ManageLeaf[](256);
 
-        // ========================== Suzaku ==========================
+        // ========================== Suzaku Collateral ==========================
         address[] memory defaultCollaterals = new address[](1);
         defaultCollaterals[0] = getAddress(sourceChain, "DC_btc.b");
         // defaultCollaterals[1] = getAddress(sourceChain, "DC_sAVAX");
         _addSuzakuLeafs(leafs, defaultCollaterals);
 
+        // ========================== Suzaku Vault ==========================
+        address[] memory suzakuVaults = new address[](1);
+        console.log("DC_btc.b_vault_shares:", getAddress(sourceChain, "DC_btc.b_vault_shares"));
+        suzakuVaults[0] = getAddress(sourceChain, "DC_btc.b_vault_shares");
+        // suzakuVaults[1] = getAddress(sourceChain, "DC_sAVAX_vault_shares");
+        _addSuzakuVaultLeafs(leafs, suzakuVaults);
 
         string memory filePath = "./leafs/SuperSuzakuStrategistLeafs.json";
 
