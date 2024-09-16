@@ -40,6 +40,7 @@ contract DeplpoySepoliaAvax is DeployArcticArchitecture, SepoliaAddresses {
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.balancerVault = balancerVault;
         configureDeployment.WETH = address(WETH); // to be changed in avalanche to WAVAX
+        configureDeployment.initiatePullFundsFromVault = true;
 
         // Save deployer.
         deployer = Deployer(configureDeployment.deployerAddress);

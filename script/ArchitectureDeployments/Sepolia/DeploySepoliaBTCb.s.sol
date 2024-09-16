@@ -40,7 +40,7 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.balancerVault = balancerVault;
         configureDeployment.WETH = address(WETH);
-        // configureDeployment.pullFundsFromVault = true;
+        configureDeployment.initiatePullFundsFromVault = true;
 
         // Save deployer.
         deployer = Deployer(configureDeployment.deployerAddress);
