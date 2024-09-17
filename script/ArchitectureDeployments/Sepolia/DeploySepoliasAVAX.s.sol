@@ -39,7 +39,7 @@ contract DeplpoySepoliaAvax is DeployArcticArchitecture, SepoliaAddresses {
         configureDeployment.saveDeploymentDetails = true;
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.balancerVault = balancerVault;
-        configureDeployment.WETH = address(WETH); // to be changed in avalanche to WAVAX
+        configureDeployment.WETH = address(WETH); // to be changed in avalanche to sAVAX
         configureDeployment.initiatePullFundsFromVault = true;
 
         // Save deployer.
@@ -69,12 +69,9 @@ contract DeplpoySepoliaAvax is DeployArcticArchitecture, SepoliaAddresses {
         accountantParameters.minimumUpateDelayInSeconds = 1 days / 4;
 
         // Define Decoder and Sanitizer deployment details.
-        bytes memory creationCode = type(EtherFiLiquidEthDecoderAndSanitizer)
-            .creationCode;
-        bytes memory constructorArgs = abi.encode(
-            deployer.getAddress(names.boringVault),
-            uniswapV3NonFungiblePositionManager
-        );
+        bytes memory creationCode = type(SepoliaSuzakuDecoderAndSanitzer).creationCode;
+        bytes memory constructorArgs =
+            abi.encode(deployer.getAddress(names.boringVault), uniswapV3NonFungiblePositionManager);
 
         // Setup extra deposit assets.
         // none
@@ -82,20 +79,20 @@ contract DeplpoySepoliaAvax is DeployArcticArchitecture, SepoliaAddresses {
         // Setup withdraw assets.
         // none
 
-        bool allowPublicDeposits = true;
-        bool allowPublicWithdraws = true;
-        uint64 shareLockPeriod = 0 days;
-        address delayedWithdrawFeeAddress = liquidPayoutAddress;
-
         withdrawAssets.push(
             WithdrawAsset({
                 asset: sAVAX,
-                withdrawDelay: 1 days,
-                completionWindow: 3 days,
+                withdrawDelay: 300 seconds,
+                completionWindow: 1500 seconds,
                 withdrawFee: 0,
                 maxLoss: 0.01e4
             })
         );
+
+        bool allowPublicDeposits = true;
+        bool allowPublicWithdraws = true;
+        uint64 shareLockPeriod = 0 days;
+        address delayedWithdrawFeeAddress = liquidPayoutAddress;
 
         vm.startBroadcast(privateKey);
 

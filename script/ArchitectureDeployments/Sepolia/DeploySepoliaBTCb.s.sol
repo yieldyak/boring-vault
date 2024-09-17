@@ -69,12 +69,9 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         accountantParameters.minimumUpateDelayInSeconds = 1 days / 4;
 
         // Define Decoder and Sanitizer deployment details.
-        bytes memory creationCode = type(EtherFiLiquidEthDecoderAndSanitizer)
-            .creationCode;
-        bytes memory constructorArgs = abi.encode(
-            deployer.getAddress(names.boringVault),
-            uniswapV3NonFungiblePositionManager
-        );
+        bytes memory creationCode = type(SepoliaSuzakuDecoderAndSanitzer).creationCode;
+        bytes memory constructorArgs =
+            abi.encode(deployer.getAddress(names.boringVault), uniswapV3NonFungiblePositionManager);
 
         // Setup extra deposit assets.
         // none
