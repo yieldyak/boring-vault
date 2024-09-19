@@ -18,8 +18,10 @@ contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
 
     address public boringVault = 0x11Ce42c6FE827f42BE7Bbb7BECBcc0E80A69880f;
     address public managerAddress = 0x478741b38BC8c721C525bcee5620Dd6ab9133519;
-    address public accountantAddress = 0x3DC53B40F03bc6A873f3E8A2eD1AecdA491cD32b;
-    address public rawDataDecoderAndSanitizer = 0x4Fb29DE25f853f0A4eb5d1dE45883D706D784488;
+    address public accountantAddress =
+        0x3DC53B40F03bc6A873f3E8A2eD1AecdA491cD32b;
+    address public rawDataDecoderAndSanitizer =
+        0x4Fb29DE25f853f0A4eb5d1dE45883D706D784488;
 
     function setUp() external {}
 
@@ -37,20 +39,36 @@ contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
         setAddress(false, sepolia, "boringVault", boringVault);
         setAddress(false, sepolia, "managerAddress", managerAddress);
         setAddress(false, sepolia, "accountantAddress", accountantAddress);
-        setAddress(false, sepolia, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
+        setAddress(
+            false,
+            sepolia,
+            "rawDataDecoderAndSanitizer",
+            rawDataDecoderAndSanitizer
+        );
 
         ManageLeaf[] memory leafs = new ManageLeaf[](4);
         leafIndex = type(uint256).max;
-        _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_btc.b"));
+        _addSuzakuApproveAndDepositLeaf(
+            leafs,
+            getAddress(sourceChain, "DC_BTC.b")
+        );
         // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX"));
-        _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_btc.b_vault_shares"));
+        _addSuzakuApproveAndDepositLeaf(
+            leafs,
+            getAddress(sourceChain, "DC_BTC.b_vault_shares")
+        );
         // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX_vault_shares"));
 
         string memory filePath = "./leafs/sepoliaSuzakuSniperLeafs.json";
 
         bytes32[][] memory manageTree = _generateMerkleTree(leafs);
 
-        _generateLeafs(filePath, leafs, manageTree[manageTree.length - 1][0], manageTree);
+        _generateLeafs(
+            filePath,
+            leafs,
+            manageTree[manageTree.length - 1][0],
+            manageTree
+        );
     }
 
     function generateAdminStrategistMerkleRoot() public {
@@ -58,7 +76,12 @@ contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
         setAddress(false, sepolia, "boringVault", boringVault);
         setAddress(false, sepolia, "managerAddress", managerAddress);
         setAddress(false, sepolia, "accountantAddress", accountantAddress);
-        setAddress(false, sepolia, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
+        setAddress(
+            false,
+            sepolia,
+            "rawDataDecoderAndSanitizer",
+            rawDataDecoderAndSanitizer
+        );
 
         leafIndex = 0;
 
@@ -66,14 +89,17 @@ contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
 
         // ========================== Suzaku Collateral ==========================
         address[] memory defaultCollaterals = new address[](1);
-        defaultCollaterals[0] = getAddress(sourceChain, "DC_btc.b");
+        defaultCollaterals[0] = getAddress(sourceChain, "DC_BTC.b");
         // defaultCollaterals[1] = getAddress(sourceChain, "DC_sAVAX");
         _addSuzakuLeafs(leafs, defaultCollaterals);
 
         // ========================== Suzaku Vault ==========================
         address[] memory suzakuVaults = new address[](1);
-        console.log("DC_btc.b_vault_shares:", getAddress(sourceChain, "DC_btc.b_vault_shares"));
-        suzakuVaults[0] = getAddress(sourceChain, "DC_btc.b_vault_shares");
+        console.log(
+            "DC_BTC.b_vault_shares:",
+            getAddress(sourceChain, "DC_BTC.b_vault_shares")
+        );
+        suzakuVaults[0] = getAddress(sourceChain, "DC_BTC.b_vault_shares");
         // suzakuVaults[1] = getAddress(sourceChain, "DC_sAVAX_vault_shares");
         _addSuzakuVaultLeafs(leafs, suzakuVaults);
 
@@ -81,6 +107,11 @@ contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
 
         bytes32[][] memory manageTree = _generateMerkleTree(leafs);
 
-        _generateLeafs(filePath, leafs, manageTree[manageTree.length - 1][0], manageTree);
+        _generateLeafs(
+            filePath,
+            leafs,
+            manageTree[manageTree.length - 1][0],
+            manageTree
+        );
     }
 }

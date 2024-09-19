@@ -13,6 +13,7 @@ import {ContractNames} from "resources/ContractNames.sol";
 import {Deployer} from "src/helper/Deployer.sol";
 import {MerkleTreeHelper} from "test/resources/MerkleTreeHelper/MerkleTreeHelper.sol";
 import "forge-std/console.sol";
+
 /**
  *  source .env && forge script script/DeploySepoliaVaultUManager.s.sol:DeploySepoliaVaultUManagerScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
  */
@@ -22,13 +23,19 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
     uint256 public privateKey;
 
     address public managerAddress = 0x478741b38BC8c721C525bcee5620Dd6ab9133519;
-    address public rawDataDecoderAndSanitizer = 0x4Fb29DE25f853f0A4eb5d1dE45883D706D784488;
-    BoringVault public boringVault = BoringVault(payable(0x11Ce42c6FE827f42BE7Bbb7BECBcc0E80A69880f));
+    address public rawDataDecoderAndSanitizer =
+        0x4Fb29DE25f853f0A4eb5d1dE45883D706D784488;
+    BoringVault public boringVault =
+        BoringVault(payable(0x11Ce42c6FE827f42BE7Bbb7BECBcc0E80A69880f));
     ManagerWithMerkleVerification public manager =
-        ManagerWithMerkleVerification(0x478741b38BC8c721C525bcee5620Dd6ab9133519);
-    address public accountantAddress = 0x3DC53B40F03bc6A873f3E8A2eD1AecdA491cD32b;
+        ManagerWithMerkleVerification(
+            0x478741b38BC8c721C525bcee5620Dd6ab9133519
+        );
+    address public accountantAddress =
+        0x3DC53B40F03bc6A873f3E8A2eD1AecdA491cD32b;
     RolesAuthority public rolesAuthority;
-    address public rolesAuthorities = 0x13D7bb576BB5e8781d6243c08302e71DbeE1ee92;
+    address public rolesAuthorities =
+        0x13D7bb576BB5e8781d6243c08302e71DbeE1ee92;
     VaultUManager public vaultUManager;
 
     Deployer public deployer;
@@ -50,35 +57,53 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
     }
 
     function generateSniperMerkleRoot() public {
-
         setSourceChainName(sepolia);
-        console.log("Deployer address:", getAddress(sourceChain, "deployerAddress"));
+        console.log(
+            "Deployer address:",
+            getAddress(sourceChain, "deployerAddress")
+        );
         deployer = Deployer(getAddress(sourceChain, "deployerAddress"));
 
         // rolesAuthority = RolesAuthority(deployer.getAddress(SevenSeasRolesAuthorityName));
         setAddress(false, sepolia, "boringVault", address(boringVault));
         setAddress(false, sepolia, "managerAddress", managerAddress);
         setAddress(false, sepolia, "accountantAddress", accountantAddress);
-        setAddress(false, sepolia, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
+        setAddress(
+            false,
+            sepolia,
+            "rawDataDecoderAndSanitizer",
+            rawDataDecoderAndSanitizer
+        );
         setAddress(false, sepolia, "rolesAuthority", rolesAuthorities);
 
         ManageLeaf[] memory leafs = new ManageLeaf[](2);
-        // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_btc.b"));
+        // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_BTC.b"));
         // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX"));
-        _addSuzakuVaultApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_btc.b_vault_shares"));
+        _addSuzakuVaultApproveAndDepositLeaf(
+            leafs,
+            getAddress(sourceChain, "DC_BTC.b_vault_shares")
+        );
 
         string memory filePath = "./leafs/sepoliaSuzakuVaultSniperLeaf.s.json";
 
         bytes32[][] memory merkleTree = _generateMerkleTree(leafs);
 
-        _generateLeafs(filePath, leafs, merkleTree[merkleTree.length - 1][0], merkleTree); // wasn't created???
+        _generateLeafs(
+            filePath,
+            leafs,
+            merkleTree[merkleTree.length - 1][0],
+            merkleTree
+        ); // wasn't created???
 
         vm.startBroadcast(privateKey);
 
         rolesAuthority = RolesAuthority(rolesAuthorities);
 
         vaultUManager = new VaultUManager(
-            getAddress(sourceChain, "dev0Address"), rolesAuthority, address(manager), address(boringVault)
+            getAddress(sourceChain, "dev0Address"),
+            rolesAuthority,
+            address(manager),
+            address(boringVault)
         );
 
         console.log("VaultUManager deployed at:", address(vaultUManager));
@@ -89,8 +114,17 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
 
         // Assign the necessary role to the caller
 
-        if (!rolesAuthority.doesUserHaveRole(getAddress(sourceChain, "dev1Address"), STRATEGIST_MULTISIG_ROLE)) {
-            rolesAuthority.setUserRole(getAddress(sourceChain, "dev1Address"), STRATEGIST_MULTISIG_ROLE, true);
+        if (
+            !rolesAuthority.doesUserHaveRole(
+                getAddress(sourceChain, "dev1Address"),
+                STRATEGIST_MULTISIG_ROLE
+            )
+        ) {
+            rolesAuthority.setUserRole(
+                getAddress(sourceChain, "dev1Address"),
+                STRATEGIST_MULTISIG_ROLE,
+                true
+            );
         }
 
         // VaultUManager.updateMerkleTree(merkleTree, false);
@@ -103,7 +137,9 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
         }
 
         vaultUManager.setConfiguration(
-            IVault(getAddress(sourceChain, "DC_btc.b_vault_shares")), 1e18, rawDataDecoderAndSanitizer
+            IVault(getAddress(sourceChain, "DC_BTC.b_vault_shares")),
+            1e18,
+            rawDataDecoderAndSanitizer
         );
         // VaultUManager.setConfiguration(
         //     DefaultCollateral(getAddress(sourceChain, "DC_sAVAX")), 1e18, rawDataDecoderAndSanitizer
@@ -112,20 +148,37 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
         rolesAuthority.setUserRole(address(vaultUManager), 88, true); // SNIPER_ROLE
 
         rolesAuthority.setRoleCapability(
-            STRATEGIST_MULTISIG_ROLE, address(vaultUManager), VaultUManager.updateMerkleTree.selector, true
+            STRATEGIST_MULTISIG_ROLE,
+            address(vaultUManager),
+            VaultUManager.updateMerkleTree.selector,
+            true
         );
         rolesAuthority.setRoleCapability(
-            STRATEGIST_MULTISIG_ROLE, address(vaultUManager), VaultUManager.setConfiguration.selector, true
+            STRATEGIST_MULTISIG_ROLE,
+            address(vaultUManager),
+            VaultUManager.setConfiguration.selector,
+            true
         );
         rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(vaultUManager), VaultUManager.assemble.selector, true
+            SNIPER_ROLE,
+            address(vaultUManager),
+            VaultUManager.assemble.selector,
+            true
         );
         rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(vaultUManager), VaultUManager.fullAssemble.selector, true
+            SNIPER_ROLE,
+            address(vaultUManager),
+            VaultUManager.fullAssemble.selector,
+            true
         );
         rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(vaultUManager), ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector, true
-        );        
+            SNIPER_ROLE,
+            address(vaultUManager),
+            ManagerWithMerkleVerification
+                .manageVaultWithMerkleVerification
+                .selector,
+            true
+        );
 
         // rolesAuthority.transferOwnership(getAddress(sourceChain, "dev1Address")); //why tho
         vaultUManager.transferOwnership(getAddress(sourceChain, "dev1Address"));

@@ -4,6 +4,7 @@ pragma solidity 0.8.21;
 import {DeployArcticArchitecture, ERC20, Deployer} from "script/ArchitectureDeployments/DeployArcticArchitecture.sol";
 import {AddressToBytes32Lib} from "src/helper/AddressToBytes32Lib.sol";
 import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
+import {SepoliaSuzakuDecoderAndSanitzer} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
 
 // Import Decoder and Sanitizer to deploy.
 import {EtherFiLiquidEthDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/EtherFiLiquidEthDecoderAndSanitizer.sol";
@@ -69,9 +70,12 @@ contract DeplpoySepoliaAvax is DeployArcticArchitecture, SepoliaAddresses {
         accountantParameters.minimumUpateDelayInSeconds = 1 days / 4;
 
         // Define Decoder and Sanitizer deployment details.
-        bytes memory creationCode = type(SepoliaSuzakuDecoderAndSanitzer).creationCode;
-        bytes memory constructorArgs =
-            abi.encode(deployer.getAddress(names.boringVault), uniswapV3NonFungiblePositionManager);
+        bytes memory creationCode = type(SepoliaSuzakuDecoderAndSanitzer)
+            .creationCode;
+        bytes memory constructorArgs = abi.encode(
+            deployer.getAddress(names.boringVault),
+            uniswapV3NonFungiblePositionManager
+        );
 
         // Setup extra deposit assets.
         // none

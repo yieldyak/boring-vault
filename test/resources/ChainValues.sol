@@ -925,10 +925,10 @@ contract ChainValues {
     // Modify this function to add the values for the new chain
     function _addSepoliaValues() private {
         // Liquid Ecosystem
-        values[sepolia]["deployerAddress"] = 0x2660362e16C44199B83f813aC89A9BF80d7dC52a.toBytes32();
-        values[sepolia]["dev0Address"] = 0xf68462E4b667E3B16b0C0E818eb550612196a5ef.toBytes32();
-        values[sepolia]["dev1Address"] = 0xfFF4224c953682C0866cb45643512D8Eee6eB608.toBytes32();
-        values[sepolia]["liquidPayoutAddress"] = 0xCF6Bc0d1bD5fd4A47bf2c0cCdCD80aD8177BaB32.toBytes32();
+        values[sepolia]["deployerAddress"] = 0xF4B6D91B7DD8A360ad207Ba3D2109C42e7A6E3C7.toBytes32();
+        values[sepolia]["dev0Address"] = 0x0691D2A17B46608a0B5A926a5a511E773f9bA036.toBytes32();
+        values[sepolia]["dev1Address"] = 0x0691D2A17B46608a0B5A926a5a511E773f9bA036.toBytes32();
+        values[sepolia]["liquidPayoutAddress"] = 0x0691D2A17B46608a0B5A926a5a511E773f9bA036.toBytes32();
         // values[sepolia]["liquidV1PriceRouter"] = 0x693799805B502264f9365440B93C113D86a4fFF5.toBytes32();
         // values[sepolia]["liquidMultisig"] = 0xCEA8039076E35a825854c5C2f85659430b06ec96.toBytes32();
 
@@ -940,8 +940,8 @@ contract ChainValues {
         // ERC20s
         // values[sepolia]["USDC"] = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48.toBytes32();
         values[sepolia]["WETH"] = 0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9.toBytes32();
-        values[sepolia]["BTCb"] = 0x64Db7fAC414cbd3754Ce02f92533eFf58134f518.toBytes32();
-        // values[sepolia]["USDT"] = 0xdAC17F958D2ee523a2206206994597C13D831ec7.toBytes32();
+        values[sepolia]["BTCb"] = 0x5f6887Dc1Cb759c47BD435448f7702209efB6c09.toBytes32();
+        values[sepolia]["sAVAX"] = 0x85D6d9E0D5721Eb32Eed28429e89A85F2148713b.toBytes32();
 
         // Aave V3 Tokens
         // values[sepolia]["aV3WETH"] = 0x4d5F47FA6A74757f35C14fD3a6Ef8E3C9BC514E8.toBytes32();
@@ -982,8 +982,7 @@ contract ChainValues {
 
 
         // Symbiotic
-        values[sepolia]["DC_btc.b"] = 0x4132aCf612637A3B821427C92312e19e7bae84f2.toBytes32();
-        values[sepolia]["DC_sAVAX"] = 0xC5B8BEd342903aD9cEe6A31a212910D5cB8b4b9F.toBytes32();
-        values[sepolia]["DC_btc.b_vault_shares"] = 0x0854a63185b0CFD013E8cE389C8B0E5d7C1934C9.toBytes32();
+        values[sepolia]["DC_BTC.b"] = 0xceAf9Ba87E425CCb91e301A4a06d2F381A22766E.toBytes32();
+        values[sepolia]["DC_sAVAX"] = 0x8F4709b4c5074f44abFa1224D84E994bA13d41a5.toBytes32();
     }
 }

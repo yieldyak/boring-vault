@@ -168,6 +168,6 @@ contract ContractNames {
     string public constant SepoliaVaultManagerName = "Sepolia Token Vault Manager With Merkle Verification V0.0";
     string public constant SepoliaVaultAccountantName = "Sepolia Token Vault Accountant With Rate Providers V0.0";
     string public constant SepoliaVaultTellerName = "Sepolia Token Vault Teller With Multi Asset Support V0.0";
-    string public constant SepoliaVaultDecoderAndSanitizerName = "Sepolia Token Vault Decoder and Sanitizer V0.0";
+    string public constant SepoliaVaultDecoderAndSanitizerName = "Sepolia Token Vault Decoder and Sanitizer V0.1";
     string public constant SepoliaVaultDelayedWithdrawer = "Sepolia Token Vault Delayed Withdrawer V0.0";
 }

@@ -21,14 +21,14 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
 
     uint256 public privateKey;
 
-    address public managerAddress = 0x478741b38BC8c721C525bcee5620Dd6ab9133519;
-    address public rawDataDecoderAndSanitizer = 0x85296ce2381922e4A0826b16f812FF7E43F36717;
-    BoringVault public boringVault = BoringVault(payable(0x11Ce42c6FE827f42BE7Bbb7BECBcc0E80A69880f));
+    address public managerAddress = 0x2C0972ee4fa7d629462f63C844E9D7059CbD95Aa;
+    address public rawDataDecoderAndSanitizer = 0x42A342D1B3bB7AD9143FAF2378ec2e3D6F764105;
+    BoringVault public boringVault = BoringVault(payable(0xe5A67Bb6335d73b3c9286eFD21b3d9eb1a8AE8C0));
     ManagerWithMerkleVerification public manager =
-        ManagerWithMerkleVerification(0x478741b38BC8c721C525bcee5620Dd6ab9133519);
-    address public accountantAddress = 0x3DC53B40F03bc6A873f3E8A2eD1AecdA491cD32b;
+        ManagerWithMerkleVerification(managerAddress);
+    address public accountantAddress = 0xfDb93132F12c9587a06b1dF859187a7ca435A5bD;
     RolesAuthority public rolesAuthority;
-    address public rolesAuthorities = 0x13D7bb576BB5e8781d6243c08302e71DbeE1ee92;
+    address public rolesAuthorities = 0x901B87B0Df4dcdE0DdFf439bE9d2BD57379f0E50;
     SuzakuUManager public suzakuUManager;
 
     Deployer public deployer;
@@ -63,7 +63,7 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         setAddress(false, sepolia, "rolesAuthority", rolesAuthorities);
 
         ManageLeaf[] memory leafs = new ManageLeaf[](2);
-        _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_btc.b"));
+        _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_BTC.b"));
         // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX"));
 
         string memory filePath = "./leafs/sepoliaSuzakuSniperLeafs.json";
@@ -102,7 +102,7 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         }
 
         suzakuUManager.setConfiguration(
-            DefaultCollateral(getAddress(sourceChain, "DC_btc.b")), 1e18, rawDataDecoderAndSanitizer
+            DefaultCollateral(getAddress(sourceChain, "DC_BTC.b")), 1e18, rawDataDecoderAndSanitizer
         );
         // suzakuUManager.setConfiguration(
         //     DefaultCollateral(getAddress(sourceChain, "DC_sAVAX")), 1e18, rawDataDecoderAndSanitizer
