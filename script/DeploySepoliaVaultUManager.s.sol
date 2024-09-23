@@ -28,9 +28,7 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
     BoringVault public boringVault =
         BoringVault(payable(0x11Ce42c6FE827f42BE7Bbb7BECBcc0E80A69880f));
     ManagerWithMerkleVerification public manager =
-        ManagerWithMerkleVerification(
-            0x478741b38BC8c721C525bcee5620Dd6ab9133519
-        );
+        ManagerWithMerkleVerification(managerAddress);
     address public accountantAddress =
         0x3DC53B40F03bc6A873f3E8A2eD1AecdA491cD32b;
     RolesAuthority public rolesAuthority;
@@ -173,7 +171,7 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
         );
         rolesAuthority.setRoleCapability(
             SNIPER_ROLE,
-            address(vaultUManager),
+            address(managerAddress),
             ManagerWithMerkleVerification
                 .manageVaultWithMerkleVerification
                 .selector,

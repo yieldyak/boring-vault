@@ -70,7 +70,7 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
 
         bytes32[][] memory merkleTree = _generateMerkleTree(leafs);
 
-        _generateLeafs(filePath, leafs, merkleTree[merkleTree.length - 1][0], merkleTree); // wasn't created???
+        _generateLeafs(filePath, leafs, merkleTree[merkleTree.length - 1][0], merkleTree);
 
         vm.startBroadcast(privateKey);
 
@@ -108,23 +108,26 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         //     DefaultCollateral(getAddress(sourceChain, "DC_sAVAX")), 1e18, rawDataDecoderAndSanitizer
         // );
 
-        rolesAuthority.setRoleCapability(
-            STRATEGIST_MULTISIG_ROLE, address(suzakuUManager), SuzakuUManager.updateMerkleTree.selector, true
-        );
-        rolesAuthority.setRoleCapability(
-            STRATEGIST_MULTISIG_ROLE, address(suzakuUManager), SuzakuUManager.setConfiguration.selector, true
-        );
-        rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(suzakuUManager), SuzakuUManager.assemble.selector, true
-        );
-        rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(suzakuUManager), SuzakuUManager.fullAssemble.selector, true
-        );
-        rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(suzakuUManager), ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector, true
-        );        
+        rolesAuthority.setUserRole(address(suzakuUManager), 88, true); // Gives suzakuUmanager the SNIPER_ROLE
 
-        // rolesAuthority.transferOwnership(getAddress(sourceChain, "dev1Address")); //why tho
+        rolesAuthority.setRoleCapability(
+            STRATEGIST_MULTISIG_ROLE, address(suzakuUManager), SuzakuUManager.updateMerkleTree.selector, true // Gives the strategist multisig the ability to update the merkle tree
+        );
+        rolesAuthority.setRoleCapability(
+            STRATEGIST_MULTISIG_ROLE, address(suzakuUManager), SuzakuUManager.setConfiguration.selector, true // Gives the strategist multisig the ability to set the configuration
+        );
+        rolesAuthority.setRoleCapability(
+            SNIPER_ROLE, address(suzakuUManager), SuzakuUManager.assemble.selector, true // Gives the sniper the ability to assemble
+        );
+        rolesAuthority.setRoleCapability(
+            SNIPER_ROLE, address(suzakuUManager), SuzakuUManager.fullAssemble.selector, true // Gives the sniper the ability to full assemble
+        );
+        rolesAuthority.setRoleCapability(
+            SNIPER_ROLE, address(managerAddress), ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector, true // Gives the sniper the ability to manage the vault with merkle verification
+        ); 
+      
+
+        // rolesAuthority.transferOwnership(getAddress(sourceChain, "dev1Address"));
         suzakuUManager.transferOwnership(getAddress(sourceChain, "dev1Address"));
 
         /// Note need to give strategist role to suzakuUManager DONE. Changed to use roleauth already deployed
