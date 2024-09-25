@@ -7,7 +7,7 @@ import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
 import {SepoliaSuzakuDecoderAndSanitzer} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
 
 // Import Decoder and Sanitizer to deploy.
-import {EtherFiLiquidEthDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/EtherFiLiquidEthDecoderAndSanitizer.sol";
+import {SepoliaSuzakuDecoderAndSanitzer} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
 
 /**
  *  source .env && forge script script/ArchitectureDeployments/sepolia/DeplpoySepoliaAvax.s.sol:DeplpoySepoliaAvax --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify

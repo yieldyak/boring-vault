@@ -16,7 +16,7 @@ import {IRateProvider} from "src/interfaces/IRateProvider.sol";
 import {IWEETH} from "src/interfaces/IStaking.sol";
 import {ILiquidityPool} from "src/interfaces/IStaking.sol";
 // import {WETH} from "@solmate/tokens/WETH.sol";
-import {EtherFiLiquidDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/EtherFiLiquidDecoderAndSanitizer.sol";
+import {SepoliaSuzakuDecoderAndSanitzer} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
 import {DecoderCustomTypes} from "src/interfaces/DecoderCustomTypes.sol";
 import {EtherFiLiquid1} from "src/interfaces/EtherFiLiquid1.sol";
 import {CellarMigrationAdaptor} from "src/migration/CellarMigrationAdaptor.sol";

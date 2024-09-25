@@ -186,7 +186,7 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
 
         // rolesAuthority.setUserRole(dev1Address, 7, true);
         // rolesAuthority.setUserRole(dev1Address, 8, true);
-        // ManagerWithMerkleVerification(managerAddress).setManageRoot(address(VaultUManager), manageTree[manageTree.length - 1][0]);
+        // ManagerWithMerkleVerification(managerAddress).setManageRoot(address(VaultUManager), manageTree[manageTree.length - 1][0]);  // Have to do manually for the moment, or add manageTree to the script.
 
         vm.stopBroadcast();
     }

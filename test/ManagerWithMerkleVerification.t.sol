@@ -8,23 +8,12 @@ import {FixedPointMathLib} from "@solmate/utils/FixedPointMathLib.sol";
 import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {ERC4626} from "@solmate/tokens/ERC4626.sol";
 import {
-    EtherFiLiquidDecoderAndSanitizer,
-    MorphoBlueDecoderAndSanitizer,
-    UniswapV3DecoderAndSanitizer,
-    BalancerV2DecoderAndSanitizer,
-    PendleRouterDecoderAndSanitizer
-} from "src/base/DecodersAndSanitizers/EtherFiLiquidDecoderAndSanitizer.sol";
-import {EtherFiLiquidUsdDecoderAndSanitizer} from
-    "src/base/DecodersAndSanitizers/EtherFiLiquidUsdDecoderAndSanitizer.sol";
-import {LidoLiquidDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/LidoLiquidDecoderAndSanitizer.sol";
+    SepoliaSuzakuDecoderAndSanitzer
+} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
 import {BalancerVault} from "src/interfaces/BalancerVault.sol";
 import {IUniswapV3Router} from "src/interfaces/IUniswapV3Router.sol";
 import {DecoderCustomTypes} from "src/interfaces/DecoderCustomTypes.sol";
 import {RolesAuthority, Authority} from "@solmate/auth/authorities/RolesAuthority.sol";
-import {
-    PointFarmingDecoderAndSanitizer,
-    EigenLayerLSTStakingDecoderAndSanitizer
-} from "src/base/DecodersAndSanitizers/PointFarmingDecoderAndSanitizer.sol";
 import {MerkleTreeHelper} from "test/resources/MerkleTreeHelper/MerkleTreeHelper.sol";
 
 import {Test, stdStorage, StdStorage, stdError, console} from "@forge-std/Test.sol";
@@ -71,7 +60,7 @@ contract ManagerWithMerkleVerificationTest is Test, MerkleTreeHelper {
         manager = new ManagerWithMerkleVerification(address(this), address(boringVault), vault);
 
         rawDataDecoderAndSanitizer =
-            address(new EtherFiLiquidDecoderAndSanitizer(address(boringVault), uniswapV3NonFungiblePositionManager));
+            address(new SepoliaSuzakuDecoderAndSanitzer(address(boringVault), uniswapV3NonFungiblePositionManager));
         setAddress(false, sourceChain, "boringVault", address(boringVault));
         setAddress(false, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
         setAddress(false, sourceChain, "manager", address(manager));
