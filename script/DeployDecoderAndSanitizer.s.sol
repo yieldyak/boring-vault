@@ -9,7 +9,7 @@ pragma solidity 0.8.21;
 //     "src/base/DecodersAndSanitizers/PancakeSwapV3FullDecoderAndSanitizer.sol";
 // import {AerodromeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/AerodromeDecoderAndSanitizer.sol";
 // import {Deployer} from "src/helper/Deployer.sol";
-// import {MainnetAddresses} from "test/resources/MainnetAddresses.sol";
+// import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
 // import {ContractNames} from "resources/ContractNames.sol";
 
 // import "forge-std/Script.sol";
@@ -19,7 +19,7 @@ pragma solidity 0.8.21;
 //  *  source .env && forge script script/DeployDecoderAndSanitizer.s.sol:DeployDecoderAndSanitizerScript --with-gas-price 30000000000 --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
 //  * @dev Optionally can change `--with-gas-price` to something more reasonable
 //  */
-// contract DeployDecoderAndSanitizerScript is Script, ContractNames, MainnetAddresses {
+// contract DeployDecoderAndSanitizerScript is Script, ContractNames, SepoliaAddresses {
 //     uint256 public privateKey;
 //     Deployer public deployer = Deployer(deployerAddress);
 

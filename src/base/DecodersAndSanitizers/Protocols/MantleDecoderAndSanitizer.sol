@@ -6,7 +6,7 @@ import {BaseDecoderAndSanitizer, DecoderCustomTypes} from "src/base/DecodersAndS
 abstract contract MantleDecoderAndSanitizer is BaseDecoderAndSanitizer {
     //============================== MANTLE ===============================
 
-    // Call stake here 0xe3cBd06D7dadB3F4e6557bAb7EdD924CD1489E8f called mantleLspStaking in MainnetAddresses
+    // Call stake here 0xe3cBd06D7dadB3F4e6557bAb7EdD924CD1489E8f called mantleLspStaking in SepoliaAddresses
     function stake(uint256 /*minMETHAmount*/ ) external pure virtual returns (bytes memory addressesFound) {
         // Nothing to sanitize or return
         return addressesFound;

@@ -62,7 +62,7 @@ contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
         );
         deployer = Deployer(getAddress(sourceChain, "deployerAddress"));
 
-        // rolesAuthority = RolesAuthority(deployer.getAddress(SevenSeasRolesAuthorityName));
+        // rolesAuthority = RolesAuthority(deployer.getAddress(SuzakuRolesAuthorityName));
         setAddress(false, sepolia, "boringVault", address(boringVault));
         setAddress(false, sepolia, "managerAddress", managerAddress);
         setAddress(false, sepolia, "accountantAddress", accountantAddress);

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 pragma solidity 0.8.21;
 
-import {MainnetAddresses} from "test/resources/MainnetAddresses.sol";
+import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
 import {SafeTransferLib} from "@solmate/utils/SafeTransferLib.sol";
 import {FixedPointMathLib} from "@solmate/utils/FixedPointMathLib.sol";
 import {RolesAuthority, Authority} from "@solmate/auth/authorities/RolesAuthority.sol";
@@ -17,7 +17,7 @@ import "forge-std/StdJson.sol";
  *  source .env && forge script script/DeployAtomicQueue.s.sol:DeployAtomicQueueScript --with-gas-price 70000000 --evm-version london --broadcast --etherscan-api-key $OPTIMISMSCAN_KEY --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
-contract DeployAtomicQueueScript is Script, ContractNames, MainnetAddresses {
+contract DeployAtomicQueueScript is Script, ContractNames, SepoliaAddresses {
     uint256 public privateKey;
 
     // Contracts to deploy
@@ -37,12 +37,12 @@ contract DeployAtomicQueueScript is Script, ContractNames, MainnetAddresses {
         bytes memory constructorArgs;
         vm.startBroadcast(privateKey);
 
-        address deployedAddress = _getAddressIfDeployed(SevenSeasRolesAuthorityName);
+        address deployedAddress = _getAddressIfDeployed(SuzakuRolesAuthorityName);
         if (deployedAddress == address(0)) {
             creationCode = type(RolesAuthority).creationCode;
             constructorArgs = abi.encode(owner, Authority(address(0)));
             rolesAuthority =
-                RolesAuthority(deployer.deployContract(SevenSeasRolesAuthorityName, creationCode, constructorArgs, 0));
+                RolesAuthority(deployer.deployContract(SuzakuRolesAuthorityName, creationCode, constructorArgs, 0));
         } else {
             rolesAuthority = RolesAuthority(deployedAddress);
         }
