@@ -2,7 +2,27 @@
 
 ### Initial Setup
 
-Verify and update environment variables:
+#### Choose your chain
+
+Each new deployment, in each chain, should have it's own deployment files.
+
+For that you will to create and adapt certain files:
+- `scripts/ArchitectureDeployments/{your_chain}/DeployDeployer.s.sol`: adapted from `script/ArchitectureDeployments/Sepolia/DeployDeployer.s.sol`
+- `scripts/ArchitectureDeployment/{your_chain}/Deploy{your_deployment_name}.s.sol`: adapted from `script/ArchitectureDeployments/Sepolia/DeploySepoliasAVAX.s.sol`
+- `test/resources/{Your_chain}Addresses.sol`: adapted from `test/resources/SepliaAddresses.sol`
+- `script/MerkleRootCreation/{your_chain}/Create{your_deployment_name}SuzakuMerkleRoot.s.sol`: adapted from `script/MerkleRootCreation/Sepolia/CreateSepoliaSuzakuMerkleRoot.s.sol`.
+- `script/ArchitectureDeployments/{your_chain}/Deploy{your_deployment_name}AtomicQueue.s.sol`: adapted from `script/ArchitectureDeployments/Sepolia/DeploySepoliaAtomicQueue.s.sol`
+
+You will also need to modify the following files in case of making use of the MerkleRootCreationg:
+- `test/resources/ChainValues.sol`: add the addresses of your deployment ehre that will be used for the MerkleRoot to target contracts and functions.
+
+Note: the rest of the deployment explanation will use the Sepolia files as an example deployment.
+
+#### Environment Variables
+
+Verify and update environment variables that you will be using, in our case it will be .env.sepolia. 
+
+Then you can run the following commands:
 
  ```bash
   set -a; source .env.sepolia
@@ -20,37 +40,31 @@ Deploy the Deployer script. This will setup a deployer which will be in charge o
  ```bash
   forge script script/ArchitectureDeployments/Sepolia/DeployDeployer.s.sol:DeployDeployerScript --slow --with-gas-price 30000000000 --broadcast --etherscan-api-key $ETHERSCAN_API_KEY
  ```
-Update update the Deployer address in `SepliaAddresses.sol` and rebuild.
+Update the Deployer address in `SepliaAddresses.sol` and rebuild.
 
-### Setup tokens whitelist
+### Setup your variables;
 
-Whitelist the tokens that will be usable by the BoringVault in `DeploySepoliaBTCb.s.sol` and `SepliaAddresses.sol`.
-
-Note: If you want to launch somethign else than BTC.b or sAVAX you will have to re-create a deployment script taking inspiration from `DeploySepoliaBTCb.s.sol`.
-
-### Configure and Deploy the BoringVault
-
-Adapt `DeploySepoliaBTCb.s.sol` as required. There you can specifiy:
-    - Base token (for isntance, BTC.b). This will define the asset class. 
-    - Define if public deposits or withdrawals are available
+We will be defining what tokens the deployment will be using, In our example it means modifying  `DeploySepoliaBTCb.s.sol` and `SepliaAddresses.sol`. Particulartly in `DeploySepoliaBTCb.s.sol` you will add/modify:
+    - Add base token (for isntance, BTC.b). This will define the asset class. 
+    - Define if public deposits or withdrawals are available.
     - Define what *additional* assets can be added or withdrawed, you will also have to define additional categories such as the completion Window and withdraw Fee.
-    - Define the stage of the deployment. This script can be launched part-by-part by definiing the booleans in configureDeployment. For more information of what this activates you will have to check on the script/ArchitectureDeployments/DeployArcticArchitecture.sol contract.
+    - Define the stage of the deployment. This script can be launched part-by-part by definiing the booleans in configureDeployment. For more information of what this activates you will have to check on the `script/ArchitectureDeployments/DeployArcticArchitecture.sol` contract.
 
-Deploy the vault:
+Adter this modifications, you can deploy the vault:
 
  ```bash
   forge script script/ArchitectureDeployments/Sepolia/DeploySepoliaBTCb.s.sol:DeploySepoliaBTCb --with-gas-price 30000000000 --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify -vvvvv 
 
  ```
 
-## Post-deployment flow:
+## Base Architecture post-deployment flow:
 
-To interact with the contracts you can find the complete deployment in the deployments folder.
-Here is a basic flow of what can be done. For additional steps you can check on the tests. 
+To interact with the contracts you can find the complete deployment in `deployments/SepoliaDeployment.json`.
+Here is a basic flow of what can be done with this base deployment. For additional steps you can check on the tests. 
 
 - Mint underlying `ERC20` to an address and approve for the underlying `ERC20` to be managed by the BoringVault contract.
-- Deposit the `ERC20` through Teller contract.
-- Check if the deposited `ERC20` exists as a withdrawal assets in the DelayerWithdraw contract. Otherwise check on the previous section to configure this.
+- Deposit the `ERC20` through Teller contract. This contract will also be used for withdrawal in case of the AtomicQueue being deployed later. Otherwise we will use `DelayedWithdraw` in the following steps.
+- Check if the deposited `ERC20` exists as a withdrawal assets in the `DelayedWithdraw` contract. Otherwise check on the previous section to configure this.
 - Check if `pullFundsFromVault` is set to true, otherwise it will have to be updated through the function `setPullFundsFromVault`
     - To do this, you will have to add for your address role to be able to modify this:
     ```
