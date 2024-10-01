@@ -9,7 +9,7 @@ import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
 import {SepoliaSuzakuDecoderAndSanitzer} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
 
 /**
- *  source .env && forge script script/ArchitectureDeployments/sepolia/DeploySepoliaBTCb.s.sol:DeploySepoliaVaultScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+ *  source .env && forge script script/ArchitectureDeployments/sepolia/DeploySepoliaBTCb.s.sol:DeploySepoliaVaultScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
 contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {

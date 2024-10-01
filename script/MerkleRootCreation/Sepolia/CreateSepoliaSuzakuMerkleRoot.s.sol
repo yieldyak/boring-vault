@@ -11,7 +11,7 @@ import "forge-std/Script.sol";
 import "forge-std/console.sol";
 
 /**
- *  source .env && forge script script/MerkleRootCreation/Sepolia/CreateSepoliaSuzakuMerkleRoot.s.sol:CreateSepoliaSuzakuMerkleRoot --rpc-url $MAINNET_RPC_URL
+ *  source .env && forge script script/MerkleRootCreation/Sepolia/CreateSepoliaSuzakuMerkleRoot.s.sol:CreateSepoliaSuzakuMerkleRoot --rpc-url $SEPOLIA_RPC_URL
  */
 contract CreateSepoliaSuzakuMerkleRoot is Script, MerkleTreeHelper {
     using FixedPointMathLib for uint256;

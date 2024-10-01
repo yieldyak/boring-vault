@@ -45,9 +45,9 @@ contract AtomicQueueTest is Test, MerkleTreeHelper {
     address internal user = vm.addr(1);
 
     function setUp() external {
-        setSourceChainName("mainnet");
+        setSourceChainName("sepolia");
         // Setup forked environment.
-        string memory rpcKey = "MAINNET_RPC_URL";
+        string memory rpcKey = "SEPOLIA_RPC_URL";
         uint256 blockNumber = 20341522;
         _startFork(rpcKey, blockNumber);
 

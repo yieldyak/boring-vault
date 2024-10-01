@@ -12,7 +12,7 @@ contract PauserTest is Test {
 
     function setUp() external {
         // Setup forked environment.
-        string memory rpcKey = "MAINNET_RPC_URL";
+        string memory rpcKey = "SEPOLIA_RPC_URL";
         uint256 blockNumber = 20083900;
 
         _startFork(rpcKey, blockNumber);

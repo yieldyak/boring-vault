@@ -15,7 +15,7 @@ import {MerkleTreeHelper} from "test/resources/MerkleTreeHelper/MerkleTreeHelper
 import "forge-std/console.sol";
 
 /**
- *  source .env && forge script script/DeploySepoliaVaultUManager.s.sol:DeploySepoliaVaultUManagerScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+ *  source .env && forge script script/DeploySepoliaVaultUManager.s.sol:DeploySepoliaVaultUManagerScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify
  */
 contract DeploySepoliaVaultUManagerScript is MerkleTreeHelper, ContractNames {
     using FixedPointMathLib for uint256;

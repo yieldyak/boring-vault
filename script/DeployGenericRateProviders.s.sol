@@ -15,7 +15,7 @@ pragma solidity 0.8.21;
 // import "forge-std/StdJson.sol";
 
 // /**
-//  *  source .env && forge script script/DeployGenericRateProviders.s.sol:DeployGenericRateProvidersScript --with-gas-price 30000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+//  *  source .env && forge script script/DeployGenericRateProviders.s.sol:DeployGenericRateProvidersScript --with-gas-price 30000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify
 //  * @dev Optionally can change `--with-gas-price` to something more reasonable
 //  */
 // contract DeployGenericRateProvidersScript is Script, ContractNames, SepoliaAddresses {

@@ -36,9 +36,9 @@ contract UniswapV3IntegrationTest is Test, MerkleTreeHelper {
     uint8 public constant BALANCER_VAULT_ROLE = 6;
 
     function setUp() external {
-        setSourceChainName("mainnet");
+        setSourceChainName("sepolia");
         // Setup forked environment.
-        string memory rpcKey = "MAINNET_RPC_URL";
+        string memory rpcKey = "SEPOLIA_RPC_URL";
         uint256 blockNumber = 19826676;
 
         _startFork(rpcKey, blockNumber);

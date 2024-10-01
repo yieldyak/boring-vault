@@ -16,7 +16,7 @@ pragma solidity 0.8.21;
 // import "forge-std/StdJson.sol";
 
 // /**
-//  *  source .env && forge script script/DeployDecoderAndSanitizer.s.sol:DeployDecoderAndSanitizerScript --with-gas-price 30000000000 --broadcast --etherscan-api-key $ETHERSCAN_KEY --verify
+//  *  source .env && forge script script/DeployDecoderAndSanitizer.s.sol:DeployDecoderAndSanitizerScript --with-gas-price 30000000000 --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify
 //  * @dev Optionally can change `--with-gas-price` to something more reasonable
 //  */
 // contract DeployDecoderAndSanitizerScript is Script, ContractNames, SepoliaAddresses {
