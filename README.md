@@ -2,7 +2,7 @@
 
 **Note:** This is a minimalistic fork of Se7enSeas' Boring Vault. The structure remains the same, and we have built upon them for customized deployments.
 
-To deploy the main components of the Boring Vault, please refer to [`spec/Sepolia.md`](spec/Sepolia.md).
+To deploy the main components of the Boring Vault, please refer to [`spec/Deployment-BoringVault.md`](spec/Deployment-BoringVault.md).
 
 To create a micro-manager, refer to [`spec/UManager.md`](spec/UManager.md).
 
