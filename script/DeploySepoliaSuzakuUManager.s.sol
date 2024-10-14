@@ -128,7 +128,7 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
       
 
         // rolesAuthority.transferOwnership(getAddress(sourceChain, "dev1Address"));
-        suzakuUManager.transferOwnership(getAddress(sourceChain, "dev1Address"));
+        // suzakuUManager.transferOwnership(getAddress(sourceChain, "dev1Address"));
 
         /// Note need to give strategist role to suzakuUManager DONE. Changed to use roleauth already deployed
         /// Note need to set merkle root in the manager THIS IS MISSING
