@@ -2,12 +2,11 @@
 pragma solidity 0.8.21;
 
 import {BoringVault, Auth} from "src/base/BoringVault.sol";
-import {ManagerWithMerkleVerification} from "src/base/Roles/ManagerWithMerkleVerification.sol";
+import {BarebonesManagerWithMerkleVerification} from "src/base/Roles/BarebonesManagerWithMerkleVerification.sol";
 import {SafeTransferLib} from "@solmate/utils/SafeTransferLib.sol";
 import {FixedPointMathLib} from "@solmate/utils/FixedPointMathLib.sol";
 import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {BalancerVault} from "src/interfaces/BalancerVault.sol";
-import {SepoliaSuzakuDecoderAndSanitzer} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
 import {RolesAuthority, Authority} from "@solmate/auth/authorities/RolesAuthority.sol";
 import {TellerWithMultiAssetSupport} from "src/base/Roles/TellerWithMultiAssetSupport.sol";
 import {AccountantWithRateProviders, IRateProvider} from "src/base/Roles/AccountantWithRateProviders.sol";
@@ -92,7 +91,7 @@ contract DeployArcticArchitecture is Script, ContractNames {
     // Contracts to deploy
     Deployer public deployer;
     ArcticArchitectureLens public lens;
-    ManagerWithMerkleVerification public manager;
+    BarebonesManagerWithMerkleVerification public manager;
     BoringVault public boringVault;
     RolesAuthority public rolesAuthority;
     address public rawDataDecoderAndSanitizer;
@@ -176,13 +175,13 @@ contract DeployArcticArchitecture is Script, ContractNames {
 
             deployedAddress = _getAddressIfDeployed(names.manager);
             if (deployedAddress == address(0)) {
-                creationCode = type(ManagerWithMerkleVerification).creationCode;
-                constructorArgs = abi.encode(owner, address(boringVault), configureDeployment.balancerVault);
-                manager = ManagerWithMerkleVerification(
+                creationCode = type(BarebonesManagerWithMerkleVerification).creationCode;
+                constructorArgs = abi.encode(owner, address(boringVault));
+                manager = BarebonesManagerWithMerkleVerification(
                     deployer.deployContract(names.manager, creationCode, constructorArgs, 0)
                 );
             } else {
-                manager = ManagerWithMerkleVerification(deployedAddress);
+                manager = BarebonesManagerWithMerkleVerification(deployedAddress);
             }
 
             deployedAddress = _getAddressIfDeployed(names.accountant);
@@ -244,7 +243,7 @@ contract DeployArcticArchitecture is Script, ContractNames {
             rolesAuthority = RolesAuthority(_getAddressIfDeployed(names.rolesAuthority));
             lens = ArcticArchitectureLens(_getAddressIfDeployed(names.lens));
             boringVault = BoringVault(payable(_getAddressIfDeployed(names.boringVault)));
-            manager = ManagerWithMerkleVerification(_getAddressIfDeployed(names.manager));
+            manager = BarebonesManagerWithMerkleVerification(_getAddressIfDeployed(names.manager));
             accountant = AccountantWithRateProviders(_getAddressIfDeployed(names.accountant));
             teller = TellerWithMultiAssetSupport(payable(_getAddressIfDeployed(names.teller)));
             rawDataDecoderAndSanitizer = _getAddressIfDeployed(names.rawDataDecoderAndSanitizer);
@@ -293,13 +292,13 @@ contract DeployArcticArchitecture is Script, ContractNames {
                 !rolesAuthority.doesRoleHaveCapability(
                     MANAGER_INTERNAL_ROLE,
                     address(manager),
-                    ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector
+                    BarebonesManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector
                 )
             ) {
                 rolesAuthority.setRoleCapability(
                     MANAGER_INTERNAL_ROLE,
                     address(manager),
-                    ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector,
+                    BarebonesManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector,
                     true
                 );
             }
@@ -430,11 +429,11 @@ contract DeployArcticArchitecture is Script, ContractNames {
             }
             if (
                 !rolesAuthority.doesRoleHaveCapability(
-                    OWNER_ROLE, address(manager), ManagerWithMerkleVerification.setManageRoot.selector
+                    OWNER_ROLE, address(manager), BarebonesManagerWithMerkleVerification.setManageRoot.selector
                 )
             ) {
                 rolesAuthority.setRoleCapability(
-                    OWNER_ROLE, address(manager), ManagerWithMerkleVerification.setManageRoot.selector, true
+                    OWNER_ROLE, address(manager), BarebonesManagerWithMerkleVerification.setManageRoot.selector, true
                 );
             }
             if (!rolesAuthority.doesRoleHaveCapability(OWNER_ROLE, address(teller), Auth.setAuthority.selector)) {
@@ -554,20 +553,20 @@ contract DeployArcticArchitecture is Script, ContractNames {
             }
             if (
                 !rolesAuthority.doesRoleHaveCapability(
-                    MULTISIG_ROLE, address(manager), ManagerWithMerkleVerification.pause.selector
+                    MULTISIG_ROLE, address(manager), BarebonesManagerWithMerkleVerification.pause.selector
                 )
             ) {
                 rolesAuthority.setRoleCapability(
-                    MULTISIG_ROLE, address(manager), ManagerWithMerkleVerification.pause.selector, true
+                    MULTISIG_ROLE, address(manager), BarebonesManagerWithMerkleVerification.pause.selector, true
                 );
             }
             if (
                 !rolesAuthority.doesRoleHaveCapability(
-                    MULTISIG_ROLE, address(manager), ManagerWithMerkleVerification.unpause.selector
+                    MULTISIG_ROLE, address(manager), BarebonesManagerWithMerkleVerification.unpause.selector
                 )
             ) {
                 rolesAuthority.setRoleCapability(
-                    MULTISIG_ROLE, address(manager), ManagerWithMerkleVerification.unpause.selector, true
+                    MULTISIG_ROLE, address(manager), BarebonesManagerWithMerkleVerification.unpause.selector, true
                 );
             }
             if (
@@ -693,7 +692,10 @@ contract DeployArcticArchitecture is Script, ContractNames {
                 )
             ) {
                 rolesAuthority.setRoleCapability(
-                    STRATEGIST_MULTISIG_ROLE, address(delayedWithdrawer), DelayedWithdraw.setPullFundsFromVault.selector, true
+                    STRATEGIST_MULTISIG_ROLE,
+                    address(delayedWithdrawer),
+                    DelayedWithdraw.setPullFundsFromVault.selector,
+                    true
                 );
             }
             // STRATEGIST_ROLE
@@ -701,13 +703,13 @@ contract DeployArcticArchitecture is Script, ContractNames {
                 !rolesAuthority.doesRoleHaveCapability(
                     STRATEGIST_ROLE,
                     address(manager),
-                    ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector
+                    BarebonesManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector
                 )
             ) {
                 rolesAuthority.setRoleCapability(
                     STRATEGIST_ROLE,
                     address(manager),
-                    ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector,
+                    BarebonesManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector,
                     true
                 );
             }
@@ -903,7 +905,7 @@ contract DeployArcticArchitecture is Script, ContractNames {
                 vm.serializeAddress(coreContracts, "RolesAuthority", address(rolesAuthority));
                 vm.serializeAddress(coreContracts, "Lens", address(lens));
                 vm.serializeAddress(coreContracts, "BoringVault", address(boringVault));
-                vm.serializeAddress(coreContracts, "ManagerWithMerkleVerification", address(manager));
+                vm.serializeAddress(coreContracts, "BarebonesManagerWithMerkleVerification", address(manager));
                 vm.serializeAddress(coreContracts, "AccountantWithRateProviders", address(accountant));
                 vm.serializeAddress(coreContracts, "TellerWithMultiAssetSupport", address(teller));
                 vm.serializeAddress(coreContracts, "DecoderAndSanitizer", rawDataDecoderAndSanitizer);

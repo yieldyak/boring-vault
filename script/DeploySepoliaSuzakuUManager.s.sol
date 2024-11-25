@@ -7,7 +7,9 @@ import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import {ERC4626} from "@solmate/tokens/ERC4626.sol";
 import {ManagerWithMerkleVerification} from "src/base/Roles/ManagerWithMerkleVerification.sol";
-import {SuzakuUManager, DefaultCollateral} from "src/micro-managers/SuzakuUManager.sol";
+import {
+    SuzakuDefaultCollateralUManager, DefaultCollateral
+} from "src/micro-managers/SuzakuDefaultCollateralUManager.sol";
 import {RolesAuthority, Authority} from "@solmate/auth/authorities/RolesAuthority.sol";
 import {ContractNames} from "resources/ContractNames.sol";
 import {Deployer} from "src/helper/Deployer.sol";
@@ -16,6 +18,7 @@ import "forge-std/console.sol";
 /**
  *  source .env && forge script script/DeploySepliaSuzakuUManager.s.sol:DeploySepliaSuzakuUManagerScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify
  */
+
 contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
     using FixedPointMathLib for uint256;
 
@@ -24,12 +27,11 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
     address public managerAddress = 0x2C0972ee4fa7d629462f63C844E9D7059CbD95Aa;
     address public rawDataDecoderAndSanitizer = 0x42A342D1B3bB7AD9143FAF2378ec2e3D6F764105;
     BoringVault public boringVault = BoringVault(payable(0xe5A67Bb6335d73b3c9286eFD21b3d9eb1a8AE8C0));
-    ManagerWithMerkleVerification public manager =
-        ManagerWithMerkleVerification(managerAddress);
+    ManagerWithMerkleVerification public manager = ManagerWithMerkleVerification(managerAddress);
     address public accountantAddress = 0xfDb93132F12c9587a06b1dF859187a7ca435A5bD;
     RolesAuthority public rolesAuthority;
     address public rolesAuthorities = 0x901B87B0Df4dcdE0DdFf439bE9d2BD57379f0E50;
-    SuzakuUManager public suzakuUManager;
+    SuzakuDefaultCollateralUManager public suzakuUManager;
 
     Deployer public deployer;
 
@@ -50,7 +52,6 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
     }
 
     function generateSniperMerkleRoot() public {
-
         setSourceChainName(sepolia);
         console.log("Deployer address:", getAddress(sourceChain, "deployerAddress"));
         deployer = Deployer(getAddress(sourceChain, "deployerAddress"));
@@ -76,11 +77,11 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
 
         rolesAuthority = RolesAuthority(rolesAuthorities);
 
-        suzakuUManager = new SuzakuUManager(
+        suzakuUManager = new SuzakuDefaultCollateralUManager(
             getAddress(sourceChain, "dev0Address"), rolesAuthority, address(manager), address(boringVault)
         );
 
-        console.log("SuzakuUManager deployed at:", address(suzakuUManager));
+        console.log("SuzakuDefaultCollateralUManager deployed at:", address(suzakuUManager));
         console.log("Caller address:", msg.sender);
         console.log("RolesAuthority address:", address(rolesAuthority));
         // console.log("Merkle tree root:", merkleTree[merkleTree.length - 1][0]);
@@ -111,21 +112,35 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         rolesAuthority.setUserRole(address(suzakuUManager), 88, true); // Gives suzakuUmanager the SNIPER_ROLE
 
         rolesAuthority.setRoleCapability(
-            STRATEGIST_MULTISIG_ROLE, address(suzakuUManager), SuzakuUManager.updateMerkleTree.selector, true // Gives the strategist multisig the ability to update the merkle tree
+            STRATEGIST_MULTISIG_ROLE,
+            address(suzakuUManager),
+            SuzakuDefaultCollateralUManager.updateMerkleTree.selector,
+            true // Gives the strategist multisig the ability to update the merkle tree
         );
         rolesAuthority.setRoleCapability(
-            STRATEGIST_MULTISIG_ROLE, address(suzakuUManager), SuzakuUManager.setConfiguration.selector, true // Gives the strategist multisig the ability to set the configuration
+            STRATEGIST_MULTISIG_ROLE,
+            address(suzakuUManager),
+            SuzakuDefaultCollateralUManager.setConfiguration.selector,
+            true // Gives the strategist multisig the ability to set the configuration
         );
         rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(suzakuUManager), SuzakuUManager.assemble.selector, true // Gives the sniper the ability to assemble
+            SNIPER_ROLE,
+            address(suzakuUManager),
+            SuzakuDefaultCollateralUManager.assemble.selector,
+            true // Gives the sniper the ability to assemble
         );
         rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(suzakuUManager), SuzakuUManager.fullAssemble.selector, true // Gives the sniper the ability to full assemble
+            SNIPER_ROLE,
+            address(suzakuUManager),
+            SuzakuDefaultCollateralUManager.fullAssemble.selector,
+            true // Gives the sniper the ability to full assemble
         );
         rolesAuthority.setRoleCapability(
-            SNIPER_ROLE, address(managerAddress), ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector, true // Gives the sniper the ability to manage the vault with merkle verification
-        ); 
-      
+            SNIPER_ROLE,
+            address(managerAddress),
+            ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector,
+            true // Gives the sniper the ability to manage the vault with merkle verification
+        );
 
         // rolesAuthority.transferOwnership(getAddress(sourceChain, "dev1Address"));
         // suzakuUManager.transferOwnership(getAddress(sourceChain, "dev1Address"));
