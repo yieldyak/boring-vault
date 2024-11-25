@@ -26,7 +26,7 @@ pragma solidity 0.8.21;
 //     address boringVault = 0x08c6F91e2B681FaF5e17227F2a44C307b3C1364C;
 
 //     function setUp() external {
-//         privateKey = vm.envUint("ETHERFI_LIQUID_DEPLOYER");
+//         privateKey = vm.envUint("LIQUID_DEPLOYER");
 //         vm.createSelectFork("optimism");
 //     }
 

@@ -39,7 +39,7 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
     uint8 public constant SNIPER_ROLE = 88;
 
     function setUp() external {
-        privateKey = vm.envUint("ETHERFI_LIQUID_DEPLOYER");
+        privateKey = vm.envUint("LIQUID_DEPLOYER");
         vm.createSelectFork("sepolia");
     }
 

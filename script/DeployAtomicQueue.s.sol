@@ -28,7 +28,7 @@ contract DeployAtomicQueueScript is Script, ContractNames, SepoliaAddresses {
     address public owner = dev1Address;
 
     function setUp() external {
-        privateKey = vm.envUint("ETHERFI_LIQUID_DEPLOYER");
+        privateKey = vm.envUint("LIQUID_DEPLOYER");
         vm.createSelectFork("optimism");
     }
 
