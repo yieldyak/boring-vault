@@ -59,32 +59,30 @@ contract ChainValues {
 
     constructor() {
         // Add mainnet values
-        _addSepoliaValues();
+        _addAvalancheValues();
     }
 
     // Modify this function to add the values for the new chain
-    function _addSepoliaValues() private {
+    function _addAvalancheValues() private {
         // Liquid Ecosystem
-        values[sepolia]["deployerAddress"] = 0xF4B6D91B7DD8A360ad207Ba3D2109C42e7A6E3C7.toBytes32();
-        values[sepolia]["dev0Address"] = 0x0691D2A17B46608a0B5A926a5a511E773f9bA036.toBytes32();
-        values[sepolia]["dev1Address"] = 0x0691D2A17B46608a0B5A926a5a511E773f9bA036.toBytes32();
-        values[sepolia]["liquidPayoutAddress"] = 0x0691D2A17B46608a0B5A926a5a511E773f9bA036.toBytes32();
-        // values[sepolia]["liquidV1PriceRouter"] = 0x693799805B502264f9365440B93C113D86a4fFF5.toBytes32();
-        // values[sepolia]["liquidMultisig"] = 0xCEA8039076E35a825854c5C2f85659430b06ec96.toBytes32();
+        values[avalanche]["deployerAddress"] = 0xd2B990B4effB27dBFE7Dc3023709f856Db95dA2B.toBytes32();
+        values[avalanche]["dev0Address"] = 0x1A267D3f9f5116dF6ae00A4aD698CdcF27b71920.toBytes32();
+        values[avalanche]["dev1Address"] = 0xDcEDF06Fd33E1D7b6eb4b309f779a0e9D3172e44.toBytes32();
+        values[avalanche]["liquidPayoutAddress"] = 0x0CEc099933F0Da490DFF91724b02e2203FAAf9Af.toBytes32();
 
         // DeFi Ecosystem
-        values[sepolia]["ETH"] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.toBytes32();
-        // values[sepolia]["uniV3Router"] = 0xE592427A0AEce92De3Edee1F18E0157C05861564.toBytes32();
-        // values[sepolia]["uniV2Router"] = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D.toBytes32();
+        values[avalanche]["ETH"] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.toBytes32();
 
         // ERC20s
-        // values[sepolia]["USDC"] = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48.toBytes32();
-        values[sepolia]["WETH"] = 0x7b79995e5f793A07Bc00c21412e50Ecae098E7f9.toBytes32();
-        values[sepolia]["BTCb"] = 0x5f6887Dc1Cb759c47BD435448f7702209efB6c09.toBytes32();
-        values[sepolia]["sAVAX"] = 0x85D6d9E0D5721Eb32Eed28429e89A85F2148713b.toBytes32();
+        // values[avalanche]["USDC"] = 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48.toBytes32();
+        values[avalanche]["WETH"] = 0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7.toBytes32();
+        values[avalanche]["BTCb"] = 0x152b9d0FdC40C096757F570A51E494bd4b943E50.toBytes32();
+        values[avalanche]["sAVAX"] = 0x2b2C81e08f1Af8835a78Bb2A90AE924ACE0eA4bE.toBytes32();
+        values[avalanche]["ggAVAX"] = 0xA25EaF2906FA1a3a13EdAc9B9657108Af7B703e3.toBytes32();
 
         // Suzaku
-        values[sepolia]["DC_BTC.b"] = 0xceAf9Ba87E425CCb91e301A4a06d2F381A22766E.toBytes32();
-        values[sepolia]["DC_sAVAX"] = 0x8F4709b4c5074f44abFa1224D84E994bA13d41a5.toBytes32();
+        values[avalanche]["DC_BTC.b"] = 0x203E9101e09dc87ce391542E705a07522d19dF0d.toBytes32();
+        values[avalanche]["DC_sAVAX"] = 0xE3C983013B8c5830D866F550a28fD7Ed4393d5B7.toBytes32();
+        values[avalanche]["DC_ggAVAX"] = 0x0CEc099933F0Da490DFF91724b02e2203FAAf9Af.toBytes32();
     }
 }
