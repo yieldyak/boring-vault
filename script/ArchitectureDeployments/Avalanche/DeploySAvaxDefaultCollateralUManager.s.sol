@@ -14,16 +14,18 @@ import {RolesAuthority, Authority} from "@solmate/auth/authorities/RolesAuthorit
 import {ContractNames} from "resources/ContractNames.sol";
 import {Deployer} from "src/helper/Deployer.sol";
 import {MerkleTreeHelper} from "test/resources/MerkleTreeHelper/MerkleTreeHelper.sol";
+import {AvalancheAddresses} from "./AvalancheAddresses.sol";
 import "forge-std/console.sol";
 /**
  *  source .env && forge script script/ArchitectureDeployments/Avalanche/DeploySAvaxDefaultCollateralUManager.s.sol:DeploySAvaxDefaultCollateralUManager --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
  */
 
-contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames {
+contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames, AvalancheAddresses {
     using FixedPointMathLib for uint256;
 
     uint256 public privateKey;
 
+    address public deployerContractAddress = 0x79c8F93aaeF27aE4784b04B407c7Df20fF636018;
     address public managerAddress = 0x1cd8B25C620C0596c60149c7dE2dd3552569379D;
     address public rawDataDecoderAndSanitizer = 0xe788464Cb0f70E2BB8D4B6995b255D8F4Ed32cC9;
     BoringVault public boringVault = BoringVault(payable(0x2badd78b05C913f129f649627c4279dC60D478E1));
@@ -36,7 +38,9 @@ contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames
     Deployer public deployer;
 
     uint8 public constant STRATEGIST_MULTISIG_ROLE = 10;
-    uint8 public constant SNIPER_ROLE = 88;
+    uint8 public constant SNIPER_ROLE = 22;
+
+    uint96 public constant MIN_DEPOSIT = 1e16;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");
@@ -53,8 +57,8 @@ contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames
 
     function generateSniperMerkleRoot() public {
         setSourceChainName(avalanche);
-        console.log("Deployer address:", getAddress(sourceChain, "deployerAddress"));
-        deployer = Deployer(getAddress(sourceChain, "deployerAddress"));
+        console.log("Deployer address:", deployerContractAddress);
+        deployer = Deployer(deployerContractAddress);
 
         // rolesAuthority = RolesAuthority(deployer.getAddress(SuzakuRolesAuthorityName));
         setAddress(false, avalanche, "boringVault", address(boringVault));
@@ -86,12 +90,6 @@ contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames
         // console.log("Merkle tree root:", merkleTree[merkleTree.length - 1][0]);
         console.log("Merkle tree length:", merkleTree.length);
 
-        // Assign the necessary role to the caller
-
-        if (!rolesAuthority.doesUserHaveRole(getAddress(sourceChain, "dev1Address"), STRATEGIST_MULTISIG_ROLE)) {
-            rolesAuthority.setUserRole(getAddress(sourceChain, "dev1Address"), STRATEGIST_MULTISIG_ROLE, true);
-        }
-
         // suzakuUManager.updateMerkleTree(merkleTree, false);
         try suzakuUManager.updateMerkleTree(merkleTree, false) {
             console.log("Merkle tree updated successfully");
@@ -102,10 +100,8 @@ contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames
         }
 
         suzakuUManager.setConfiguration(
-            DefaultCollateral(getAddress(sourceChain, "DC_sAVAX")), 1e18, rawDataDecoderAndSanitizer
+            DefaultCollateral(getAddress(sourceChain, "DC_sAVAX")), MIN_DEPOSIT, rawDataDecoderAndSanitizer
         );
-
-        rolesAuthority.setUserRole(address(suzakuUManager), 88, true); // Gives suzakuUmanager the SNIPER_ROLE
 
         rolesAuthority.setRoleCapability(
             STRATEGIST_MULTISIG_ROLE,
@@ -137,6 +133,9 @@ contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames
             BarebonesManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector,
             true // Gives the sniper the ability to manage the vault with merkle verification
         );
+
+        if (suzakuUManager.owner() != address(0)) suzakuUManager.transferOwnership(address(0));
+        if (rolesAuthority.owner() != teamMultisig) rolesAuthority.transferOwnership(teamMultisig);
 
         /// Note need to set merkle root in the manager THIS IS MISSING
 

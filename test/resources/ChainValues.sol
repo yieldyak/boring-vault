@@ -65,10 +65,7 @@ contract ChainValues {
     // Modify this function to add the values for the new chain
     function _addAvalancheValues() private {
         // Liquid Ecosystem
-        values[avalanche]["deployerAddress"] = 0xd2B990B4effB27dBFE7Dc3023709f856Db95dA2B.toBytes32();
-        values[avalanche]["dev0Address"] = 0x1A267D3f9f5116dF6ae00A4aD698CdcF27b71920.toBytes32();
-        values[avalanche]["dev1Address"] = 0xDcEDF06Fd33E1D7b6eb4b309f779a0e9D3172e44.toBytes32();
-        values[avalanche]["liquidPayoutAddress"] = 0x0CEc099933F0Da490DFF91724b02e2203FAAf9Af.toBytes32();
+        values[avalanche]["dev0Address"] = 0xDcEDF06Fd33E1D7b6eb4b309f779a0e9D3172e44.toBytes32();
 
         // DeFi Ecosystem
         values[avalanche]["ETH"] = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE.toBytes32();

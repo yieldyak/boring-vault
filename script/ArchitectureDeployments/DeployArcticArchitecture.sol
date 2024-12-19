@@ -148,7 +148,7 @@ contract DeployArcticArchitecture is Script, ContractNames {
             deployedAddress = _getAddressIfDeployed(names.rolesAuthority);
             if (deployedAddress == address(0)) {
                 creationCode = type(RolesAuthority).creationCode;
-                constructorArgs = abi.encode(owner, Authority(address(0)));
+                constructorArgs = abi.encode(developmentAddress, Authority(address(0)));
                 rolesAuthority =
                     RolesAuthority(deployer.deployContract(names.rolesAuthority, creationCode, constructorArgs, 0));
             } else {

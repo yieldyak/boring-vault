@@ -42,7 +42,6 @@ contract DeployDeployerScript is Script, ContractNames, AvalancheAddresses {
 
         rolesAuthority.setRoleCapability(DEPLOYER_ROLE, address(deployer), Deployer.deployContract.selector, true);
         rolesAuthority.setUserRole(dev0Address, DEPLOYER_ROLE, true);
-        rolesAuthority.setUserRole(dev1Address, DEPLOYER_ROLE, true);
 
         vm.stopBroadcast();
     }

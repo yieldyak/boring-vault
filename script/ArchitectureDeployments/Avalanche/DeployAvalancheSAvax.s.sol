@@ -18,10 +18,10 @@ contract DeployAvalancheSAvax is DeployArcticArchitecture, AvalancheAddresses {
     uint256 public privateKey;
 
     // Deployment parameters
-    string public boringVaultName = "YY sAvax Test Vault";
-    string public boringVaultSymbol = "testyyLRTsAvax";
+    string public boringVaultName = "";
+    string public boringVaultSymbol = "";
     uint8 public boringVaultDecimals = 18;
-    address public owner = dev0Address;
+    address public owner = teamMultisig;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");
@@ -35,7 +35,7 @@ contract DeployAvalancheSAvax is DeployArcticArchitecture, AvalancheAddresses {
         configureDeployment.setupDepositAssets = true;
         configureDeployment.setupWithdrawAssets = true;
         configureDeployment.finishSetup = true;
-        configureDeployment.setupTestUser = true;
+        configureDeployment.setupTestUser = false;
         configureDeployment.saveDeploymentDetails = true;
         configureDeployment.deployerAddress = deployerAddress;
         configureDeployment.WETH = address(WETH);
