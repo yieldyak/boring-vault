@@ -3,29 +3,29 @@ pragma solidity 0.8.21;
 
 import {DeployArcticArchitecture, ERC20, Deployer} from "script/ArchitectureDeployments/DeployArcticArchitecture.sol";
 import {AddressToBytes32Lib} from "src/helper/AddressToBytes32Lib.sol";
-import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
+import {AvalancheAddresses} from "./AvalancheAddresses.sol";
 
 // Import Decoder and Sanitizer to deploy.
-import {SepoliaSuzakuDecoderAndSanitzer} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
+import {SuzakuDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/SuzakuDecoderAndSanitizer.sol";
 
 /**
- *  source .env && forge script script/ArchitectureDeployments/sepolia/DeploySepoliaBTCb.s.sol:DeploySepoliaVaultScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify
+ *  source .env && forge script script/ArchitectureDeployments/Avalanche/DeployAvalancheSAvax.s.sol:DeployAvalancheSAvax --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
-contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
+contract DeployAvalancheSAvax is DeployArcticArchitecture, AvalancheAddresses {
     using AddressToBytes32Lib for address;
 
     uint256 public privateKey;
 
     // Deployment parameters
-    string public boringVaultName = "BTCb Vault";
-    string public boringVaultSymbol = "suzLRTBTCb";
+    string public boringVaultName = "";
+    string public boringVaultSymbol = "";
     uint8 public boringVaultDecimals = 18;
-    address public owner = dev0Address;
+    address public owner = teamMultisig;
 
     function setUp() external {
-        privateKey = vm.envUint("ETHERFI_LIQUID_DEPLOYER");
-        vm.createSelectFork("sepolia");
+        privateKey = vm.envUint("LIQUID_DEPLOYER");
+        vm.createSelectFork("avalanche");
     }
 
     function run() external {
@@ -35,10 +35,9 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         configureDeployment.setupDepositAssets = true;
         configureDeployment.setupWithdrawAssets = true;
         configureDeployment.finishSetup = true;
-        configureDeployment.setupTestUser = true;
+        configureDeployment.setupTestUser = false;
         configureDeployment.saveDeploymentDetails = true;
         configureDeployment.deployerAddress = deployerAddress;
-        configureDeployment.balancerVault = balancerVault;
         configureDeployment.WETH = address(WETH);
         configureDeployment.initiatePullFundsFromVault = true;
 
@@ -46,18 +45,18 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         deployer = Deployer(configureDeployment.deployerAddress);
 
         // Define names to determine where contracts are deployed.
-        names.rolesAuthority = SepoliaVaultRolesAuthorityName;
+        names.rolesAuthority = AvalancheVaultRolesAuthorityName;
         names.lens = ArcticArchitectureLensName;
-        names.boringVault = SepoliaVaultName;
-        names.manager = SepoliaVaultManagerName;
-        names.accountant = SepoliaVaultAccountantName;
-        names.teller = SepoliaVaultTellerName;
-        names.rawDataDecoderAndSanitizer = SepoliaVaultDecoderAndSanitizerName;
-        names.delayedWithdrawer = SepoliaVaultDelayedWithdrawer;
+        names.boringVault = AvalancheVaultName;
+        names.manager = AvalancheVaultManagerName;
+        names.accountant = AvalancheVaultAccountantName;
+        names.teller = AvalancheVaultTellerName;
+        names.rawDataDecoderAndSanitizer = AvalancheVaultDecoderAndSanitizerName;
+        names.delayedWithdrawer = AvalancheVaultDelayedWithdrawer;
 
         // Define Accountant Parameters.
         accountantParameters.payoutAddress = liquidPayoutAddress;
-        accountantParameters.base = BTCb;
+        accountantParameters.base = sAVAX;
         // Decimals are in terms of `base`.
         accountantParameters.startingExchangeRate = 1e18;
         //  4 decimals
@@ -69,12 +68,8 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         accountantParameters.minimumUpateDelayInSeconds = 1 days / 4;
 
         // Define Decoder and Sanitizer deployment details.
-        bytes memory creationCode = type(SepoliaSuzakuDecoderAndSanitzer)
-            .creationCode;
-        bytes memory constructorArgs = abi.encode(
-            deployer.getAddress(names.boringVault),
-            uniswapV3NonFungiblePositionManager
-        );
+        bytes memory creationCode = type(SuzakuDecoderAndSanitizer).creationCode;
+        bytes memory constructorArgs = abi.encode(deployer.getAddress(names.boringVault));
 
         // Setup extra deposit assets.
         // none
@@ -84,7 +79,7 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
 
         withdrawAssets.push(
             WithdrawAsset({
-                asset: BTCb,
+                asset: sAVAX,
                 withdrawDelay: 300 seconds,
                 completionWindow: 1500 seconds,
                 withdrawFee: 0,
@@ -100,7 +95,7 @@ contract DeploySepoliaBTCb is DeployArcticArchitecture, SepoliaAddresses {
         vm.startBroadcast(privateKey);
 
         _deploy(
-            "SepoliaDeployment.json",
+            "AvalancheSAvaxDeployment.json",
             owner,
             boringVaultName,
             boringVaultSymbol,

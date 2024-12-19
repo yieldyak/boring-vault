@@ -2,15 +2,14 @@
 pragma solidity 0.8.21;
 
 import {FixedPointMathLib} from "@solmate/utils/FixedPointMathLib.sol";
-import {ManagerWithMerkleVerification} from "src/base/Roles/ManagerWithMerkleVerification.sol";
+import {BarebonesManagerWithMerkleVerification} from "src/base/Roles/BarebonesManagerWithMerkleVerification.sol";
 import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {Auth, Authority} from "@solmate/auth/Auth.sol";
 import {SSTORE2} from "lib/solmate/src/utils/SSTORE2.sol";
-import {SuzakuDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SuzakuDecoderAndSanitizer.sol";
 import {DefaultCollateral} from "src/interfaces/DefaultCollateral.sol";
 import "forge-std/console.sol";
 
-contract SuzakuUManager is Auth {
+contract SuzakuDefaultCollateralUManager is Auth {
     using FixedPointMathLib for uint256;
 
     // ========================================= STRUCTS =========================================
@@ -50,13 +49,15 @@ contract SuzakuUManager is Auth {
 
     //============================== ERRORS ===============================
 
-    error SuzakuUManager__BadHash(bytes32 leafA, bytes32 leafB, bytes32 expectedLeafAB, bytes32 actualLeafAB);
-    error SuzakuUManager__InvalidMerkleTree();
-    error SuzakuUManager__DepositAmountExceedsLimit(uint256 amount, uint256 limitDelta);
-    error SuzakuUManager__DepositAmountExceedsBalance(uint256 amount, uint256 balance);
-    error SuzakuUManager__DepositAmountTooSmall(uint256 amount, uint256 minimumDeposit);
-    error SuzakuUManager__DecoderAndSanitizerNotSet();
-    error SuzakuUManager__MinimumDepositNotSet();
+    error SuzakuDefaultCollateralUManager__BadHash(
+        bytes32 leafA, bytes32 leafB, bytes32 expectedLeafAB, bytes32 actualLeafAB
+    );
+    error SuzakuDefaultCollateralUManager__InvalidMerkleTree();
+    error SuzakuDefaultCollateralUManager__DepositAmountExceedsLimit(uint256 amount, uint256 limitDelta);
+    error SuzakuDefaultCollateralUManager__DepositAmountExceedsBalance(uint256 amount, uint256 balance);
+    error SuzakuDefaultCollateralUManager__DepositAmountTooSmall(uint256 amount, uint256 minimumDeposit);
+    error SuzakuDefaultCollateralUManager__DecoderAndSanitizerNotSet();
+    error SuzakuDefaultCollateralUManager__MinimumDepositNotSet();
 
     //============================== EVENTS ===============================
 
@@ -67,9 +68,9 @@ contract SuzakuUManager is Auth {
     //============================== IMMUTABLES ===============================
 
     /**
-     * @notice The ManagerWithMerkleVerification this uManager works with.
+     * @notice The BarebonesManagerWithMerkleVerification this uManager works with.
      */
-    ManagerWithMerkleVerification internal immutable manager;
+    BarebonesManagerWithMerkleVerification internal immutable manager;
 
     /**
      * @notice The BoringVault this uManager works with.
@@ -79,7 +80,7 @@ contract SuzakuUManager is Auth {
     constructor(address _owner, Authority _authoirty, address _manager, address _boringVault)
         Auth(_owner, Authority(_authoirty))
     {
-        manager = ManagerWithMerkleVerification(_manager);
+        manager = BarebonesManagerWithMerkleVerification(_manager);
         boringVault = _boringVault;
     }
 
@@ -95,7 +96,6 @@ contract SuzakuUManager is Auth {
      * @param validateMerkleTree If true, the merkle tree will be validated.
      * @dev Callable by STRATEGIST_MULTISIG_ROLE
      */
-
     function updateMerkleTree(bytes32[][] calldata _merkleTree, bool validateMerkleTree) external requiresAuth {
         if (validateMerkleTree) {
             // Check that the tree is valid.
@@ -103,12 +103,12 @@ contract SuzakuUManager is Auth {
                 uint256 levelLength = _merkleTree[i].length;
                 if (levelLength % 2 != 0) {
                     emit MerkleTreeValidationFailed("Invalid level length", i, 0);
-                    revert SuzakuUManager__InvalidMerkleTree();
+                    revert SuzakuDefaultCollateralUManager__InvalidMerkleTree();
                 }
                 uint256 nextLevelLength = _merkleTree[i + 1].length;
                 if (levelLength / 2 != nextLevelLength) {
                     emit MerkleTreeValidationFailed("Invalid next level length", i, 0);
-                    revert SuzakuUManager__InvalidMerkleTree();
+                    revert SuzakuDefaultCollateralUManager__InvalidMerkleTree();
                 }
                 for (uint256 j; j < _merkleTree[i].length; j += 2) {
                     bytes32 leafA = _merkleTree[i][j];
@@ -117,7 +117,7 @@ contract SuzakuUManager is Auth {
                     bytes32 actualLeafAB = _hashPair(leafA, leafB);
                     if (actualLeafAB != expectedLeafAB) {
                         emit MerkleTreeValidationFailed("Hash mismatch", i, j);
-                        revert SuzakuUManager__BadHash(leafA, leafB, expectedLeafAB, actualLeafAB);
+                        revert SuzakuDefaultCollateralUManager__BadHash(leafA, leafB, expectedLeafAB, actualLeafAB);
                     }
                 }
             }
@@ -126,7 +126,7 @@ contract SuzakuUManager is Auth {
             bytes32 managerRoot = manager.manageRoot(address(this));
             if (proposedRoot != managerRoot) {
                 emit RootMismatch(proposedRoot, managerRoot);
-                revert SuzakuUManager__InvalidMerkleTree();
+                revert SuzakuDefaultCollateralUManager__InvalidMerkleTree();
             }
         }
         bytes memory data = abi.encode(_merkleTree);
@@ -147,10 +147,10 @@ contract SuzakuUManager is Auth {
         requiresAuth
     {
         if (decoderAndSanitizer == address(0)) {
-            revert SuzakuUManager__DecoderAndSanitizerNotSet();
+            revert SuzakuDefaultCollateralUManager__DecoderAndSanitizerNotSet();
         }
         if (minimumDeposit == 0) {
-            revert SuzakuUManager__MinimumDepositNotSet();
+            revert SuzakuDefaultCollateralUManager__MinimumDepositNotSet();
         }
         configurations[address(defaultCollateral)] = Configuration(minimumDeposit, decoderAndSanitizer);
 
@@ -204,7 +204,7 @@ contract SuzakuUManager is Auth {
         bytes32[][] memory merkleTree = viewMerkleTree();
         bytes32[][] memory unoProof = new bytes32[][](1);
         if (unoDecoderAndSanitizer[0] == address(0)) {
-            revert SuzakuUManager__DecoderAndSanitizerNotSet();
+            revert SuzakuDefaultCollateralUManager__DecoderAndSanitizerNotSet();
         }
         address[] memory unoTarget = new address[](1);
         bytes[] memory unoTargetData = new bytes[](1);
@@ -274,10 +274,10 @@ contract SuzakuUManager is Auth {
             // Bot wants to deposit a specific amount.
             // Revert early if the amount is too high.
             if (amount > limitDelta) {
-                revert SuzakuUManager__DepositAmountExceedsLimit(amount, limitDelta);
+                revert SuzakuDefaultCollateralUManager__DepositAmountExceedsLimit(amount, limitDelta);
             }
             if (amount > assetBalance) {
-                revert SuzakuUManager__DepositAmountExceedsBalance(amount, assetBalance);
+                revert SuzakuDefaultCollateralUManager__DepositAmountExceedsBalance(amount, assetBalance);
             }
             max = amount;
         } else {
@@ -288,7 +288,7 @@ contract SuzakuUManager is Auth {
 
         // Make sure we meet the minimum deposit requirement.
         if (max < minimumDeposit) {
-            revert SuzakuUManager__DepositAmountTooSmall(max, minimumDeposit);
+            revert SuzakuDefaultCollateralUManager__DepositAmountTooSmall(max, minimumDeposit);
         }
     }
 

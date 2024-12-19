@@ -7,9 +7,7 @@ import {SafeTransferLib} from "@solmate/utils/SafeTransferLib.sol";
 import {FixedPointMathLib} from "@solmate/utils/FixedPointMathLib.sol";
 import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {ERC4626} from "@solmate/tokens/ERC4626.sol";
-import {
-    SepoliaSuzakuDecoderAndSanitzer
-} from "src/base/DecodersAndSanitizers/SepoliaSuzakuDecoderAndSanitzer.sol";
+import {SuzakuDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/SuzakuDecoderAndSanitizer.sol";
 import {BalancerVault} from "src/interfaces/BalancerVault.sol";
 import {IUniswapV3Router} from "src/interfaces/IUniswapV3Router.sol";
 import {DecoderCustomTypes} from "src/interfaces/DecoderCustomTypes.sol";
@@ -38,7 +36,6 @@ contract ManagerWithMerkleVerificationTest is Test, MerkleTreeHelper {
     ERC20 internal USDC;
     ERC20 internal USDT;
     address internal vault;
-    address internal uniswapV3NonFungiblePositionManager;
 
     function setUp() external {
         setSourceChainName("sepolia");
@@ -53,14 +50,12 @@ contract ManagerWithMerkleVerificationTest is Test, MerkleTreeHelper {
         USDC = getERC20(sourceChain, "USDC");
         USDT = getERC20(sourceChain, "USDT");
         vault = getAddress(sourceChain, "vault");
-        uniswapV3NonFungiblePositionManager = getAddress(sourceChain, "uniswapV3NonFungiblePositionManager");
 
         boringVault = new BoringVault(address(this), "Boring Vault", "BV", 18);
 
         manager = new ManagerWithMerkleVerification(address(this), address(boringVault), vault);
 
-        rawDataDecoderAndSanitizer =
-            address(new SepoliaSuzakuDecoderAndSanitzer(address(boringVault), uniswapV3NonFungiblePositionManager));
+        rawDataDecoderAndSanitizer = address(new SuzakuDecoderAndSanitizer(address(boringVault)));
         setAddress(false, sourceChain, "boringVault", address(boringVault));
         setAddress(false, sourceChain, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
         setAddress(false, sourceChain, "manager", address(manager));

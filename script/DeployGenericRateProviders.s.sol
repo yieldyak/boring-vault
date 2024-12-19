@@ -49,7 +49,7 @@ pragma solidity 0.8.21;
 //     // Dont need an aweETH rate provider as aweETH is 1:1 with weETH so we can just use the weETH rate provider.
 
 //     function setUp() external {
-//         privateKey = vm.envUint("ETHERFI_LIQUID_DEPLOYER");
+//         privateKey = vm.envUint("LIQUID_DEPLOYER");
 //         vm.createSelectFork("mainnet");
 
 //         rolesAuthority = RolesAuthority(deployer.getAddress(EtherFiLiquidEthRolesAuthorityName));

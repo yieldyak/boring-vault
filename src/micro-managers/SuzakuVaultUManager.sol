@@ -2,15 +2,14 @@
 pragma solidity 0.8.21;
 
 import {FixedPointMathLib} from "@solmate/utils/FixedPointMathLib.sol";
-import {ManagerWithMerkleVerification} from "src/base/Roles/ManagerWithMerkleVerification.sol";
+import {BarebonesManagerWithMerkleVerification} from "src/base/Roles/BarebonesManagerWithMerkleVerification.sol";
 import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {Auth, Authority} from "@solmate/auth/Auth.sol";
 import {SSTORE2} from "lib/solmate/src/utils/SSTORE2.sol";
-import {VaultDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SuzakuVaultDecoderAndSanitizer.sol";
 import {IVault} from "lib/symbiotic/src/interfaces/vault/IVault.sol";
 import "forge-std/console.sol";
 
-contract VaultUManager is Auth {
+contract SuzakuVaultUManager is Auth {
     using FixedPointMathLib for uint256;
 
     // ========================================= STRUCTS =========================================
@@ -50,13 +49,13 @@ contract VaultUManager is Auth {
 
     //============================== ERRORS ===============================
 
-    error VaultUManager__BadHash(bytes32 leafA, bytes32 leafB, bytes32 expectedLeafAB, bytes32 actualLeafAB);
-    error VaultUManager__InvalidMerkleTree();
-    error VaultUManager__DepositAmountExceedsLimit(uint256 amount, uint256 limitDelta);
-    error VaultUManager__DepositAmountExceedsBalance(uint256 amount, uint256 balance);
-    error VaultUManager__DepositAmountTooSmall(uint256 amount, uint256 minimumDeposit);
-    error VaultUManager__DecoderAndSanitizerNotSet();
-    error VaultUManager__MinimumDepositNotSet();
+    error SuzakuVaultUManager__BadHash(bytes32 leafA, bytes32 leafB, bytes32 expectedLeafAB, bytes32 actualLeafAB);
+    error SuzakuVaultUManager__InvalidMerkleTree();
+    error SuzakuVaultUManager__DepositAmountExceedsLimit(uint256 amount, uint256 limitDelta);
+    error SuzakuVaultUManager__DepositAmountExceedsBalance(uint256 amount, uint256 balance);
+    error SuzakuVaultUManager__DepositAmountTooSmall(uint256 amount, uint256 minimumDeposit);
+    error SuzakuVaultUManager__DecoderAndSanitizerNotSet();
+    error SuzakuVaultUManager__MinimumDepositNotSet();
 
     //============================== EVENTS ===============================
 
@@ -67,9 +66,9 @@ contract VaultUManager is Auth {
     //============================== IMMUTABLES ===============================
 
     /**
-     * @notice The ManagerWithMerkleVerification this uManager works with.
+     * @notice The BarebonesManagerWithMerkleVerification this uManager works with.
      */
-    ManagerWithMerkleVerification internal immutable manager;
+    BarebonesManagerWithMerkleVerification internal immutable manager;
 
     /**
      * @notice The BoringVault this uManager works with.
@@ -79,7 +78,7 @@ contract VaultUManager is Auth {
     constructor(address _owner, Authority _authority, address _manager, address _boringVault)
         Auth(_owner, Authority(_authority))
     {
-        manager = ManagerWithMerkleVerification(_manager);
+        manager = BarebonesManagerWithMerkleVerification(_manager);
         boringVault = _boringVault;
     }
 
@@ -95,18 +94,17 @@ contract VaultUManager is Auth {
      * @param validateMerkleTree If true, the merkle tree will be validated.
      * @dev Callable by STRATEGIST_MULTISIG_ROLE
      */
-
     function updateMerkleTree(bytes32[][] calldata _merkleTree, bool validateMerkleTree) external requiresAuth {
         if (validateMerkleTree) {
             // Check that the tree is valid.
             for (uint256 i; i < _merkleTree.length - 1; ++i) {
                 uint256 levelLength = _merkleTree[i].length;
                 if (levelLength % 2 != 0) {
-                    revert VaultUManager__InvalidMerkleTree();
+                    revert SuzakuVaultUManager__InvalidMerkleTree();
                 }
                 uint256 nextLevelLength = _merkleTree[i + 1].length;
                 if (levelLength / 2 != nextLevelLength) {
-                    revert VaultUManager__InvalidMerkleTree();
+                    revert SuzakuVaultUManager__InvalidMerkleTree();
                 }
                 for (uint256 j; j < _merkleTree[i].length; j += 2) {
                     bytes32 leafA = _merkleTree[i][j];
@@ -114,7 +112,7 @@ contract VaultUManager is Auth {
                     bytes32 expectedLeafAB = _merkleTree[i + 1][j / 2];
                     bytes32 actualLeafAB = _hashPair(leafA, leafB);
                     if (actualLeafAB != expectedLeafAB) {
-                        revert VaultUManager__BadHash(leafA, leafB, expectedLeafAB, actualLeafAB);
+                        revert SuzakuVaultUManager__BadHash(leafA, leafB, expectedLeafAB, actualLeafAB);
                     }
                 }
             }
@@ -122,7 +120,7 @@ contract VaultUManager is Auth {
             bytes32 proposedRoot = _merkleTree[_merkleTree.length - 1][0];
             bytes32 managerRoot = manager.manageRoot(address(this));
             if (proposedRoot != managerRoot) {
-                revert VaultUManager__InvalidMerkleTree();
+                revert SuzakuVaultUManager__InvalidMerkleTree();
             }
         }
         bytes memory data = abi.encode(_merkleTree);
@@ -138,16 +136,12 @@ contract VaultUManager is Auth {
      * @param decoderAndSanitizer The decoder and sanitizer to use to sanitize the call.
      * @dev Callable by STRATEGIST_MULTISIG_ROLE
      */
-
-    function setConfiguration(IVault vault, uint96 minimumDeposit, address decoderAndSanitizer)
-        external
-        requiresAuth
-    {
+    function setConfiguration(IVault vault, uint96 minimumDeposit, address decoderAndSanitizer) external requiresAuth {
         if (decoderAndSanitizer == address(0)) {
-            revert VaultUManager__DecoderAndSanitizerNotSet();
+            revert SuzakuVaultUManager__DecoderAndSanitizerNotSet();
         }
         if (minimumDeposit == 0) {
-            revert VaultUManager__MinimumDepositNotSet();
+            revert SuzakuVaultUManager__MinimumDepositNotSet();
         }
         configurations[address(vault)] = Configuration(minimumDeposit, decoderAndSanitizer);
 
@@ -163,7 +157,6 @@ contract VaultUManager is Auth {
      * @dev Callable by SNIPER_ROLE
      * @dev Use type(uint256).max to deposit as much as possible.
      */
-
     function assemble(IVault vault, uint256 amount) external requiresAuth returns (uint256 assembled) {
         assembled = _assemble(vault, amount);
     }
@@ -173,11 +166,9 @@ contract VaultUManager is Auth {
      * @param vault The vault to assemble.
      * @dev Callable by SNIPER_ROLE
      */
-
     function fullAssemble(IVault vault) external requiresAuth returns (uint256 assembled) {
         assembled = _assemble(vault, type(uint256).max);
     }
-
 
     // ========================================= HELPER FUNCTIONS =========================================
 
@@ -185,7 +176,6 @@ contract VaultUManager is Auth {
      * @notice Helper function to handle approving and depositing into a vault.
      * @return the amount assembled.
      */
-
     function _assemble(IVault vault, uint256 amount) internal returns (uint256) {
         ERC20 collateral = ERC20(vault.collateral());
         uint256 allowance = collateral.allowance(boringVault, address(vault));
@@ -201,7 +191,7 @@ contract VaultUManager is Auth {
         bytes32[][] memory merkleTree = viewMerkleTree();
         bytes32[][] memory unoProof = new bytes32[][](1);
         if (unoDecoderAndSanitizer[0] == address(0)) {
-            revert VaultUManager__DecoderAndSanitizerNotSet();
+            revert SuzakuVaultUManager__DecoderAndSanitizerNotSet();
         }
         address[] memory unoTarget = new address[](1);
         bytes[] memory unoTargetData = new bytes[](1);
@@ -259,7 +249,6 @@ contract VaultUManager is Auth {
      * @param minimumDeposit The minimum amount that can be deposited.
      * @return max The maximum amount that can be deposited.
      */
-
     function _maxDeposit(IVault vault, ERC20 collateral, uint256 amount, uint256 minimumDeposit)
         internal
         view
@@ -282,28 +271,29 @@ contract VaultUManager is Auth {
 
         if (isDepositLimit) {
             uint256 limitDelta = depositLimit - vault.totalStake();
-            max = (amount != type(uint256).max) ? amount : (limitDelta < collateralBalance ? limitDelta : collateralBalance);
-            
+            max = (amount != type(uint256).max)
+                ? amount
+                : (limitDelta < collateralBalance ? limitDelta : collateralBalance);
+
             if (amount != type(uint256).max && amount > limitDelta) {
-                revert VaultUManager__DepositAmountExceedsLimit(amount, limitDelta);
+                revert SuzakuVaultUManager__DepositAmountExceedsLimit(amount, limitDelta);
             }
         } else {
             max = (amount != type(uint256).max) ? amount : collateralBalance;
         }
 
         if (amount != type(uint256).max && amount > collateralBalance) {
-            revert VaultUManager__DepositAmountExceedsBalance(amount, collateralBalance);
+            revert SuzakuVaultUManager__DepositAmountExceedsBalance(amount, collateralBalance);
         }
 
         if (max < minimumDeposit) {
-            revert VaultUManager__DepositAmountTooSmall(max, minimumDeposit);
+            revert SuzakuVaultUManager__DepositAmountTooSmall(max, minimumDeposit);
         }
     }
 
     /**
      * @notice Efficiently hash two bytes32 values.
      */
-
     function _efficientHash(bytes32 a, bytes32 b) private pure returns (bytes32 value) {
         /// @solidity memory-safe-assembly
         assembly {
@@ -316,7 +306,6 @@ contract VaultUManager is Auth {
     /**
      * @notice Efficiently hash a pair of bytes32 values in numerical order.
      */
-
     function _hashPair(bytes32 a, bytes32 b) private pure returns (bytes32) {
         return a < b ? _efficientHash(a, b) : _efficientHash(b, a);
     }
@@ -327,7 +316,6 @@ contract VaultUManager is Auth {
      * @param tree The merkle tree to generate the proof from.
      * @return proof The proof for the leaf.
      */
-
     function _generateProof(bytes32 leaf, bytes32[][] memory tree) internal pure returns (bytes32[] memory proof) {
         // The length of each proof is the height of the tree - 1.
         uint256 treeLength = tree.length;
@@ -355,7 +343,6 @@ contract VaultUManager is Auth {
      * @param addressArgument The address argument of the call.
      * @return leaf The leaf for the merkle tree.
      */
-
     function _buildLeaf(address decoderAndSanitizer, address target, bytes4 selector, address addressArgument)
         internal
         pure
@@ -368,7 +355,6 @@ contract VaultUManager is Auth {
      * @notice View the merkle tree.
      * @return merkleTree The merkle tree.
      */
-
     function viewMerkleTree() public view returns (bytes32[][] memory merkleTree) {
         bytes memory data = SSTORE2.read(pointer);
         merkleTree = abi.decode(data, (bytes32[][]));

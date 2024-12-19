@@ -6,7 +6,7 @@ import {FixedPointMathLib} from "@solmate/utils/FixedPointMathLib.sol";
 import {ERC20} from "@solmate/tokens/ERC20.sol";
 import {Strings} from "lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 import {ERC4626} from "@solmate/tokens/ERC4626.sol";
-import {ManagerWithMerkleVerification} from "src/base/Roles/ManagerWithMerkleVerification.sol";
+import {BarebonesManagerWithMerkleVerification} from "src/base/Roles/BarebonesManagerWithMerkleVerification.sol";
 import {
     SuzakuDefaultCollateralUManager, DefaultCollateral
 } from "src/micro-managers/SuzakuDefaultCollateralUManager.sol";
@@ -14,33 +14,37 @@ import {RolesAuthority, Authority} from "@solmate/auth/authorities/RolesAuthorit
 import {ContractNames} from "resources/ContractNames.sol";
 import {Deployer} from "src/helper/Deployer.sol";
 import {MerkleTreeHelper} from "test/resources/MerkleTreeHelper/MerkleTreeHelper.sol";
+import {AvalancheAddresses} from "./AvalancheAddresses.sol";
 import "forge-std/console.sol";
 /**
- *  source .env && forge script script/DeploySepliaSuzakuUManager.s.sol:DeploySepliaSuzakuUManagerScript --with-gas-price 10000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify
+ *  source .env && forge script script/ArchitectureDeployments/Avalanche/DeploySAvaxDefaultCollateralUManager.s.sol:DeploySAvaxDefaultCollateralUManager --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
  */
 
-contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
+contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames, AvalancheAddresses {
     using FixedPointMathLib for uint256;
 
     uint256 public privateKey;
 
-    address public managerAddress = 0x2C0972ee4fa7d629462f63C844E9D7059CbD95Aa;
-    address public rawDataDecoderAndSanitizer = 0x42A342D1B3bB7AD9143FAF2378ec2e3D6F764105;
-    BoringVault public boringVault = BoringVault(payable(0xe5A67Bb6335d73b3c9286eFD21b3d9eb1a8AE8C0));
-    ManagerWithMerkleVerification public manager = ManagerWithMerkleVerification(managerAddress);
-    address public accountantAddress = 0xfDb93132F12c9587a06b1dF859187a7ca435A5bD;
+    address public deployerContractAddress = 0x79c8F93aaeF27aE4784b04B407c7Df20fF636018;
+    address public managerAddress = 0x1cd8B25C620C0596c60149c7dE2dd3552569379D;
+    address public rawDataDecoderAndSanitizer = 0xe788464Cb0f70E2BB8D4B6995b255D8F4Ed32cC9;
+    BoringVault public boringVault = BoringVault(payable(0x2badd78b05C913f129f649627c4279dC60D478E1));
+    BarebonesManagerWithMerkleVerification public manager = BarebonesManagerWithMerkleVerification(managerAddress);
+    address public accountantAddress = 0x93a309e0C8b20C764758b94f950Be8B1676fFb17;
     RolesAuthority public rolesAuthority;
-    address public rolesAuthorities = 0x901B87B0Df4dcdE0DdFf439bE9d2BD57379f0E50;
+    address public rolesAuthorities = 0x01fB02A17c05a2c793Aadb6f269a615Ea2A7b226;
     SuzakuDefaultCollateralUManager public suzakuUManager;
 
     Deployer public deployer;
 
     uint8 public constant STRATEGIST_MULTISIG_ROLE = 10;
-    uint8 public constant SNIPER_ROLE = 88;
+    uint8 public constant SNIPER_ROLE = 22;
+
+    uint96 public constant MIN_DEPOSIT = 1e16;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");
-        vm.createSelectFork("sepolia");
+        vm.createSelectFork("avalanche");
     }
 
     /**
@@ -52,22 +56,21 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
     }
 
     function generateSniperMerkleRoot() public {
-        setSourceChainName(sepolia);
-        console.log("Deployer address:", getAddress(sourceChain, "deployerAddress"));
-        deployer = Deployer(getAddress(sourceChain, "deployerAddress"));
+        setSourceChainName(avalanche);
+        console.log("Deployer address:", deployerContractAddress);
+        deployer = Deployer(deployerContractAddress);
 
         // rolesAuthority = RolesAuthority(deployer.getAddress(SuzakuRolesAuthorityName));
-        setAddress(false, sepolia, "boringVault", address(boringVault));
-        setAddress(false, sepolia, "managerAddress", managerAddress);
-        setAddress(false, sepolia, "accountantAddress", accountantAddress);
-        setAddress(false, sepolia, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
-        setAddress(false, sepolia, "rolesAuthority", rolesAuthorities);
+        setAddress(false, avalanche, "boringVault", address(boringVault));
+        setAddress(false, avalanche, "managerAddress", managerAddress);
+        setAddress(false, avalanche, "accountantAddress", accountantAddress);
+        setAddress(false, avalanche, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
+        setAddress(false, avalanche, "rolesAuthority", rolesAuthorities);
 
         ManageLeaf[] memory leafs = new ManageLeaf[](2);
-        _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_BTC.b"));
-        // _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX"));
+        _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_sAVAX"));
 
-        string memory filePath = "./leafs/sepoliaSuzakuSniperLeafs.json";
+        string memory filePath = "./leafs/avalancheSuzakuSAVAXSniperLeafs.json";
 
         bytes32[][] memory merkleTree = _generateMerkleTree(leafs);
 
@@ -87,12 +90,6 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         // console.log("Merkle tree root:", merkleTree[merkleTree.length - 1][0]);
         console.log("Merkle tree length:", merkleTree.length);
 
-        // Assign the necessary role to the caller
-
-        if (!rolesAuthority.doesUserHaveRole(getAddress(sourceChain, "dev1Address"), STRATEGIST_MULTISIG_ROLE)) {
-            rolesAuthority.setUserRole(getAddress(sourceChain, "dev1Address"), STRATEGIST_MULTISIG_ROLE, true);
-        }
-
         // suzakuUManager.updateMerkleTree(merkleTree, false);
         try suzakuUManager.updateMerkleTree(merkleTree, false) {
             console.log("Merkle tree updated successfully");
@@ -103,13 +100,8 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         }
 
         suzakuUManager.setConfiguration(
-            DefaultCollateral(getAddress(sourceChain, "DC_BTC.b")), 1e18, rawDataDecoderAndSanitizer
+            DefaultCollateral(getAddress(sourceChain, "DC_sAVAX")), MIN_DEPOSIT, rawDataDecoderAndSanitizer
         );
-        // suzakuUManager.setConfiguration(
-        //     DefaultCollateral(getAddress(sourceChain, "DC_sAVAX")), 1e18, rawDataDecoderAndSanitizer
-        // );
-
-        rolesAuthority.setUserRole(address(suzakuUManager), 88, true); // Gives suzakuUmanager the SNIPER_ROLE
 
         rolesAuthority.setRoleCapability(
             STRATEGIST_MULTISIG_ROLE,
@@ -138,19 +130,18 @@ contract DeploySepliaSuzakuUManagerScript is MerkleTreeHelper, ContractNames {
         rolesAuthority.setRoleCapability(
             SNIPER_ROLE,
             address(managerAddress),
-            ManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector,
+            BarebonesManagerWithMerkleVerification.manageVaultWithMerkleVerification.selector,
             true // Gives the sniper the ability to manage the vault with merkle verification
         );
 
-        // rolesAuthority.transferOwnership(getAddress(sourceChain, "dev1Address"));
-        // suzakuUManager.transferOwnership(getAddress(sourceChain, "dev1Address"));
+        if (suzakuUManager.owner() != address(0)) suzakuUManager.transferOwnership(address(0));
+        if (rolesAuthority.owner() != teamMultisig) rolesAuthority.transferOwnership(teamMultisig);
 
-        /// Note need to give strategist role to suzakuUManager DONE. Changed to use roleauth already deployed
         /// Note need to set merkle root in the manager THIS IS MISSING
 
         // rolesAuthority.setUserRole(dev1Address, 7, true);
         // rolesAuthority.setUserRole(dev1Address, 8, true);
-        // ManagerWithMerkleVerification(managerAddress).setManageRoot(address(suzakuUManager), manageTree[manageTree.length - 1][0]); // Have to do manually for the moment, or add manageTree to the script.
+        // BarebonesManagerWithMerkleVerification(managerAddress).setManageRoot(address(suzakuUManager), manageTree[manageTree.length - 1][0]); // Have to do manually for the moment, or add manageTree to the script.
 
         vm.stopBroadcast();
     }

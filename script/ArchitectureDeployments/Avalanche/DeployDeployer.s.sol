@@ -4,16 +4,16 @@ pragma solidity 0.8.21;
 import {Deployer} from "src/helper/Deployer.sol";
 import {RolesAuthority, Authority} from "@solmate/auth/authorities/RolesAuthority.sol";
 import {ContractNames} from "resources/ContractNames.sol";
-import {SepoliaAddresses} from "test/resources/SepoliaAddresses.sol";
+import {AvalancheAddresses} from "./AvalancheAddresses.sol";
 
 import "forge-std/Script.sol";
 import "forge-std/StdJson.sol";
 
 /**
- *  source .env && forge script script/DeployDeployer.s.sol:DeployDeployerScript --with-gas-price 30000000000 --slow --broadcast --etherscan-api-key $ETHERSCAN_API_KEY --verify
+ *  source .env && forge script script/ArchitectureDeployments/Avalanche/DeployDeployer.s.sol:DeployDeployerScript --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
-contract DeployDeployerScript is Script, ContractNames, SepoliaAddresses {
+contract DeployDeployerScript is Script, ContractNames, AvalancheAddresses {
     uint256 public privateKey;
 
     // Contracts to deploy
@@ -23,8 +23,8 @@ contract DeployDeployerScript is Script, ContractNames, SepoliaAddresses {
     uint8 public DEPLOYER_ROLE = 1;
 
     function setUp() external {
-        privateKey = vm.envUint("ETHERFI_LIQUID_DEPLOYER");
-        vm.createSelectFork("sepolia");
+        privateKey = vm.envUint("LIQUID_DEPLOYER");
+        vm.createSelectFork("avalanche");
     }
 
     function run() external {
@@ -42,7 +42,6 @@ contract DeployDeployerScript is Script, ContractNames, SepoliaAddresses {
 
         rolesAuthority.setRoleCapability(DEPLOYER_ROLE, address(deployer), Deployer.deployContract.selector, true);
         rolesAuthority.setUserRole(dev0Address, DEPLOYER_ROLE, true);
-        // rolesAuthority.setUserRole(dev1Address, DEPLOYER_ROLE, true);
 
         vm.stopBroadcast();
     }
