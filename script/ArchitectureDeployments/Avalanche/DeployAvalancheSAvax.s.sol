@@ -18,10 +18,10 @@ contract DeployAvalancheSAvax is DeployArcticArchitecture, AvalancheAddresses {
     uint256 public privateKey;
 
     // Deployment parameters
-    string public boringVaultName = "";
-    string public boringVaultSymbol = "";
+    string public boringVaultName = "Yak Milk Suzaku Restaked sAVAX";
+    string public boringVaultSymbol = "rsAVAX";
     uint8 public boringVaultDecimals = 18;
-    address public owner = teamMultisig;
+    address public owner = dev0Address;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");

@@ -1,0 +1,41 @@
+{
+  "DepositAssets": {
+    "sAVAX": {
+      "isPeggedToBase": true,
+      "rateProvider": "0x0000000000000000000000000000000000000000"
+    }
+  },
+  "WithdrawAssets": {
+    "sAVAX": {
+      "CompletionWindow": 1500,
+      "MaxLoss": 100,
+      "WithdrawDelay": 300,
+      "WithdrawFee": 0
+    }
+  },
+  "accountantConfiguration": {
+    "AllowedExchangeRateChangeLower": 9950,
+    "AllowedExchangeRateChangeUpper": 10050,
+    "Base": "sAVAX",
+    "BaseAddress": "0x2b2C81e08f1Af8835a78Bb2A90AE924ACE0eA4bE",
+    "ManagementFee": 200,
+    "MinimumUpateDelayInSeconds": 21600,
+    "PayoutAddress": "0x2D580F9CF2fB2D09BC411532988F2aFdA4E7BefF",
+    "StartingExchangeRate": 1000000000000000000
+  },
+  "core": {
+    "AccountantWithRateProviders": "0xA8d0c29cF475dD91Fe043D376bEFDDeEC2d2e24A",
+    "BarebonesManagerWithMerkleVerification": "0x961819E5749C45b9EfbcE9F929be69049D242860",
+    "BoringVault": "0xDf788AD40181894dA035B827cDF55C523bf52F67",
+    "DecoderAndSanitizer": "0x7194F028e54AF36550bB9a561Be69738bf539352",
+    "DelayedWithdraw": "0xfF464A521077bd233C4e429BeD76d1442015Eb62",
+    "Lens": "0xdcb498167392146f9Ad81568C134B5f33c810126",
+    "RolesAuthority": "0x5EAa2b9369644B99d482bE0F184046aa62e90B9d",
+    "TellerWithMultiAssetSupport": "0xb05Cd0881A34E1d4cbAAb067D197B763e69e1045"
+  },
+  "depositConfiguration": {
+    "AllowPublicDeposits": true,
+    "AllowPublicWithdraws": true,
+    "ShareLockPeriod": 0
+  }
+}
