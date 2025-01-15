@@ -3157,6 +3157,50 @@ contract MerkleTreeHelper is CommonBase, ChainValues {
         }
     }
 
+    function _generateWithdrawOnlyLeafs(address defaultCollateral) internal view returns (ManageLeaf[] memory) {
+        // Just need a single leaf for withdraw
+        ManageLeaf[] memory leafs = new ManageLeaf[](1);
+
+        // Withdraw leaf (index 0)
+        leafs[0] = ManageLeaf(
+            defaultCollateral,
+            false,
+            "withdraw(address,uint256)",
+            new address[](1),
+            string.concat(
+                "Withdraw ", ERC20(defaultCollateral).symbol(), " from Suzaku ", ERC20(defaultCollateral).name()
+            ),
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+        leafs[0].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
+        return leafs;
+    }
+
+    function generateWithdrawOnlyTreeAndLeafs(address defaultCollateral)
+        internal
+        view
+        returns (bytes32[][] memory, ManageLeaf[] memory)
+    {
+        // Create array with single leaf
+        ManageLeaf[] memory leafs = new ManageLeaf[](1);
+
+        // Withdraw leaf
+        leafs[0] = ManageLeaf(
+            defaultCollateral,
+            false,
+            "withdraw(address,uint256)",
+            new address[](1),
+            string.concat(
+                "Withdraw ", ERC20(defaultCollateral).symbol(), " from Suzaku ", ERC20(defaultCollateral).name()
+            ),
+            getAddress(sourceChain, "rawDataDecoderAndSanitizer")
+        );
+        leafs[0].argumentAddresses[0] = getAddress(sourceChain, "boringVault");
+
+        // Generate and return tree
+        return (_generateMerkleTree(leafs), leafs);
+    }
+
     // ========================================= Suzaku Vault Shares =========================================
 
     function _addSuzakuVaultApproveAndDepositLeaf(ManageLeaf[] memory leafs, address vault) internal {
@@ -3164,7 +3208,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues {
         IVault vlt = IVault(vault);
         address depositAsset = vlt.collateral();
         console.log("Deposit asset:", depositAsset);
-        
+
         // Approve
         if (!tokenToSpenderToApprovalInTree[depositAsset][vault]) {
             unchecked {
@@ -4122,6 +4166,7 @@ contract MerkleTreeHelper is CommonBase, ChainValues {
         uint256 merkleTreeIn_length = merkleTreeIn.length;
         merkleTreeOut = new bytes32[][](merkleTreeIn_length + 1);
         uint256 layer_length;
+
         // Iterate through merkleTreeIn to copy over data.
         for (uint256 i; i < merkleTreeIn_length; ++i) {
             layer_length = merkleTreeIn[i].length;
@@ -4138,15 +4183,22 @@ contract MerkleTreeHelper is CommonBase, ChainValues {
             next_layer_length = layer_length / 2;
         }
         merkleTreeOut[merkleTreeIn_length] = new bytes32[](next_layer_length);
+
         uint256 count;
         for (uint256 i; i < layer_length; i += 2) {
-            merkleTreeOut[merkleTreeIn_length][count] =
-                _hashPair(merkleTreeIn[merkleTreeIn_length - 1][i], merkleTreeIn[merkleTreeIn_length - 1][i + 1]);
+            // Handle single leaf case - if this is the last leaf and it's odd
+            if (i + 1 >= layer_length) {
+                // When there's a single leaf left, it becomes its own parent
+                merkleTreeOut[merkleTreeIn_length][count] = merkleTreeIn[merkleTreeIn_length - 1][i];
+            } else {
+                merkleTreeOut[merkleTreeIn_length][count] =
+                    _hashPair(merkleTreeIn[merkleTreeIn_length - 1][i], merkleTreeIn[merkleTreeIn_length - 1][i + 1]);
+            }
             count++;
         }
 
+        // If we have more than one node in the current layer, continue building up
         if (next_layer_length > 1) {
-            // We need to process the next layer of leaves.
             merkleTreeOut = _buildTrees(merkleTreeOut);
         }
     }
@@ -4211,22 +4263,22 @@ contract MerkleTreeHelper is CommonBase, ChainValues {
     }
 
     function _generateProof(bytes32 leaf, bytes32[][] memory tree) internal pure returns (bytes32[] memory proof) {
-        // The length of each proof is the height of the tree - 1.
         uint256 tree_length = tree.length;
-        proof = new bytes32[](tree_length - 1);
 
-        // Build the proof
+        // Special case for single leaf
+        if (tree[0].length == 1) {
+            // Return empty proof array since no siblings are needed
+            return new bytes32[](0);
+        }
+
+        // Original proof generation logic for multi-leaf trees
+        proof = new bytes32[](tree_length - 1);
         for (uint256 i; i < tree_length - 1; ++i) {
-            // For each layer we need to find the leaf.
             for (uint256 j; j < tree[i].length; ++j) {
                 if (leaf == tree[i][j]) {
-                    // We have found the leaf, so now figure out if the proof needs the next leaf or the previous one.
                     proof[i] = j % 2 == 0 ? tree[i][j + 1] : tree[i][j - 1];
                     leaf = _hashPair(leaf, proof[i]);
                     break;
-                } else if (j == tree[i].length - 1) {
-                    // We have reached the end of the layer and have not found the leaf.
-                    revert("Leaf not found in tree");
                 }
             }
         }
