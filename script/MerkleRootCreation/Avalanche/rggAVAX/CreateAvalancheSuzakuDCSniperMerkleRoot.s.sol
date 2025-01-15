@@ -11,15 +11,15 @@ import "forge-std/Script.sol";
 import "forge-std/console.sol";
 
 /**
- *  source .env && forge script script/MerkleRootCreation/Avalanche/CreateAvalancheSuzakuDefaultCollateralWithdrawOnlyMerkleRoot.s.sol:CreateAvalancheSuzakuDefaultCollateralWithdrawOnlyMerkleRoot --rpc-url $AVALANCHE_RPC_URL
+ *  source .env && forge script script/MerkleRootCreation/Avalanche/rggAVAX/CreateAvalancheSuzakuDCSniperMerkleRoot.s.sol:CreateAvalancheSuzakuDCSniperMerkleRoot --rpc-url $AVALANCHE_RPC_URL
  */
-contract CreateAvalancheSuzakuDefaultCollateralWithdrawOnlyMerkleRoot is Script, MerkleTreeHelper {
+contract CreateAvalancheSuzakuDCSniperMerkleRoot is Script, MerkleTreeHelper {
     using FixedPointMathLib for uint256;
 
-    address public boringVault = 0x2badd78b05C913f129f649627c4279dC60D478E1;
-    address public managerAddress = 0x1cd8B25C620C0596c60149c7dE2dd3552569379D;
-    address public accountantAddress = 0x93a309e0C8b20C764758b94f950Be8B1676fFb17;
-    address public rawDataDecoderAndSanitizer = 0xe788464Cb0f70E2BB8D4B6995b255D8F4Ed32cC9;
+    address public boringVault = 0x0000000000000000000000000000000000000000;
+    address public managerAddress = 0x0000000000000000000000000000000000000000;
+    address public accountantAddress = 0x0000000000000000000000000000000000000000;
+    address public rawDataDecoderAndSanitizer = 0x0000000000000000000000000000000000000000;
 
     function setUp() external {}
 
@@ -34,9 +34,9 @@ contract CreateAvalancheSuzakuDefaultCollateralWithdrawOnlyMerkleRoot is Script,
         setAddress(false, avalanche, "rawDataDecoderAndSanitizer", rawDataDecoderAndSanitizer);
 
         // ========================== Suzaku Collateral ==========================
-        address defaultCollateral = getAddress(sourceChain, "DC_sAVAX");
+        address defaultCollateral = getAddress(sourceChain, "DC_ggAVAX");
 
-        string memory filePath = "./leafs/avalancheSuzakuDefaultCollateralWithdrawLeafs.json";
+        string memory filePath = "./leafs/avalanche_rggAVAX_suzaku_dc_sniper.json";
 
         (bytes32[][] memory manageTree, ManageLeaf[] memory leafs) = generateWithdrawOnlyTreeAndLeafs(defaultCollateral);
 

@@ -28,7 +28,7 @@ anvil = "${ANVIL_RPC_URL}"
 # arbitrum = { key = "${ARBISCAN_KEY}" }
 # optimism = { key = "${OPTIMISMSCAN_KEY}" }
 # base = { key = "${BASESCAN_KEY}" }
-sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api-sepolia.etherscan.io/api" }
+# sepolia = { key = "${ETHERSCAN_API_KEY}", url = "https://api-sepolia.etherscan.io/api" }
 
 [fmt]
 FOUNDRY_FMT_LINE_LENGTH = 120
