@@ -69,7 +69,7 @@ contract DeployRbtcbDefaultCollateralUManager is MerkleTreeHelper, ContractNames
         ManageLeaf[] memory leafs = new ManageLeaf[](2);
         _addSuzakuApproveAndDepositLeaf(leafs, getAddress(sourceChain, "DC_BTCb"));
 
-        string memory filePath = "./leafs/avalanche_rsBTCb_suzaku_dc_manager_internal.json";
+        string memory filePath = "./leafs/avalanche_rBTCb_suzaku_dc_manager_internal.json";
 
         bytes32[][] memory merkleTree = _generateMerkleTree(leafs);
 
@@ -143,7 +143,7 @@ contract DeployRbtcbDefaultCollateralUManager is MerkleTreeHelper, ContractNames
         if (rolesAuthority.owner() != teamMultisig) rolesAuthority.transferOwnership(teamMultisig);
 
         console.log(
-            "This script generated './leafs/avalanche_rsBTCb_suzaku_dc_manager_internal.json', but did not set the manage root for the deployed uManager!"
+            "This script generated './leafs/avalanche_rBTCb_suzaku_dc_manager_internal.json', but did not set the manage root for the deployed uManager!"
         );
 
         vm.stopBroadcast();
