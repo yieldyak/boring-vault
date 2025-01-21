@@ -37,12 +37,13 @@ contract DeployAtomicQueueScript is Script, ContractNames, SepoliaAddresses {
         bytes memory constructorArgs;
         vm.startBroadcast(privateKey);
 
-        address deployedAddress = _getAddressIfDeployed(SuzakuRolesAuthorityName);
+        address deployedAddress = _getAddressIfDeployed(DeployerContractRolesAuthorityName);
         if (deployedAddress == address(0)) {
             creationCode = type(RolesAuthority).creationCode;
             constructorArgs = abi.encode(owner, Authority(address(0)));
-            rolesAuthority =
-                RolesAuthority(deployer.deployContract(SuzakuRolesAuthorityName, creationCode, constructorArgs, 0));
+            rolesAuthority = RolesAuthority(
+                deployer.deployContract(DeployerContractRolesAuthorityName, creationCode, constructorArgs, 0)
+            );
         } else {
             rolesAuthority = RolesAuthority(deployedAddress);
         }

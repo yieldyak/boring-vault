@@ -54,7 +54,7 @@ contract DeploySepoliaSuzakuVaultUManagerScript is MerkleTreeHelper, ContractNam
         console.log("Deployer address:", getAddress(sourceChain, "deployerAddress"));
         deployer = Deployer(getAddress(sourceChain, "deployerAddress"));
 
-        // rolesAuthority = RolesAuthority(deployer.getAddress(SuzakuRolesAuthorityName));
+        // rolesAuthority = RolesAuthority(deployer.getAddress(DeployerContractRolesAuthorityName));
         setAddress(false, sepolia, "boringVault", address(boringVault));
         setAddress(false, sepolia, "managerAddress", managerAddress);
         setAddress(false, sepolia, "accountantAddress", accountantAddress);

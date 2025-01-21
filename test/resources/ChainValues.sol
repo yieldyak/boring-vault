@@ -78,7 +78,7 @@ contract ChainValues {
         values[avalanche]["ggAVAX"] = 0xA25EaF2906FA1a3a13EdAc9B9657108Af7B703e3.toBytes32();
 
         // Suzaku
-        values[avalanche]["DC_BTC.b"] = 0x203E9101e09dc87ce391542E705a07522d19dF0d.toBytes32();
+        values[avalanche]["DC_BTCb"] = 0x203E9101e09dc87ce391542E705a07522d19dF0d.toBytes32();
         values[avalanche]["DC_sAVAX"] = 0xE3C983013B8c5830D866F550a28fD7Ed4393d5B7.toBytes32();
         values[avalanche]["DC_ggAVAX"] = 0x0CEc099933F0Da490DFF91724b02e2203FAAf9Af.toBytes32();
     }

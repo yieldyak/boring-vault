@@ -14,18 +14,18 @@ import {RolesAuthority, Authority} from "@solmate/auth/authorities/RolesAuthorit
 import {ContractNames} from "resources/ContractNames.sol";
 import {Deployer} from "src/helper/Deployer.sol";
 import {MerkleTreeHelper} from "test/resources/MerkleTreeHelper/MerkleTreeHelper.sol";
-import {AvalancheAddresses} from "./AvalancheAddresses.sol";
+import {AvalancheAddresses} from "../AvalancheAddresses.sol";
 import "forge-std/console.sol";
 /**
- *  source .env && forge script script/ArchitectureDeployments/Avalanche/DeploySAvaxDefaultCollateralUManager.s.sol:DeploySAvaxDefaultCollateralUManager --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
+ *  source .env && forge script script/ArchitectureDeployments/Avalanche/sAVAX/DeployRsAvaxDefaultCollateralUManager.s.sol:DeployRsAvaxDefaultCollateralUManager --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
  */
 
-contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames, AvalancheAddresses {
+contract DeployRsAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames, AvalancheAddresses {
     using FixedPointMathLib for uint256;
 
     uint256 public privateKey;
 
-    address public deployerContractAddress = deployerAddress;
+    address public deployerContractAddress = 0x67e1195614235005a262650b812E0cED63a0a8B4;
     address public managerAddress = 0x961819E5749C45b9EfbcE9F929be69049D242860;
     address public rawDataDecoderAndSanitizer = 0x7194F028e54AF36550bB9a561Be69738bf539352;
     BoringVault public boringVault = BoringVault(payable(0xDf788AD40181894dA035B827cDF55C523bf52F67));
@@ -60,7 +60,7 @@ contract DeploySAvaxDefaultCollateralUManager is MerkleTreeHelper, ContractNames
         console.log("Deployer address:", deployerContractAddress);
         deployer = Deployer(deployerContractAddress);
 
-        // rolesAuthority = RolesAuthority(deployer.getAddress(SuzakuRolesAuthorityName));
+        // rolesAuthority = RolesAuthority(deployer.getAddress(DeployerContractRolesAuthorityName));
         setAddress(false, avalanche, "boringVault", address(boringVault));
         setAddress(false, avalanche, "managerAddress", managerAddress);
         setAddress(false, avalanche, "accountantAddress", accountantAddress);
