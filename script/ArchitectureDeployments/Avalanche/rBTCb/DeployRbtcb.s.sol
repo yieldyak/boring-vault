@@ -22,7 +22,7 @@ contract DeployRbtcb is DeployArcticArchitecture, AvalancheAddresses {
     string public boringVaultSymbol = "rBTCb";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
-    address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
+    address public deployerContractAddress = 0x08fEC0FE5B167e5D73229FF08E9268074bD225Ce;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");
