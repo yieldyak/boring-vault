@@ -26,15 +26,15 @@ contract DeployRbtcbDefaultCollateralUManager is MerkleTreeHelper, ContractNames
 
     uint256 public privateKey;
 
-    address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
-    address public managerAddress = 0x0000000000000000000000000000000000000000;
-    address public rawDataDecoderAndSanitizer = 0x0000000000000000000000000000000000000000;
-    BoringVault public boringVault = BoringVault(payable(0x0000000000000000000000000000000000000000));
+    address public deployerContractAddress = 0x08fEC0FE5B167e5D73229FF08E9268074bD225Ce;
+    address public managerAddress = 0x05E51F827cbA124e104a9A2F609B0Fb34d0F4D1E;
+    address public rawDataDecoderAndSanitizer = 0x9DfA103Bc4348D951a3FE54B393A261Ef5Ad1B03;
+    BoringVault public boringVault = BoringVault(payable(0xD65deA0e72A2E0b321C360066a2BE8E8e16B3Ac6));
     BarebonesManagerWithMerkleVerification public manager = BarebonesManagerWithMerkleVerification(managerAddress);
-    address public accountantAddress = 0x0000000000000000000000000000000000000000;
+    address public accountantAddress = 0x58Ee67D878D3A095B074e6D6182F1fbB57F5f7F4;
     RolesAuthority public rolesAuthority;
-    address public rolesAuthorities = 0x0000000000000000000000000000000000000000;
-    address public sniperBot = 0x0000000000000000000000000000000000000000;
+    address public rolesAuthorities = 0x11CD17c8dc43B4dc42fA76eD8BBE136A10492002;
+    address public sniperBot = 0xa20614a8F7ca777C40157413E5CaA2Cd575187dd;
     SuzakuDefaultCollateralUManager public suzakuUManager;
 
     Deployer public deployer;
