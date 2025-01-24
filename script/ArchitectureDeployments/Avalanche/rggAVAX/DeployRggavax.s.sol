@@ -22,7 +22,7 @@ contract DeployRggavax is DeployArcticArchitecture, AvalancheAddresses {
     string public boringVaultSymbol = "rggAVAX";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
-    address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
+    address public deployerContractAddress = 0x9508884684aFFB6ab31faF0A6049f8B32FB44dBE;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");
