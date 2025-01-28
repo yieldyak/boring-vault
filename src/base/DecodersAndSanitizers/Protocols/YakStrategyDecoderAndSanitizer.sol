@@ -10,10 +10,6 @@ abstract contract YakStrategyDecoderAndSanitizer is BaseDecoderAndSanitizer {
         return addressesFound;
     }
 
-    function depositFor(address receiver, uint256) external pure virtual returns (bytes memory addressesFound) {
-        addressesFound = abi.encodePacked(receiver);
-    }
-
     function withdraw(uint256) external pure virtual returns (bytes memory addressesFound) {
         // No addresses to sanitize
         return addressesFound;
@@ -23,9 +19,5 @@ abstract contract YakStrategyDecoderAndSanitizer is BaseDecoderAndSanitizer {
     function deposit() external pure virtual returns (bytes memory addressesFound) {
         // No addresses to sanitize - payable variant
         return addressesFound;
-    }
-
-    function depositFor(address receiver) external pure virtual returns (bytes memory addressesFound) {
-        addressesFound = abi.encodePacked(receiver);
     }
 }
