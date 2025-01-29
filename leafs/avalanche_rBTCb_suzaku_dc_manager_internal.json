@@ -1,11 +1,49 @@
-{ "metadata": 
-{"AccountantAddress":"0xd65187e54d40eCD8619Ec7319560B68fE305256a","BoringVaultAddress":"0x07714f9A17a926615B52C109346F6bE7d5E977b4","DecoderAndSanitizerAddress":"0x5E6909269eAF878E35DfF895672E0a50F79ECEFA","DigestComposition":["Bytes20(DECODER_AND_SANITIZER_ADDRESS)","Bytes20(TARGET_ADDRESS)","Bytes1(CAN_SEND_VALUE)","Bytes4(TARGET_FUNCTION_SELECTOR)","Bytes{N*20}(ADDRESS_ARGUMENT_0,...,ADDRESS_ARGUMENT_N)"],"LeafCount":2,"ManageRoot":"0x81d957883873c89fa3da074601b2bfce725db1aca31258d15c5bd353c047d1fa","ManagerAddress":"0xFb7594706Ed392b115682f585154717f3575c6Ae","TreeCapacity":2}
-,
-"leafs": [
-{"AddressArguments":["0x203E9101e09dc87ce391542E705a07522d19dF0d"],"CanSendValue":false,"DecoderAndSanitizerAddress":"0x5E6909269eAF878E35DfF895672E0a50F79ECEFA","Description":"Approve Suzaku DefaultCollateral_Bitcoin to spend BTC.b","FunctionSelector":"0x095ea7b3","FunctionSignature":"approve(address,uint256)","LeafDigest":"0xbc66d90990da9b768e439329f06346bdae4dcdc8a8e1a15a45fe56156767a3cd","PackedArgumentAddresses":"0x203e9101e09dc87ce391542e705a07522d19df0d","TargetAddress":"0x152b9d0FdC40C096757F570A51E494bd4b943E50"}
-,
-{"AddressArguments":["0x07714f9A17a926615B52C109346F6bE7d5E977b4"],"CanSendValue":false,"DecoderAndSanitizerAddress":"0x5E6909269eAF878E35DfF895672E0a50F79ECEFA","Description":"Deposit BTC.b into Suzaku DefaultCollateral_Bitcoin","FunctionSelector":"0x47e7ef24","FunctionSignature":"deposit(address,uint256)","LeafDigest":"0xcf0e32f3a29da939ff81f6ed8d373a02c22b1215cac2c4ce6ff4bc5be6a0a70f","PackedArgumentAddresses":"0x07714f9a17a926615b52c109346f6be7d5e977b4","TargetAddress":"0x203E9101e09dc87ce391542E705a07522d19dF0d"}
-],
-"MerkleTree": 
-{"0":["0x81d957883873c89fa3da074601b2bfce725db1aca31258d15c5bd353c047d1fa"],"1":["0xbc66d90990da9b768e439329f06346bdae4dcdc8a8e1a15a45fe56156767a3cd","0xcf0e32f3a29da939ff81f6ed8d373a02c22b1215cac2c4ce6ff4bc5be6a0a70f"]}
+{
+  "metadata": {
+    "AccountantAddress": "0xd65187e54d40eCD8619Ec7319560B68fE305256a",
+    "BoringVaultAddress": "0x07714f9A17a926615B52C109346F6bE7d5E977b4",
+    "DecoderAndSanitizerAddress": "0x5E6909269eAF878E35DfF895672E0a50F79ECEFA",
+    "DigestComposition": [
+      "Bytes20(DECODER_AND_SANITIZER_ADDRESS)",
+      "Bytes20(TARGET_ADDRESS)",
+      "Bytes1(CAN_SEND_VALUE)",
+      "Bytes4(TARGET_FUNCTION_SELECTOR)",
+      "Bytes{N*20}(ADDRESS_ARGUMENT_0,...,ADDRESS_ARGUMENT_N)"
+    ],
+    "LeafCount": 2,
+    "ManageRoot": "0x81d957883873c89fa3da074601b2bfce725db1aca31258d15c5bd353c047d1fa",
+    "ManagerAddress": "0xFb7594706Ed392b115682f585154717f3575c6Ae",
+    "TreeCapacity": 2
+  },
+  "leafs": [
+    {
+      "AddressArguments": ["0x203E9101e09dc87ce391542E705a07522d19dF0d"],
+      "CanSendValue": false,
+      "DecoderAndSanitizerAddress": "0x5E6909269eAF878E35DfF895672E0a50F79ECEFA",
+      "Description": "Approve Suzaku DefaultCollateral_Bitcoin to spend BTC.b",
+      "FunctionSelector": "0x095ea7b3",
+      "FunctionSignature": "approve(address,uint256)",
+      "LeafDigest": "0xbc66d90990da9b768e439329f06346bdae4dcdc8a8e1a15a45fe56156767a3cd",
+      "PackedArgumentAddresses": "0x203e9101e09dc87ce391542e705a07522d19df0d",
+      "TargetAddress": "0x152b9d0FdC40C096757F570A51E494bd4b943E50"
+    },
+    {
+      "AddressArguments": ["0x07714f9A17a926615B52C109346F6bE7d5E977b4"],
+      "CanSendValue": false,
+      "DecoderAndSanitizerAddress": "0x5E6909269eAF878E35DfF895672E0a50F79ECEFA",
+      "Description": "Deposit BTC.b into Suzaku DefaultCollateral_Bitcoin",
+      "FunctionSelector": "0x47e7ef24",
+      "FunctionSignature": "deposit(address,uint256)",
+      "LeafDigest": "0xcf0e32f3a29da939ff81f6ed8d373a02c22b1215cac2c4ce6ff4bc5be6a0a70f",
+      "PackedArgumentAddresses": "0x07714f9a17a926615b52c109346f6be7d5e977b4",
+      "TargetAddress": "0x203E9101e09dc87ce391542E705a07522d19dF0d"
+    }
+  ],
+  "MerkleTree": {
+    "0": ["0x81d957883873c89fa3da074601b2bfce725db1aca31258d15c5bd353c047d1fa"],
+    "1": [
+      "0xbc66d90990da9b768e439329f06346bdae4dcdc8a8e1a15a45fe56156767a3cd",
+      "0xcf0e32f3a29da939ff81f6ed8d373a02c22b1215cac2c4ce6ff4bc5be6a0a70f"
+    ]
+  }
 }

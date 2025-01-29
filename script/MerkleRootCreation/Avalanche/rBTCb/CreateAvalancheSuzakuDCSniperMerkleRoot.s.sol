@@ -16,10 +16,10 @@ import "forge-std/console.sol";
 contract CreateAvalancheSuzakuDCSniperMerkleRoot is Script, MerkleTreeHelper {
     using FixedPointMathLib for uint256;
 
-    address public boringVault = 0xD65deA0e72A2E0b321C360066a2BE8E8e16B3Ac6;
-    address public managerAddress = 0x05E51F827cbA124e104a9A2F609B0Fb34d0F4D1E;
-    address public accountantAddress = 0x58Ee67D878D3A095B074e6D6182F1fbB57F5f7F4;
-    address public rawDataDecoderAndSanitizer = 0x9DfA103Bc4348D951a3FE54B393A261Ef5Ad1B03;
+    address public boringVault = 0x07714f9A17a926615B52C109346F6bE7d5E977b4;
+    address public managerAddress = 0xFb7594706Ed392b115682f585154717f3575c6Ae;
+    address public accountantAddress = 0xd65187e54d40eCD8619Ec7319560B68fE305256a;
+    address public rawDataDecoderAndSanitizer = 0x5E6909269eAF878E35DfF895672E0a50F79ECEFA;
 
     function setUp() external {}
 
