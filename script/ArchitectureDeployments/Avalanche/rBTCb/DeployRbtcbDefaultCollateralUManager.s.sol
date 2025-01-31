@@ -26,14 +26,14 @@ contract DeployRbtcbDefaultCollateralUManager is MerkleTreeHelper, ContractNames
 
     uint256 public privateKey;
 
-    address public deployerContractAddress = 0x723D69A0dd91B48D2D678d503fec9C0884dbc480;
-    address public managerAddress = 0xFb7594706Ed392b115682f585154717f3575c6Ae;
-    address public rawDataDecoderAndSanitizer = 0x5E6909269eAF878E35DfF895672E0a50F79ECEFA;
-    BoringVault public boringVault = BoringVault(payable(0x07714f9A17a926615B52C109346F6bE7d5E977b4));
+    address public deployerContractAddress = 0x330d3112dc2059d3C5BF4EB7BB17dfEA27Deb279;
+    address public managerAddress = 0x4CDF59d0ed892AF5eBdbF5fBD73A3D1406098FF4;
+    address public rawDataDecoderAndSanitizer = 0x7e2317C0701859c04A85fAD022EDE8f755fab180;
+    BoringVault public boringVault = BoringVault(payable(0xe684F692bdf5B3B0DB7E8e31a276DE8A2E9F0025));
     BarebonesManagerWithMerkleVerification public manager = BarebonesManagerWithMerkleVerification(managerAddress);
-    address public accountantAddress = 0xd65187e54d40eCD8619Ec7319560B68fE305256a;
+    address public accountantAddress = 0x57392E941a72cA47097135b9567C2c9Da8B2E0Fc;
     RolesAuthority public rolesAuthority;
-    address public rolesAuthorities = 0x4D7c0dB637cde9769804223BC59CF2C20588B23C;
+    address public rolesAuthorities = 0x15E28915e9f9A3a9A956A9c9f57948F848eA7b66;
     address public sniperBot = 0xa20614a8F7ca777C40157413E5CaA2Cd575187dd;
     SuzakuDefaultCollateralUManager public suzakuUManager;
 
