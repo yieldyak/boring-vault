@@ -6,7 +6,7 @@ import {AddressToBytes32Lib} from "src/helper/AddressToBytes32Lib.sol";
 import {AvalancheAddresses} from "../AvalancheAddresses.sol";
 
 // Import Decoder and Sanitizer to deploy.
-import {SuzakuDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/SuzakuDecoderAndSanitizer.sol";
+import {MilkAvaxAIDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/MilkAvaxAIDecoderAndSanitizer.sol";
 
 /**
  *  source .env && forge script script/ArchitectureDeployments/Avalanche/yyAVAXai/DeployAVAXMilkAI.s.sol:DeployAVAXMilkAI --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
@@ -18,12 +18,11 @@ contract DeployAVAXMilkAI is DeployArcticArchitecture, AvalancheAddresses {
     uint256 public privateKey;
 
     // Deployment parameters
-    string public boringVaultName = "Test Yak Milk AI AVAX";
-    string public boringVaultSymbol = "testmilkAVAXai";
+    string public boringVaultName = "Yak Milk AI AVAX";
+    string public boringVaultSymbol = "milkAVAXai";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
-    address public deployerContractAddress = 0xDCFd250135ebfA5Bf4F6FDa5F31e0C72DB5E8403;
-    address public avaxUsdcRateProvider = 0x9121366c3c2a374D37ef035e8981e14AAaB17dc7;
+    address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");
@@ -58,11 +57,11 @@ contract DeployAVAXMilkAI is DeployArcticArchitecture, AvalancheAddresses {
 
         // Define Accountant Parameters.
         accountantParameters.payoutAddress = liquidPayoutAddress;
-        accountantParameters.base = USDC;
+        accountantParameters.base = WETH;
         // Decimals are in terms of `base`.
         accountantParameters.startingExchangeRate = 1e18;
         //  4 decimals
-        accountantParameters.managementFee = 0;
+        accountantParameters.managementFee = 0.02e4;
         accountantParameters.performanceFee = 0;
         accountantParameters.allowedExchangeRateChangeLower = 0.995e4;
         accountantParameters.allowedExchangeRateChangeUpper = 1.005e4;
@@ -70,28 +69,16 @@ contract DeployAVAXMilkAI is DeployArcticArchitecture, AvalancheAddresses {
         accountantParameters.minimumUpateDelayInSeconds = 1 days / 4;
 
         // Define Decoder and Sanitizer deployment details.
-        bytes memory creationCode = type(SuzakuDecoderAndSanitizer).creationCode;
+        bytes memory creationCode = type(MilkAvaxAIDecoderAndSanitizer).creationCode;
         bytes memory constructorArgs = abi.encode(deployer.getAddress(names.boringVault));
 
         // Configure deposit assets
         depositAssets.push(
             DepositAsset({
-                asset: WETH,
-                isPeggedToBase: false,
-                rateProvider: address(avaxUsdcRateProvider),
-                genericRateProviderName: "", // Not needed since we deployed our own
-                target: address(0), // Not needed
-                selector: bytes4(0), // Not needed
-                params: [bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0)]
-            })
-        );
-
-        depositAssets.push(
-            DepositAsset({
                 asset: ERC20(ETH),
-                isPeggedToBase: false,
-                rateProvider: address(avaxUsdcRateProvider),
-                genericRateProviderName: "", // Not needed since we deployed our own
+                isPeggedToBase: true,
+                rateProvider: address(0),
+                genericRateProviderName: "", // Not needed
                 target: address(0), // Not needed
                 selector: bytes4(0), // Not needed
                 params: [bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0)]
@@ -102,14 +89,14 @@ contract DeployAVAXMilkAI is DeployArcticArchitecture, AvalancheAddresses {
         withdrawAssets.push(
             WithdrawAsset({
                 asset: WETH,
-                withdrawDelay: 300 seconds,
-                completionWindow: 1500 seconds,
+                withdrawDelay: 8 hours,
+                completionWindow: 24 hours,
                 withdrawFee: 0,
                 maxLoss: 0.01e4
             })
         );
 
-        bool allowPublicDeposits = true;
+        bool allowPublicDeposits = false;
         bool allowPublicWithdraws = true;
         uint64 shareLockPeriod = 0;
         address delayedWithdrawFeeAddress = liquidPayoutAddress;
