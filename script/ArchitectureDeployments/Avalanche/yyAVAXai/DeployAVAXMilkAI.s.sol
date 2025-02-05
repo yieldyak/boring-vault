@@ -22,7 +22,7 @@ contract DeployAVAXMilkAI is DeployArcticArchitecture, AvalancheAddresses {
     string public boringVaultSymbol = "aiAVAX";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
-    address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
+    address public deployerContractAddress = 0x4c993F8f63ee45B56db7c0514A5818EEB421e077;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");
