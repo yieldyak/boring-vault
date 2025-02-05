@@ -5,8 +5,8 @@ import {ERC20} from "@solmate/tokens/ERC20.sol";
 
 contract AvalancheAddresses {
     // Liquid Ecosystem
-    // address public dev0Address = 0xDcEDF06Fd33E1D7b6eb4b309f779a0e9D3172e44; // Will be used for deploying contracts and managing them.
-    address public dev0Address = 0x1A267D3f9f5116dF6ae00A4aD698CdcF27b71920;
+    address public dev0Address = 0xDcEDF06Fd33E1D7b6eb4b309f779a0e9D3172e44; // Will be used for deploying contracts and managing them.
+    // address public dev0Address = 0x1A267D3f9f5116dF6ae00A4aD698CdcF27b71920;
     address public liquidPayoutAddress = 0x2D580F9CF2fB2D09BC411532988F2aFdA4E7BefF; // Not used much currently
     address public teamMultisig = 0xEA3e895b0696e161C68486Ee2F85e6Cc6ef962d0;
 
