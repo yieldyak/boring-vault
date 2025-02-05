@@ -18,8 +18,8 @@ contract DeployAVAXMilkAI is DeployArcticArchitecture, AvalancheAddresses {
     uint256 public privateKey;
 
     // Deployment parameters
-    string public boringVaultName = "Yak Milk AI AVAX";
-    string public boringVaultSymbol = "milkAVAXai";
+    string public boringVaultName = "Yak Milk Intelligent AVAX";
+    string public boringVaultSymbol = "aiAVAX";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
     address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
