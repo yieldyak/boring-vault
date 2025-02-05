@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "AccountantAddress": "0x46520834D24FBF4e556576a8BB29eB8500378561",
+    "BoringVaultAddress": "0x9D15A28fCB96AF5e26dd0EF546D6a777C0ec34cd",
+    "DecoderAndSanitizerAddress": "0xf543cEBe6476A3772da397427be116233fcD0255",
+    "DigestComposition": [
+      "Bytes20(DECODER_AND_SANITIZER_ADDRESS)",
+      "Bytes20(TARGET_ADDRESS)",
+      "Bytes1(CAN_SEND_VALUE)",
+      "Bytes4(TARGET_FUNCTION_SELECTOR)",
+      "Bytes{N*20}(ADDRESS_ARGUMENT_0,...,ADDRESS_ARGUMENT_N)"
+    ],
+    "LeafCount": 2,
+    "ManageRoot": "0xb2422563973e431ad9868aca3ea961527c95865736b780d9dca5480ea2010756",
+    "ManagerAddress": "0xDeEd5D9F3413406F388e1A80a8dCdDCA18298e02",
+    "TreeCapacity": 2
+  },
+  "leafs": [
+    {
+      "AddressArguments": ["0x0CEc099933F0Da490DFF91724b02e2203FAAf9Af"],
+      "CanSendValue": false,
+      "DecoderAndSanitizerAddress": "0xf543cEBe6476A3772da397427be116233fcD0255",
+      "Description": "Approve Suzaku DefaultCollateral_GoGoPool Liquid Staking Token to spend ggAVAX",
+      "FunctionSelector": "0x095ea7b3",
+      "FunctionSignature": "approve(address,uint256)",
+      "LeafDigest": "0xb21dc327348d99cf36c2872184a55dc2fb427a4ed26b119a1700097f70c13288",
+      "PackedArgumentAddresses": "0x0cec099933f0da490dff91724b02e2203faaf9af",
+      "TargetAddress": "0xA25EaF2906FA1a3a13EdAc9B9657108Af7B703e3"
+    },
+    {
+      "AddressArguments": ["0x9D15A28fCB96AF5e26dd0EF546D6a777C0ec34cd"],
+      "CanSendValue": false,
+      "DecoderAndSanitizerAddress": "0xf543cEBe6476A3772da397427be116233fcD0255",
+      "Description": "Deposit ggAVAX into Suzaku DefaultCollateral_GoGoPool Liquid Staking Token",
+      "FunctionSelector": "0x47e7ef24",
+      "FunctionSignature": "deposit(address,uint256)",
+      "LeafDigest": "0x8e5f5beb97c3f89fe911a5e132a4450553dd7517592a144c454222dbba233abf",
+      "PackedArgumentAddresses": "0x9d15a28fcb96af5e26dd0ef546d6a777c0ec34cd",
+      "TargetAddress": "0x0CEc099933F0Da490DFF91724b02e2203FAAf9Af"
+    }
+  ],
+  "MerkleTree": {
+    "0": ["0xb2422563973e431ad9868aca3ea961527c95865736b780d9dca5480ea2010756"],
+    "1": [
+      "0xb21dc327348d99cf36c2872184a55dc2fb427a4ed26b119a1700097f70c13288",
+      "0x8e5f5beb97c3f89fe911a5e132a4450553dd7517592a144c454222dbba233abf"
+    ]
+  }
+}

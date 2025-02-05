@@ -18,11 +18,11 @@ contract DeployRbtcb is DeployArcticArchitecture, AvalancheAddresses {
     uint256 public privateKey;
 
     // Deployment parameters
-    string public boringVaultName = "Yak Milk Suzaku Restaked BTCb";
-    string public boringVaultSymbol = "rBTCb";
+    string public boringVaultName = "Yak Milk Suzaku Restaked BTC.b";
+    string public boringVaultSymbol = "rBTC.b";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
-    address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
+    address public deployerContractAddress = 0x330d3112dc2059d3C5BF4EB7BB17dfEA27Deb279;
 
     function setUp() external {
         privateKey = vm.envUint("LIQUID_DEPLOYER");
@@ -59,7 +59,7 @@ contract DeployRbtcb is DeployArcticArchitecture, AvalancheAddresses {
         accountantParameters.payoutAddress = liquidPayoutAddress;
         accountantParameters.base = BTCb;
         // Decimals are in terms of `base`.
-        accountantParameters.startingExchangeRate = 1e18;
+        accountantParameters.startingExchangeRate = 1e8;
         //  4 decimals
         accountantParameters.managementFee = 0;
         accountantParameters.performanceFee = 0;

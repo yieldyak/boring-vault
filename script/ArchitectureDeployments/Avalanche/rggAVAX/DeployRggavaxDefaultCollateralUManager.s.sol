@@ -26,15 +26,15 @@ contract DeployRggavaxDefaultCollateralUManager is MerkleTreeHelper, ContractNam
 
     uint256 public privateKey;
 
-    address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
-    address public managerAddress = 0x0000000000000000000000000000000000000000;
-    address public rawDataDecoderAndSanitizer = 0x0000000000000000000000000000000000000000;
-    BoringVault public boringVault = BoringVault(payable(0x0000000000000000000000000000000000000000));
+    address public deployerContractAddress = 0x9508884684aFFB6ab31faF0A6049f8B32FB44dBE;
+    address public managerAddress = 0xDeEd5D9F3413406F388e1A80a8dCdDCA18298e02;
+    address public rawDataDecoderAndSanitizer = 0xf543cEBe6476A3772da397427be116233fcD0255;
+    BoringVault public boringVault = BoringVault(payable(0x9D15A28fCB96AF5e26dd0EF546D6a777C0ec34cd));
     BarebonesManagerWithMerkleVerification public manager = BarebonesManagerWithMerkleVerification(managerAddress);
-    address public accountantAddress = 0x0000000000000000000000000000000000000000;
+    address public accountantAddress = 0x46520834D24FBF4e556576a8BB29eB8500378561;
     RolesAuthority public rolesAuthority;
-    address public rolesAuthorities = 0x0000000000000000000000000000000000000000;
-    address public sniperBot = 0x0000000000000000000000000000000000000000;
+    address public rolesAuthorities = 0x57757e291e4371086a2DebD37253e76B57b56117;
+    address public sniperBot = 0x1fb59544B46A8B2557d20ea3F2d048359A4df6d0;
     SuzakuDefaultCollateralUManager public suzakuUManager;
 
     Deployer public deployer;
