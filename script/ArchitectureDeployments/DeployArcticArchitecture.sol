@@ -107,6 +107,8 @@ contract DeployArcticArchitecture is Script, ContractNames, Roles {
     string accountantConfigurationOutput;
     string depositConfigurationOutput;
 
+    address public ETH = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
+
     function _getAddressIfDeployed(string memory name) internal view returns (address) {
         address deployedAt = deployer.getAddress(name);
         uint256 size;
@@ -914,8 +916,11 @@ contract DeployArcticArchitecture is Script, ContractNames, Roles {
                     assetKey = "asset key";
                     vm.serializeBool(assetKey, "isPeggedToBase", depositAsset.isPeggedToBase);
                     assetOutput = vm.serializeAddress(assetKey, "rateProvider", depositAsset.rateProvider);
-                    depositAssetConfigurationOutput =
-                        vm.serializeString(depositAssetConfiguration, depositAsset.asset.symbol(), assetOutput);
+                    depositAssetConfigurationOutput = vm.serializeString(
+                        depositAssetConfiguration,
+                        (address(depositAsset.asset) == ETH) ? "NATIVE" : depositAsset.asset.symbol(),
+                        assetOutput
+                    );
                 }
             }
 
