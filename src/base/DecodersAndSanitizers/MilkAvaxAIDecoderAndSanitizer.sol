@@ -5,6 +5,8 @@ import {BaseDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/BaseDecode
 import {NativeWrapperDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/NativeWrapperDecoderAndSanitizer.sol";
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
+import {YakMilkDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/YakMilkDecoderAndSanitizer.sol";
 import {YakStrategyDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/YakStrategyDecoderAndSanitizer.sol";
 import {YakSimpleSwapDecoderAndSanitizer} from
@@ -14,6 +16,7 @@ contract MilkAvaxAIDecoderAndSanitizer is
     BaseDecoderAndSanitizer,
     NativeWrapperDecoderAndSanitizer,
     AaveV3DecoderAndSanitizer,
+    YakMilkDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
     YakSimpleSwapDecoderAndSanitizer
 {
