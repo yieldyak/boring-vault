@@ -8,11 +8,14 @@ import {SuzakuDefaultCollateralDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/SuzakuDefaultCollateralDecoderAndSanitizer.sol";
 import {SuzakuVaultDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/SuzakuVaultDecoderAndSanitizer.sol";
+import {YakStrategyDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/YakStrategyDecoderAndSanitizer.sol";
 
 contract SuzakuDecoderAndSanitizer is
     BaseDecoderAndSanitizer,
-    SuzakuDefaultCollateralDecoderAndSanitizer,
     NativeWrapperDecoderAndSanitizer,
+    YakStrategyDecoderAndSanitizer,
+    SuzakuDefaultCollateralDecoderAndSanitizer,
     SuzakuVaultDecoderAndSanitizer
 {
     constructor(address _boringVault) BaseDecoderAndSanitizer(_boringVault) {}
@@ -28,7 +31,22 @@ contract SuzakuDecoderAndSanitizer is
         addressesFound = abi.encodePacked(recipient);
     }
 
-    function deposit() external pure override(NativeWrapperDecoderAndSanitizer) returns (bytes memory addressesFound) {
+    function withdraw(uint256)
+        external
+        pure
+        override(NativeWrapperDecoderAndSanitizer, YakStrategyDecoderAndSanitizer)
+        returns (bytes memory addressesFound)
+    {
+        // No addresses to sanitize
+        return addressesFound;
+    }
+
+    function deposit()
+        external
+        pure
+        override(NativeWrapperDecoderAndSanitizer, YakStrategyDecoderAndSanitizer)
+        returns (bytes memory addressesFound)
+    {
         // Nothing to sanitize or return
         return addressesFound;
     }
