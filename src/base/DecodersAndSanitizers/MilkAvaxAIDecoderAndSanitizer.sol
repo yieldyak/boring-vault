@@ -22,14 +22,13 @@ contract MilkAvaxAIDecoderAndSanitizer is
 {
     constructor(address _boringVault) BaseDecoderAndSanitizer(_boringVault) {}
 
-    // Payable variants for V2Payable
     function deposit()
         external
         pure
         override(NativeWrapperDecoderAndSanitizer, YakStrategyDecoderAndSanitizer)
         returns (bytes memory addressesFound)
     {
-        // No addresses to sanitize - payable variant
+        // No addresses to sanitize
         return addressesFound;
     }
 
@@ -41,5 +40,23 @@ contract MilkAvaxAIDecoderAndSanitizer is
     {
         // No addresses to sanitize
         return addressesFound;
+    }
+
+    function deposit(address depositAsset, uint256, uint256)
+        external
+        pure
+        override(YakMilkDecoderAndSanitizer)
+        returns (bytes memory addressesFound)
+    {
+        addressesFound = abi.encodePacked(depositAsset);
+    }
+
+    function requestWithdraw(address asset, uint96, uint16, bool)
+        external
+        pure
+        override(YakMilkDecoderAndSanitizer)
+        returns (bytes memory addressesFound)
+    {
+        addressesFound = abi.encodePacked(asset);
     }
 }
