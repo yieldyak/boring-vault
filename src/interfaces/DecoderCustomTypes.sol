@@ -309,4 +309,33 @@ contract DecoderCustomTypes {
         uint256 deadline;
         uint160 sqrtPriceX96;
     }
+    // ========================================= StableJack =========================================
+
+    struct StableJackGroupCore {
+        address aToken; // Yield-bearing token
+        address xToken; // Leverage token
+        address baseToken; // Base token for the group - wrapped Avax
+        address yieldBearingToken; // Example: staked AVAX (immutable)
+        address wethToken; // WETH token address for the router
+    }
+
+    struct StableJackGroupKey {
+        StableJackGroupCore core;
+    }
+
+    struct StableJackMintParams {
+        uint8 operationType; // Type of mint operation
+        uint256 baseIn; // Amount of base token input
+        uint24 slippage; // The slippage tolerance
+        address paymentToken; // Token used for payment
+        bytes hookData; // Hook data if any
+    }
+
+    struct StableJackRedeemParams {
+        uint8 operationType; // Type of redeem operation
+        uint256 baseOut; // Amount of tokens to redeem
+        uint24 slippage; // The slippage tolerance
+        address desiredCollateral; // Desired collateral to receive
+        bytes hookData; // Hook data if any
+    }
 }
