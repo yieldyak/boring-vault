@@ -5,6 +5,7 @@ import {BaseDecoderAndSanitizer, DecoderCustomTypes} from "src/base/DecodersAndS
 import {NativeWrapperDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/NativeWrapperDecoderAndSanitizer.sol";
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
+import {DeltaPrimeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/DeltaPrimeDecoderAndSanitizer.sol";
 import {StableJackDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/StableJackDecoderAndSanitizer.sol";
 import {YakMilkDecoderAndSanitizer} from
@@ -18,6 +19,7 @@ contract MilkAvaxAIDecoderAndSanitizer is
     BaseDecoderAndSanitizer,
     NativeWrapperDecoderAndSanitizer,
     AaveV3DecoderAndSanitizer,
+    DeltaPrimeDecoderAndSanitizer,
     StableJackDecoderAndSanitizer,
     YakMilkDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
@@ -99,5 +101,45 @@ contract MilkAvaxAIDecoderAndSanitizer is
             groupKey.core.wethToken,
             params.desiredCollateral
         );
+    }
+
+    function deposit(uint256) 
+        external 
+        pure 
+        override(YakStrategyDecoderAndSanitizer, DeltaPrimeDecoderAndSanitizer)
+        returns (bytes memory addressesFound)
+    {
+        // No addresses to sanitize
+        return addressesFound;
+    }
+
+    function depositNativeToken() 
+        external 
+        pure 
+        override(DeltaPrimeDecoderAndSanitizer)
+        returns (bytes memory addressesFound)
+    {
+        // No addresses to sanitize
+        return addressesFound;
+    }
+
+    function createWithdrawalIntent(uint256) 
+        external 
+        pure 
+        override(DeltaPrimeDecoderAndSanitizer)
+        returns (bytes memory addressesFound)
+    {
+        // No addresses to sanitize
+        return addressesFound;
+    }
+
+    function withdraw(uint256,uint256[] calldata) 
+        external 
+        pure 
+        override(DeltaPrimeDecoderAndSanitizer)
+        returns (bytes memory addressesFound)
+    {
+        // No addresses to sanitize
+        return addressesFound;
     }
 }
