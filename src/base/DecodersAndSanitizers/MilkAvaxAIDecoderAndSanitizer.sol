@@ -6,6 +6,10 @@ import {NativeWrapperDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/NativeWrapperDecoderAndSanitizer.sol";
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
 import {DeltaPrimeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/DeltaPrimeDecoderAndSanitizer.sol";
+import {LFJLBRouterDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/LFJLBRouterDecoderAndSanitizer.sol";
+import {LFJLBHooksSimpleRewarderDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/LFJLBHooksSimpleRewarderDecoderAndSanitizer.sol";
 import {StableJackDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/StableJackDecoderAndSanitizer.sol";
 import {YakMilkDecoderAndSanitizer} from
@@ -20,6 +24,8 @@ contract MilkAvaxAIDecoderAndSanitizer is
     NativeWrapperDecoderAndSanitizer,
     AaveV3DecoderAndSanitizer,
     DeltaPrimeDecoderAndSanitizer,
+    LFJLBRouterDecoderAndSanitizer,
+    LFJLBHooksSimpleRewarderDecoderAndSanitizer,
     StableJackDecoderAndSanitizer,
     YakMilkDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
@@ -141,5 +147,42 @@ contract MilkAvaxAIDecoderAndSanitizer is
     {
         // No addresses to sanitize
         return addressesFound;
+    }
+
+    function addLiquidity(
+        DecoderCustomTypes.LiquidityParameters calldata params
+    )
+        external 
+        pure 
+        override(LFJLBRouterDecoderAndSanitizer) 
+        returns (bytes memory addressesFound)
+    {
+        addressesFound = abi.encodePacked(
+            params.tokenX,
+            params.tokenY,
+            params.to,
+            params.refundTo
+        );
+    }
+
+    function removeLiquidity(
+        DecoderCustomTypes.RemoveLiquidityParams calldata params
+    )
+        external 
+        pure 
+        override(LFJLBRouterDecoderAndSanitizer) 
+        returns (bytes memory addressesFound)
+    {
+        addressesFound = abi.encodePacked(
+            params.tokenX,
+            params.tokenY,
+            params.to
+        );
+    }
+
+    function claim(
+        DecoderCustomTypes.ClaimParams calldata params
+    ) external pure override(LFJLBHooksSimpleRewarderDecoderAndSanitizer) returns (bytes memory addressesFound) {
+        addressesFound = abi.encodePacked(params.user);
     }
 }
