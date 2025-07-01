@@ -379,4 +379,11 @@ contract DecoderCustomTypes {
         address user;
         uint256[] ids;
     }
+
+    // ========================================= LBPair =========================================
+
+    struct ApproveForAllParams {
+        address spender;
+        bool approved;
+    }
 }

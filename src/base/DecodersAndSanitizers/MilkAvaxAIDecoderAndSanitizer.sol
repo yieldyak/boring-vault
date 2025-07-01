@@ -10,6 +10,8 @@ import {LFJLBRouterDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/LFJLBRouterDecoderAndSanitizer.sol";
 import {LFJLBHooksSimpleRewarderDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/LFJLBHooksSimpleRewarderDecoderAndSanitizer.sol";
+import {LFJLBPairDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/LFJLBPairDecoderAndSanitizer.sol";
 import {StableJackDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/StableJackDecoderAndSanitizer.sol";
 import {YakMilkDecoderAndSanitizer} from
@@ -26,6 +28,7 @@ contract MilkAvaxAIDecoderAndSanitizer is
     DeltaPrimeDecoderAndSanitizer,
     LFJLBRouterDecoderAndSanitizer,
     LFJLBHooksSimpleRewarderDecoderAndSanitizer,
+    LFJLBPairDecoderAndSanitizer,
     StableJackDecoderAndSanitizer,
     YakMilkDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
@@ -184,5 +187,11 @@ contract MilkAvaxAIDecoderAndSanitizer is
         DecoderCustomTypes.ClaimParams calldata params
     ) external pure override(LFJLBHooksSimpleRewarderDecoderAndSanitizer) returns (bytes memory addressesFound) {
         addressesFound = abi.encodePacked(params.user);
+    }
+
+    function approveForAll(
+        DecoderCustomTypes.ApproveForAllParams calldata params
+    ) external pure override(LFJLBPairDecoderAndSanitizer) returns (bytes memory addressesFound) {
+        addressesFound = abi.encodePacked(params.spender);
     }
 }
