@@ -21,7 +21,7 @@ contract DeployUSDMilkAI is DeployArcticArchitecture, AvalancheAddresses {
     string public boringVaultSymbol = "aiUSD";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
-    address public deployerContractAddress = 0x4c993F8f63ee45B56db7c0514A5818EEB421e077;
+    address public deployerContractAddress = 0x07f66f64Bb2CF9B619468f1D46f52d48646f080D;
 
     function setUp() external {
         vm.createSelectFork("avalanche");
