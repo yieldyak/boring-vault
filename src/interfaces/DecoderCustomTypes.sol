@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.21;
 
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
 contract DecoderCustomTypes {
     // ========================================= BALANCER =========================================
     struct JoinPoolRequest {
@@ -344,9 +342,9 @@ contract DecoderCustomTypes {
     // ========================================= LBRouter =========================================
 
     struct LiquidityParameters {
-        IERC20 tokenX;
-        IERC20 tokenY;
-        uint16 binStep;
+        address tokenX;
+        address tokenY;
+        uint256 binStep;
         uint256 amountX;
         uint256 amountY;
         uint256 amountXMin;
@@ -362,9 +360,9 @@ contract DecoderCustomTypes {
     }
 
     struct RemoveLiquidityParams {
-        IERC20 tokenX;
-        IERC20 tokenY;
-        uint16 binStep;
+        address tokenX;
+        address tokenY;
+        uint256 binStep;
         uint256 amountXMin;
         uint256 amountYMin;
         uint256[] ids;
