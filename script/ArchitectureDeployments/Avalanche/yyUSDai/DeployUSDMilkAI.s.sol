@@ -99,7 +99,7 @@ contract DeployUSDMilkAI is DeployArcticArchitecture, AvalancheAddresses {
         uint64 shareLockPeriod = 0;
         address delayedWithdrawFeeAddress = liquidPayoutAddress;
 
-        vm.startBroadcast(privateKey);
+        vm.startBroadcast();
 
         _deploy(
             "AvalancheUSDMilkAIDeployment.json",
