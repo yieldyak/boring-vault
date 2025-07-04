@@ -362,7 +362,7 @@ contract DecoderCustomTypes {
     struct RemoveLiquidityParams {
         address tokenX;
         address tokenY;
-        uint256 binStep;
+        uint16 binStep;
         uint256 amountXMin;
         uint256 amountYMin;
         uint256[] ids;
