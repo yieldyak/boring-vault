@@ -358,30 +358,4 @@ contract DecoderCustomTypes {
         address refundTo;
         uint256 deadline;
     }
-
-    struct RemoveLiquidityParams {
-        address tokenX;
-        address tokenY;
-        uint16 binStep;
-        uint256 amountXMin;
-        uint256 amountYMin;
-        uint256[] ids;
-        uint256[] amounts;
-        address to;
-        uint256 deadline;
-    }
-
-    // ========================================= LBHooksSimpleRewarder =========================================
-
-    struct ClaimParams {
-        address user;
-        uint256[] ids;
-    }
-
-    // ========================================= LBPair =========================================
-
-    struct ApproveForAllParams {
-        address spender;
-        bool approved;
-    }
 }

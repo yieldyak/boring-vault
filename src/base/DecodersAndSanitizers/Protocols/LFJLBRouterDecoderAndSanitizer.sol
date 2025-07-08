@@ -17,12 +17,20 @@ abstract contract LFJLBRouterDecoderAndSanitizer is BaseDecoderAndSanitizer {
     }
 
     function removeLiquidity(
-        DecoderCustomTypes.RemoveLiquidityParams calldata params
+        address tokenX,
+        address tokenY,
+        uint16,
+        uint256,
+        uint256,
+        uint256[] memory,
+        uint256[] memory,
+        address to,
+        uint256
     ) external pure virtual returns (bytes memory addressesFound) {
         addressesFound = abi.encodePacked(
-            params.tokenX,
-            params.tokenY,
-            params.to
+            tokenX,
+            tokenY,
+            to
         );
     }
 } 

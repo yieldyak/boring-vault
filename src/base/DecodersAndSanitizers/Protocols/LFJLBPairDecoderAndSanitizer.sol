@@ -6,8 +6,9 @@ import {BaseDecoderAndSanitizer, DecoderCustomTypes} from "src/base/DecodersAndS
 abstract contract LFJLBPairDecoderAndSanitizer is BaseDecoderAndSanitizer {
 
     function approveForAll(
-        DecoderCustomTypes.ApproveForAllParams calldata params
+        address spender,
+        bool
     ) external pure virtual returns (bytes memory addressesFound) {
-        addressesFound = abi.encodePacked(params.spender);
+        addressesFound = abi.encodePacked(spender);
     }
 } 

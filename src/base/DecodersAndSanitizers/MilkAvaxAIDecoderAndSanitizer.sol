@@ -169,7 +169,15 @@ contract MilkAvaxAIDecoderAndSanitizer is
     }
 
     function removeLiquidity(
-        DecoderCustomTypes.RemoveLiquidityParams calldata params
+        address tokenX,
+        address tokenY,
+        uint16,
+        uint256,
+        uint256,
+        uint256[] memory,
+        uint256[] memory,
+        address to,
+        uint256
     )
         external 
         pure 
@@ -177,21 +185,23 @@ contract MilkAvaxAIDecoderAndSanitizer is
         returns (bytes memory addressesFound)
     {
         addressesFound = abi.encodePacked(
-            params.tokenX,
-            params.tokenY,
-            params.to
+            tokenX,
+            tokenY,
+            to
         );
     }
 
     function claim(
-        DecoderCustomTypes.ClaimParams calldata params
+        address user,
+        uint256[] calldata
     ) external pure override(LFJLBHooksSimpleRewarderDecoderAndSanitizer) returns (bytes memory addressesFound) {
-        addressesFound = abi.encodePacked(params.user);
+        addressesFound = abi.encodePacked(user);
     }
 
     function approveForAll(
-        DecoderCustomTypes.ApproveForAllParams calldata params
+        address spender,
+        bool
     ) external pure override(LFJLBPairDecoderAndSanitizer) returns (bytes memory addressesFound) {
-        addressesFound = abi.encodePacked(params.spender);
+        addressesFound = abi.encodePacked(spender);
     }
 }
