@@ -6,6 +6,12 @@ import {NativeWrapperDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/NativeWrapperDecoderAndSanitizer.sol";
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
 import {DeltaPrimeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/DeltaPrimeDecoderAndSanitizer.sol";
+import {LFJLBRouterDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/LFJLBRouterDecoderAndSanitizer.sol";
+import {LFJLBHooksSimpleRewarderDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/LFJLBHooksSimpleRewarderDecoderAndSanitizer.sol";
+import {LFJLBPairDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/LFJLBPairDecoderAndSanitizer.sol";
 import {StableJackDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/StableJackDecoderAndSanitizer.sol";
 import {YakMilkDecoderAndSanitizer} from
@@ -20,6 +26,9 @@ contract MilkAvaxAIDecoderAndSanitizer is
     NativeWrapperDecoderAndSanitizer,
     AaveV3DecoderAndSanitizer,
     DeltaPrimeDecoderAndSanitizer,
+    LFJLBRouterDecoderAndSanitizer,
+    LFJLBHooksSimpleRewarderDecoderAndSanitizer,
+    LFJLBPairDecoderAndSanitizer,
     StableJackDecoderAndSanitizer,
     YakMilkDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
@@ -141,5 +150,58 @@ contract MilkAvaxAIDecoderAndSanitizer is
     {
         // No addresses to sanitize
         return addressesFound;
+    }
+
+    function addLiquidity(
+        DecoderCustomTypes.LiquidityParameters calldata params
+    )
+        external 
+        pure 
+        override(LFJLBRouterDecoderAndSanitizer) 
+        returns (bytes memory addressesFound)
+    {
+        addressesFound = abi.encodePacked(
+            params.tokenX,
+            params.tokenY,
+            params.to,
+            params.refundTo
+        );
+    }
+
+    function removeLiquidity(
+        address tokenX,
+        address tokenY,
+        uint16,
+        uint256,
+        uint256,
+        uint256[] memory,
+        uint256[] memory,
+        address to,
+        uint256
+    )
+        external 
+        pure 
+        override(LFJLBRouterDecoderAndSanitizer) 
+        returns (bytes memory addressesFound)
+    {
+        addressesFound = abi.encodePacked(
+            tokenX,
+            tokenY,
+            to
+        );
+    }
+
+    function claim(
+        address user,
+        uint256[] calldata
+    ) external pure override(LFJLBHooksSimpleRewarderDecoderAndSanitizer) returns (bytes memory addressesFound) {
+        addressesFound = abi.encodePacked(user);
+    }
+
+    function approveForAll(
+        address spender,
+        bool
+    ) external pure override(LFJLBPairDecoderAndSanitizer) returns (bytes memory addressesFound) {
+        addressesFound = abi.encodePacked(spender);
     }
 }
