@@ -338,4 +338,24 @@ contract DecoderCustomTypes {
         address desiredCollateral; // Desired collateral to receive
         bytes hookData; // Hook data if any
     }
+
+    // ========================================= LBRouter =========================================
+
+    struct LiquidityParameters {
+        address tokenX;
+        address tokenY;
+        uint256 binStep;
+        uint256 amountX;
+        uint256 amountY;
+        uint256 amountXMin;
+        uint256 amountYMin;
+        uint256 activeIdDesired;
+        uint256 idSlippage;
+        int256[] deltaIds;
+        uint256[] distributionX;
+        uint256[] distributionY;
+        address to;
+        address refundTo;
+        uint256 deadline;
+    }
 }
