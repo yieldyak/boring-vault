@@ -27,7 +27,7 @@
     "AccountantWithRateProviders": "0xA8d0c29cF475dD91Fe043D376bEFDDeEC2d2e24A",
     "BarebonesManagerWithMerkleVerification": "0x961819E5749C45b9EfbcE9F929be69049D242860",
     "BoringVault": "0xDf788AD40181894dA035B827cDF55C523bf52F67",
-    "DecoderAndSanitizer": "0x7194F028e54AF36550bB9a561Be69738bf539352",
+    "DecoderAndSanitizer": "0x3a81cfa8b7c915a46947a73bbcf1880f21410093",
     "DelayedWithdraw": "0xfF464A521077bd233C4e429BeD76d1442015Eb62",
     "Lens": "0xdcb498167392146f9Ad81568C134B5f33c810126",
     "RolesAuthority": "0x5EAa2b9369644B99d482bE0F184046aa62e90B9d",
