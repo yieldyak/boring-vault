@@ -8,7 +8,7 @@ import {MilkUSDAIDecoderAndSanitizer} from "../../../../src/base/DecodersAndSani
 import "forge-std/Script.sol";
 
 /**
- *  forge script script/ArchitectureDeployments/Avalanche/yyAVAXai/RedeployUSDMilkAIDecoderAndSanitizer.s.sol:RedeployUSDMilkAIDecoderAndSanitizer --account yak-deployer --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
+ *  forge script script/ArchitectureDeployments/Avalanche/yyUSDai/RedeployUSDMilkAIDecoderAndSanitizer.s.sol:RedeployUSDMilkAIDecoderAndSanitizer --account yak-deployer --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
 contract RedeployUSDMilkAIDecoderAndSanitizer is Script, AvalancheAddresses {
