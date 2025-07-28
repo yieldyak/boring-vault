@@ -6,6 +6,7 @@ import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocol
 import {BenqiDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/BenqiDecoderAndSanitizer.sol";
 import {DeltaPrimeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/DeltaPrimeDecoderAndSanitizer.sol";
 import {ERC4626DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/ERC4626DecoderAndSanitizer.sol";
+import {MerklDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/MerklDecoderAndSanitizer.sol";
 import {YakStrategyDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/YakStrategyDecoderAndSanitizer.sol";
 import {YakSimpleSwapDecoderAndSanitizer} from
@@ -17,6 +18,7 @@ contract MilkUSDAIDecoderAndSanitizer is
     BenqiDecoderAndSanitizer,
     DeltaPrimeDecoderAndSanitizer,
     ERC4626DecoderAndSanitizer,
+    MerklDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
     YakSimpleSwapDecoderAndSanitizer
 {
