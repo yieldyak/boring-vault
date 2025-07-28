@@ -358,4 +358,12 @@ contract DecoderCustomTypes {
         address refundTo;
         uint256 deadline;
     }
+    // ========================================= YakSwap =========================================
+
+    struct YakSwapTrade {
+        uint256 amountIn;
+        uint256 amountOut;
+        address[] path;
+        address[] adapters;
+    }
 }
