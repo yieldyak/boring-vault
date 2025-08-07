@@ -10,22 +10,20 @@ import {SuzakuDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/SuzakuDe
 
 /**
  *  source .env && forge script script/ArchitectureDeployments/Avalanche/sSUZ/DeploySSuz.s.sol:DeploySSuz --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
+ * forge script script/ArchitectureDeployments/Avalanche/sSUZ/DeploySSuz.s.sol:DeploySSuz --account yak-deployer --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
 contract DeploySSuz is DeployArcticArchitecture, AvalancheAddresses {
     using AddressToBytes32Lib for address;
-
-    uint256 public privateKey;
 
     // Deployment parameters
     string public boringVaultName = "Staked SUZ";
     string public boringVaultSymbol = "sSUZ";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
-    address public deployerContractAddress = 0x0000000000000000000000000000000000000000;
+    address public deployerContractAddress = 0x48519A33BBf709112B8011c4f34A1120c780922c;
 
     function setUp() external {
-        privateKey = vm.envUint("LIQUID_DEPLOYER");
         vm.createSelectFork("avalanche");
     }
 
@@ -90,7 +88,7 @@ contract DeploySSuz is DeployArcticArchitecture, AvalancheAddresses {
         uint64 shareLockPeriod = 0;
         address delayedWithdrawFeeAddress = liquidPayoutAddress;
 
-        vm.startBroadcast(privateKey);
+        vm.startBroadcast();
 
         _deploy(
             "AvalancheSSuzDeployment.json",
