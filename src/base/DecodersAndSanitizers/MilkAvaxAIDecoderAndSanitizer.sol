@@ -5,6 +5,8 @@ import {BaseDecoderAndSanitizer, DecoderCustomTypes} from "src/base/DecodersAndS
 import {NativeWrapperDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/NativeWrapperDecoderAndSanitizer.sol";
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
+import {BlackholeDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/BlackholeDecoderAndSanitizer.sol";
 import {DeltaPrimeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/DeltaPrimeDecoderAndSanitizer.sol";
 import {LFJLBRouterDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/LFJLBRouterDecoderAndSanitizer.sol";
@@ -25,6 +27,7 @@ contract MilkAvaxAIDecoderAndSanitizer is
     BaseDecoderAndSanitizer,
     NativeWrapperDecoderAndSanitizer,
     AaveV3DecoderAndSanitizer,
+    BlackholeDecoderAndSanitizer,
     DeltaPrimeDecoderAndSanitizer,
     LFJLBRouterDecoderAndSanitizer,
     LFJLBHooksSimpleRewarderDecoderAndSanitizer,
@@ -34,7 +37,13 @@ contract MilkAvaxAIDecoderAndSanitizer is
     YakStrategyDecoderAndSanitizer,
     YakSimpleSwapDecoderAndSanitizer
 {
-    constructor(address _boringVault) BaseDecoderAndSanitizer(_boringVault) {}
+    constructor(
+        address _boringVault,
+        address _blackholeNonFungiblePositionManager
+    ) 
+        BaseDecoderAndSanitizer(_boringVault)
+        BlackholeDecoderAndSanitizer(_blackholeNonFungiblePositionManager)
+    {}
 
     function deposit()
         external
@@ -49,7 +58,7 @@ contract MilkAvaxAIDecoderAndSanitizer is
     function withdraw(uint256)
         external
         pure
-        override(NativeWrapperDecoderAndSanitizer, YakStrategyDecoderAndSanitizer)
+        override(NativeWrapperDecoderAndSanitizer, YakStrategyDecoderAndSanitizer, BlackholeDecoderAndSanitizer)
         returns (bytes memory addressesFound)
     {
         // No addresses to sanitize
@@ -115,7 +124,7 @@ contract MilkAvaxAIDecoderAndSanitizer is
     function deposit(uint256) 
         external 
         pure 
-        override(YakStrategyDecoderAndSanitizer, DeltaPrimeDecoderAndSanitizer)
+        override(YakStrategyDecoderAndSanitizer, DeltaPrimeDecoderAndSanitizer, BlackholeDecoderAndSanitizer)
         returns (bytes memory addressesFound)
     {
         // No addresses to sanitize
