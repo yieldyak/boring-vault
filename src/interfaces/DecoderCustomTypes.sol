@@ -324,6 +324,13 @@ contract DecoderCustomTypes {
         address recipient;
         uint256 deadline;
     }
+
+    struct IncentiveKey {
+        address rewardToken;
+        address bonusRewardToken;
+        address pool;
+        uint256 nonce;
+    }
     // ========================================= StableJack =========================================
 
     struct StableJackGroupCore {
