@@ -145,13 +145,13 @@ abstract contract BlackholeDecoderAndSanitizer is BaseDecoderAndSanitizer {
         addressesFound = abi.encodePacked(account);
     }
 
-    function claimRewards(address gauge, uint256[] calldata /*tokenIds*/, bool /*isBonusReward*/ ) external pure virtual returns (bytes memory addressesFound) {
-        addressesFound = abi.encodePacked(gauge);
-    }
-
     //============================== BLACKHOLE FARMING CENTER ===============================
 
     function collectRewards(DecoderCustomTypes.IncentiveKey calldata incentiveKey, uint256 /*tokenId*/ ) external pure virtual returns (bytes memory addressesFound) {  
         addressesFound = abi.encodePacked(incentiveKey.rewardToken, incentiveKey.bonusRewardToken, incentiveKey.pool);
+    }
+
+    function claimReward(address rewardToken, address to, uint256 /*amountRequested*/ ) external pure virtual returns (bytes memory addressesFound) {
+        addressesFound = abi.encodePacked(rewardToken, to);
     }
 }
