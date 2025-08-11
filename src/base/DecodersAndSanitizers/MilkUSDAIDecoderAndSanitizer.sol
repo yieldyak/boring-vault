@@ -4,6 +4,8 @@ pragma solidity 0.8.21;
 import {BaseDecoderAndSanitizer, DecoderCustomTypes} from "src/base/DecodersAndSanitizers/BaseDecoderAndSanitizer.sol";
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
 import {BenqiDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/BenqiDecoderAndSanitizer.sol";
+import {BlackholeDecoderAndSanitizer} from
+    "src/base/DecodersAndSanitizers/Protocols/BlackholeDecoderAndSanitizer.sol";
 import {DeltaPrimeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/DeltaPrimeDecoderAndSanitizer.sol";
 import {ERC4626DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/ERC4626DecoderAndSanitizer.sol";
 import {MerklDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/MerklDecoderAndSanitizer.sol";
@@ -16,18 +18,22 @@ contract MilkUSDAIDecoderAndSanitizer is
     BaseDecoderAndSanitizer,
     AaveV3DecoderAndSanitizer,
     BenqiDecoderAndSanitizer,
+    BlackholeDecoderAndSanitizer,
     DeltaPrimeDecoderAndSanitizer,
     ERC4626DecoderAndSanitizer,
     MerklDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
     YakSimpleSwapDecoderAndSanitizer
 {
-    constructor(address _boringVault) BaseDecoderAndSanitizer(_boringVault) {}
+    constructor(address _boringVault, address _blackholeNonFungiblePositionManager) 
+        BaseDecoderAndSanitizer(_boringVault)
+        BlackholeDecoderAndSanitizer(_blackholeNonFungiblePositionManager)
+    {}
 
     function deposit(uint256) 
         external 
         pure 
-        override(YakStrategyDecoderAndSanitizer, DeltaPrimeDecoderAndSanitizer)
+        override(BlackholeDecoderAndSanitizer, DeltaPrimeDecoderAndSanitizer, YakStrategyDecoderAndSanitizer)
         returns (bytes memory addressesFound)
     {
         // No addresses to sanitize
@@ -66,7 +72,7 @@ contract MilkUSDAIDecoderAndSanitizer is
     function withdraw(uint256)
         external
         pure
-        override(YakStrategyDecoderAndSanitizer)
+        override(BlackholeDecoderAndSanitizer, YakStrategyDecoderAndSanitizer)
         returns (bytes memory addressesFound)
     {
         // No addresses to sanitize
