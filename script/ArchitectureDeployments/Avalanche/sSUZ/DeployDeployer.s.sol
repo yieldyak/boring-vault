@@ -11,10 +11,10 @@ import "forge-std/StdJson.sol";
 
 /**
  *  source .env && forge script script/ArchitectureDeployments/Avalanche/sSUZ/DeployDeployer.s.sol:DeployDeployerScript --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
+ * forge script script/ArchitectureDeployments/Avalanche/sSUZ/DeployDeployer.s.sol:DeployDeployerScript --account yak-deployer --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
  * @dev Optionally can change `--with-gas-price` to something more reasonable
  */
 contract DeployDeployerScript is Script, ContractNames, AvalancheAddresses {
-    uint256 public privateKey;
 
     // Contracts to deploy
     RolesAuthority public rolesAuthority;
@@ -23,14 +23,13 @@ contract DeployDeployerScript is Script, ContractNames, AvalancheAddresses {
     uint8 public DEPLOYER_ROLE = 1;
 
     function setUp() external {
-        privateKey = vm.envUint("LIQUID_DEPLOYER");
         vm.createSelectFork("avalanche");
     }
 
     function run() external {
         bytes memory creationCode;
         bytes memory constructorArgs;
-        vm.startBroadcast(privateKey);
+        vm.startBroadcast();
 
         deployer = new Deployer(dev0Address, Authority(address(0)));
         creationCode = type(RolesAuthority).creationCode;
