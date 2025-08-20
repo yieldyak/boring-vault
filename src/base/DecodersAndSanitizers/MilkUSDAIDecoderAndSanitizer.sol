@@ -9,6 +9,7 @@ import {BlackholeDecoderAndSanitizer} from
 import {DeltaPrimeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/DeltaPrimeDecoderAndSanitizer.sol";
 import {ERC4626DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/ERC4626DecoderAndSanitizer.sol";
 import {MerklDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/MerklDecoderAndSanitizer.sol";
+import {SiloIncentivesControllerDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SiloIncentivesControllerDecoderAndSanitizer.sol";
 import {YakStrategyDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/YakStrategyDecoderAndSanitizer.sol";
 import {YakSimpleSwapDecoderAndSanitizer} from
@@ -22,6 +23,7 @@ contract MilkUSDAIDecoderAndSanitizer is
     DeltaPrimeDecoderAndSanitizer,
     ERC4626DecoderAndSanitizer,
     MerklDecoderAndSanitizer,
+    SiloIncentivesControllerDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
     YakSimpleSwapDecoderAndSanitizer
 {
