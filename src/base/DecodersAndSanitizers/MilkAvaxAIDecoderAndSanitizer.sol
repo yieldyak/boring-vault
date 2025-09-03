@@ -8,12 +8,15 @@ import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocol
 import {BlackholeDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/BlackholeDecoderAndSanitizer.sol";
 import {DeltaPrimeDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/DeltaPrimeDecoderAndSanitizer.sol";
+import {ERC4626DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/ERC4626DecoderAndSanitizer.sol";
 import {LFJLBRouterDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/LFJLBRouterDecoderAndSanitizer.sol";
 import {LFJLBHooksSimpleRewarderDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/LFJLBHooksSimpleRewarderDecoderAndSanitizer.sol";
 import {LFJLBPairDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/LFJLBPairDecoderAndSanitizer.sol";
+import {MerklDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/MerklDecoderAndSanitizer.sol";
+import {SiloIncentivesControllerDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SiloIncentivesControllerDecoderAndSanitizer.sol";
 import {StableJackDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/StableJackDecoderAndSanitizer.sol";
 import {YakMilkDecoderAndSanitizer} from
@@ -29,9 +32,12 @@ contract MilkAvaxAIDecoderAndSanitizer is
     AaveV3DecoderAndSanitizer,
     BlackholeDecoderAndSanitizer,
     DeltaPrimeDecoderAndSanitizer,
+    ERC4626DecoderAndSanitizer,
     LFJLBRouterDecoderAndSanitizer,
     LFJLBHooksSimpleRewarderDecoderAndSanitizer,
     LFJLBPairDecoderAndSanitizer,
+    MerklDecoderAndSanitizer,
+    SiloIncentivesControllerDecoderAndSanitizer,
     StableJackDecoderAndSanitizer,
     YakMilkDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
