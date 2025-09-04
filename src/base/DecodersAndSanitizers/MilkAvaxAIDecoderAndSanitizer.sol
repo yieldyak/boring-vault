@@ -15,6 +15,7 @@ import {LFJLBHooksSimpleRewarderDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/LFJLBHooksSimpleRewarderDecoderAndSanitizer.sol";
 import {LFJLBPairDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/LFJLBPairDecoderAndSanitizer.sol";
+import {MasterChefDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/MasterChefDecoderAndSanitizer.sol";
 import {MerklDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/MerklDecoderAndSanitizer.sol";
 import {SiloIncentivesControllerDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SiloIncentivesControllerDecoderAndSanitizer.sol";
 import {StableJackDecoderAndSanitizer} from
@@ -36,6 +37,7 @@ contract MilkAvaxAIDecoderAndSanitizer is
     LFJLBRouterDecoderAndSanitizer,
     LFJLBHooksSimpleRewarderDecoderAndSanitizer,
     LFJLBPairDecoderAndSanitizer,
+    MasterChefDecoderAndSanitizer,
     MerklDecoderAndSanitizer,
     SiloIncentivesControllerDecoderAndSanitizer,
     StableJackDecoderAndSanitizer,
