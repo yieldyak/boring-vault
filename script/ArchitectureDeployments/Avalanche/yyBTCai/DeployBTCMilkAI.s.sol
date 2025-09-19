@@ -1,0 +1,122 @@
+// SPDX-License-Identifier: Apache-2.0
+pragma solidity 0.8.21;
+
+import {DeployArcticArchitecture, ERC20, Deployer} from "script/ArchitectureDeployments/DeployArcticArchitecture.sol";
+import {AddressToBytes32Lib} from "src/helper/AddressToBytes32Lib.sol";
+import {AvalancheAddresses} from "../AvalancheAddresses.sol";
+
+// Import Decoder and Sanitizer to deploy.
+import {MilkBTCAIDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/MilkBTCAIDecoderAndSanitizer.sol";
+
+/**
+ *  source .env && forge script script/ArchitectureDeployments/Avalanche/yyBTCai/DeployBTCMilkAI.s.sol:DeployBTCMilkAI --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
+ *  forge script script/ArchitectureDeployments/Avalanche/yyBTCai/DeployBTCMilkAI.s.sol:DeployBTCMilkAI --account yak-deployer --slow --broadcast --verifier-url 'https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan' --etherscan-api-key "verifyContract" --verify
+ * @dev Optionally can change `--with-gas-price` to something more reasonable
+ */
+contract DeployBTCMilkAI is DeployArcticArchitecture, AvalancheAddresses {
+    using AddressToBytes32Lib for address;
+
+    // Deployment parameters
+    string public boringVaultName = "Yak Milk Intelligent BTC";
+    string public boringVaultSymbol = "aiBTC";
+    uint8 public boringVaultDecimals = 18;
+    address public owner = dev0Address;
+    address public deployerContractAddress = 0xA541b21cF2994F93127438774e0Bd79F95cb5d59;
+    address public blackholeNonFungiblePositionManager = 0x3fED017EC0f5517Cdf2E8a9a4156c64d74252146;
+
+    function setUp() external {
+        vm.createSelectFork("avalanche");
+    }
+
+    function run() external {
+        // Configure the deployment.
+        configureDeployment.deployContracts = true;
+        configureDeployment.setupRoles = true;
+        configureDeployment.setupDepositAssets = true;
+        configureDeployment.setupWithdrawAssets = true;
+        configureDeployment.finishSetup = true;
+        configureDeployment.setupTestUser = true;
+        configureDeployment.saveDeploymentDetails = true;
+        configureDeployment.deployerAddress = deployerContractAddress;
+        configureDeployment.WETH = address(WETH);
+        configureDeployment.initiatePullFundsFromVault = true;
+
+        // Save deployer.
+        deployer = Deployer(configureDeployment.deployerAddress);
+
+        // Define names to determine where contracts are deployed.
+        names.rolesAuthority = AvalancheVaultRolesAuthorityName;
+        names.lens = ArcticArchitectureLensName;
+        names.boringVault = AvalancheVaultName;
+        names.manager = AvalancheVaultManagerName;
+        names.accountant = AvalancheVaultAccountantName;
+        names.teller = AvalancheVaultTellerName;
+        names.rawDataDecoderAndSanitizer = AvalancheVaultDecoderAndSanitizerName;
+        names.delayedWithdrawer = AvalancheVaultDelayedWithdrawer;
+
+        // Define Accountant Parameters.
+        accountantParameters.payoutAddress = liquidPayoutAddress;
+        accountantParameters.base = BTCb;
+        // Decimals are in terms of `base`.
+        accountantParameters.startingExchangeRate = 1e8;
+        //  4 decimals
+        accountantParameters.managementFee = 0.02e4;
+        accountantParameters.performanceFee = 0;
+        accountantParameters.allowedExchangeRateChangeLower = 0.995e4;
+        accountantParameters.allowedExchangeRateChangeUpper = 1.005e4;
+        // Minimum time(in seconds) to pass between updated without triggering a pause.
+        accountantParameters.minimumUpateDelayInSeconds = 1 days / 4;
+
+        // Define Decoder and Sanitizer deployment details.
+        bytes memory creationCode = type(MilkBTCAIDecoderAndSanitizer).creationCode;
+        bytes memory constructorArgs = abi.encode(deployer.getAddress(names.boringVault), blackholeNonFungiblePositionManager);
+
+        // Configure deposit assets
+        depositAssets.push(
+            DepositAsset({
+                asset: ERC20(BTCb),
+                isPeggedToBase: true,
+                rateProvider: address(0),
+                genericRateProviderName: "", // Not needed
+                target: address(0), // Not needed
+                selector: bytes4(0), // Not needed
+                params: [bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0), bytes32(0)]
+            })
+        );
+
+        // Setup withdraw assets.
+        withdrawAssets.push(
+            WithdrawAsset({
+                asset: BTCb,
+                withdrawDelay: 8 hours,
+                completionWindow: 24 hours,
+                withdrawFee: 0,
+                maxLoss: 0.01e4
+            })
+        );
+
+        bool allowPublicDeposits = true;
+        bool allowPublicWithdraws = true;
+        uint64 shareLockPeriod = 0;
+        address delayedWithdrawFeeAddress = liquidPayoutAddress;
+
+        vm.startBroadcast();
+
+        _deploy(
+            "AvalancheBTCMilkAIDeployment.json",
+            owner,
+            boringVaultName,
+            boringVaultSymbol,
+            boringVaultDecimals,
+            creationCode,
+            constructorArgs,
+            delayedWithdrawFeeAddress,
+            allowPublicDeposits,
+            allowPublicWithdraws,
+            shareLockPeriod,
+            dev0Address
+        );
+
+        vm.stopBroadcast();
+    }
+}
