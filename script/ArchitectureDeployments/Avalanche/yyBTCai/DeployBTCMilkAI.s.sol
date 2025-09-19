@@ -21,7 +21,8 @@ contract DeployBTCMilkAI is DeployArcticArchitecture, AvalancheAddresses {
     string public boringVaultSymbol = "aiBTC";
     uint8 public boringVaultDecimals = 18;
     address public owner = dev0Address;
-    address public deployerContractAddress = 0x07f66f64Bb2CF9B619468f1D46f52d48646f080D;
+    address public deployerContractAddress = 0xA541b21cF2994F93127438774e0Bd79F95cb5d59;
+    address public blackholeNonFungiblePositionManager = 0x3fED017EC0f5517Cdf2E8a9a4156c64d74252146;
 
     function setUp() external {
         vm.createSelectFork("avalanche");
@@ -68,7 +69,7 @@ contract DeployBTCMilkAI is DeployArcticArchitecture, AvalancheAddresses {
 
         // Define Decoder and Sanitizer deployment details.
         bytes memory creationCode = type(MilkBTCAIDecoderAndSanitizer).creationCode;
-        bytes memory constructorArgs = abi.encode(deployer.getAddress(names.boringVault));
+        bytes memory constructorArgs = abi.encode(deployer.getAddress(names.boringVault), blackholeNonFungiblePositionManager);
 
         // Configure deposit assets
         depositAssets.push(
