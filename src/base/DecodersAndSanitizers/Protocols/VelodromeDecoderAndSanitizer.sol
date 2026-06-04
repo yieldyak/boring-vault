@@ -32,7 +32,7 @@ abstract contract VelodromeDecoderAndSanitizer is BaseDecoderAndSanitizer {
         virtual
         returns (bytes memory addressesFound)
     {
-        if(params.sqrtPriceX96 != 0) {
+        if (params.sqrtPriceX96 != 0) {
             revert VelodromeDecoderAndSanitizer__PoolCreationNotAllowed();
         }
         // Return addresses found
@@ -89,7 +89,14 @@ abstract contract VelodromeDecoderAndSanitizer is BaseDecoderAndSanitizer {
         addressesFound = abi.encodePacked(params.recipient);
     }
 
-    function burn(uint256 /*tokenId*/ ) external pure virtual returns (bytes memory addressesFound) {
+    function burn(
+        uint256 /*tokenId*/
+    )
+        external
+        pure
+        virtual
+        returns (bytes memory addressesFound)
+    {
         // positionManager.burn(tokenId) will verify that the tokenId has no liquidity, and no tokens owed.
         // Nothing to sanitize or return
         return addressesFound;
@@ -107,7 +114,11 @@ abstract contract VelodromeDecoderAndSanitizer is BaseDecoderAndSanitizer {
         uint256, /*amountBMin*/
         address to,
         uint256 /*deadline*/
-    ) external pure returns (bytes memory addressesFound) {
+    )
+        external
+        pure
+        returns (bytes memory addressesFound)
+    {
         // Nothing to sanitize
         // Return addresses found
         addressesFound = abi.encodePacked(tokenA, tokenB, to);
@@ -122,26 +133,58 @@ abstract contract VelodromeDecoderAndSanitizer is BaseDecoderAndSanitizer {
         uint256, /*amountBMin*/
         address to,
         uint256 /*deadline*/
-    ) external pure returns (bytes memory addressesFound) {
+    )
+        external
+        pure
+        returns (bytes memory addressesFound)
+    {
         // Nothing to sanitize
         // Return addresses found
         addressesFound = abi.encodePacked(tokenA, tokenB, to);
     }
 
-    //============================== VELODROME V2/V3 GAUGE ===============================
+    //============================== VELODROME V2 POOL ===============================
 
-    function deposit(uint256 /*tokenId_or_amount*/ ) external pure virtual returns (bytes memory addressesFound) {
+    function claimFees() external pure virtual returns (bytes memory addressesFound) {
         // Nothing to sanitize or return
         return addressesFound;
     }
 
-    function withdraw(uint256 /*tokenId_or_amount*/ ) external pure virtual returns (bytes memory addressesFound) {
+    //============================== VELODROME V2/V3 GAUGE ===============================
+
+    function deposit(
+        uint256 /*tokenId_or_amount*/
+    )
+        external
+        pure
+        virtual
+        returns (bytes memory addressesFound)
+    {
+        // Nothing to sanitize or return
+        return addressesFound;
+    }
+
+    function withdraw(
+        uint256 /*tokenId_or_amount*/
+    )
+        external
+        pure
+        virtual
+        returns (bytes memory addressesFound)
+    {
         // Nothing to sanitize or return
         return addressesFound;
     }
 
     // Only callable on V3 gauge
-    function getReward(uint256 /*tokenId*/ ) external pure virtual returns (bytes memory addressesFound) {
+    function getReward(
+        uint256 /*tokenId*/
+    )
+        external
+        pure
+        virtual
+        returns (bytes memory addressesFound)
+    {
         // Nothing to sanitize or return
         return addressesFound;
     }

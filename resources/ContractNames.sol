@@ -25,4 +25,19 @@ contract ContractNames {
     string public constant AvalancheVaultTellerName = "Avalanche Token Vault Teller With Multi Asset Support V1.0";
     string public constant AvalancheVaultDecoderAndSanitizerName = "Avalanche Token Vault Decoder and Sanitizer V1.0";
     string public constant AvalancheVaultDelayedWithdrawer = "Avalanche Token Vault Delayed Withdrawer V1.0";
+
+    // Base Intelligent USD names
+    string public constant BaseIntelligentUSDLensName = "Base Intelligent USD Lens V1.0";
+    string public constant BaseIntelligentUSDRolesAuthorityName = "Base Intelligent USD RolesAuthority V1.0";
+    string public constant BaseIntelligentUSDBoringVaultName = "Base Intelligent USD BoringVault V1.0";
+    string public constant BaseIntelligentUSDBoringVaultManagerName =
+        "Base Intelligent USD BoringVault Manager With Merkle Verification V1.0";
+    string public constant BaseIntelligentUSDBoringVaultAccountantName =
+        "Base Intelligent USD BoringVault Accountant With Rate Providers V1.0";
+    string public constant BaseIntelligentUSDBoringVaultTellerName =
+        "Base Intelligent USD BoringVault Teller With Multi Asset Support V1.0";
+    string public constant BaseIntelligentUSDBoringVaultDecoderAndSanitizerName =
+        "Base Intelligent USD BoringVault Decoder and Sanitizer V1.0";
+    string public constant BaseIntelligentUSDBoringVaultDelayedWithdrawer =
+        "Base Intelligent USD BoringVault Delayed Withdrawer V1.0";
 }
