@@ -3,6 +3,7 @@ pragma solidity 0.8.21;
 
 import {BaseDecoderAndSanitizer, DecoderCustomTypes} from "src/base/DecodersAndSanitizers/BaseDecoderAndSanitizer.sol";
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
+import {ERC4626DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/ERC4626DecoderAndSanitizer.sol";
 import {
     NativeWrapperDecoderAndSanitizer
 } from "src/base/DecodersAndSanitizers/Protocols/NativeWrapperDecoderAndSanitizer.sol";
@@ -18,6 +19,7 @@ import {YoDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/Yo
 contract IntelligentUSDBaseDecoderAndSanitizer is
     BaseDecoderAndSanitizer,
     AaveV3DecoderAndSanitizer,
+    ERC4626DecoderAndSanitizer,
     NativeWrapperDecoderAndSanitizer,
     VelodromeDecoderAndSanitizer,
     YakSimpleSwapDecoderAndSanitizer,
