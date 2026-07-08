@@ -142,7 +142,7 @@ contract DecoderCustomTypes {
         uint256 guessOffchain; // pass 0 in to skip this variable
         uint256 maxIteration; // every iteration, the diff between guessMin and guessMax will be divided by 2
         uint256 eps; // the max eps between the returned result & the correct result, base 1e18. Normally this number will be set
-            // to 1e15 (1e18/1000 = 0.1%)
+        // to 1e15 (1e18/1000 = 0.1%)
     }
 
     struct SwapData {

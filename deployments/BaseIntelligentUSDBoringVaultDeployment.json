@@ -1,0 +1,41 @@
+{
+  "DepositAssets": {
+    "USDC": {
+      "isPeggedToBase": true,
+      "rateProvider": "0x0000000000000000000000000000000000000000"
+    }
+  },
+  "WithdrawAssets": {
+    "USDC": {
+      "CompletionWindow": 86400,
+      "MaxLoss": 100,
+      "WithdrawDelay": 28800,
+      "WithdrawFee": 0
+    }
+  },
+  "accountantConfiguration": {
+    "AllowedExchangeRateChangeLower": 9950,
+    "AllowedExchangeRateChangeUpper": 10050,
+    "Base": "USDC",
+    "BaseAddress": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+    "ManagementFee": 0,
+    "MinimumUpateDelayInSeconds": 21600,
+    "PayoutAddress": "0xEA3e895b0696e161C68486Ee2F85e6Cc6ef962d0",
+    "StartingExchangeRate": 1000000
+  },
+  "core": {
+    "AccountantWithRateProviders": "0x0D7e98D765E19760499670ba674079442451eeb8",
+    "BarebonesManagerWithMerkleVerification": "0x8f3619800049aa588aB684649e9C3db893fE00BE",
+    "BoringVault": "0xB5803023B8fa8BFe7d64E373297dFaA24e3B5962",
+    "DecoderAndSanitizer": "0x845CCcBd66c6F84f5AB7E4a05C4b10f7631E7bCC",
+    "DelayedWithdraw": "0x0e3f024785862DD95C055803053158b8180ce27B",
+    "Lens": "0xa3eB32cc9421762246eD736F88C580C84Ad9acb8",
+    "RolesAuthority": "0xA07300c685950C3bD045BcdE517B119aaE4de8e3",
+    "TellerWithMultiAssetSupport": "0xA5D8A904Fd1e9d654f838a5796044816008BEc75"
+  },
+  "depositConfiguration": {
+    "AllowPublicDeposits": true,
+    "AllowPublicWithdraws": true,
+    "ShareLockPeriod": 0
+  }
+}
