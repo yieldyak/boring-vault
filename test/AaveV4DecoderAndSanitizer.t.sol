@@ -20,6 +20,21 @@ contract MockAaveV4Spoke is IAaveV4Spoke {
     }
 }
 
+contract RawAaveV4SpokeMock {
+    address public constant UNDERLYING = address(0xA3);
+    address public constant HUB = address(0xB3);
+
+    fallback() external {
+        require(msg.sig == IAaveV4Spoke.getReserve.selector);
+        bytes memory response = abi.encode(
+            UNDERLYING, HUB, type(uint16).max, type(uint8).max, type(uint24).max, type(uint8).max, type(uint32).max
+        );
+        assembly {
+            return(add(response, 0x20), mload(response))
+        }
+    }
+}
+
 contract TestAaveV4DecoderAndSanitizer is AaveV4DecoderAndSanitizer {
     constructor(address boringVault, address spoke)
         BaseDecoderAndSanitizer(boringVault)
@@ -66,5 +81,12 @@ contract AaveV4DecoderAndSanitizerTest is Test {
         assertEq(wavaxAddresses, abi.encodePacked(WAVAX, ON_BEHALF_OF));
         assertEq(usdcAddresses, abi.encodePacked(USDC, ON_BEHALF_OF));
         assertNotEq(keccak256(wavaxAddresses), keccak256(usdcAddresses));
+    }
+
+    function testDecodesRawAaveV4ReserveAbiWithPopulatedFields() external {
+        RawAaveV4SpokeMock rawSpoke = new RawAaveV4SpokeMock();
+        TestAaveV4DecoderAndSanitizer rawDecoder = new TestAaveV4DecoderAndSanitizer(BORING_VAULT, address(rawSpoke));
+
+        assertEq(rawDecoder.supply(5, 1e6, ON_BEHALF_OF), abi.encodePacked(rawSpoke.UNDERLYING(), ON_BEHALF_OF));
     }
 }
