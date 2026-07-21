@@ -3,34 +3,16 @@ pragma solidity 0.8.21;
 
 import {BaseDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/BaseDecoderAndSanitizer.sol";
 
-interface IAaveV4Spoke {
-    struct Reserve {
-        address underlying;
-        address hub;
-        uint16 assetId;
-        uint8 decimals;
-        uint24 collateralRisk;
-        uint8 flags;
-        uint32 dynamicConfigKey;
-    }
-
-    function getReserve(uint256 reserveId) external view returns (Reserve memory);
-}
-
 abstract contract AaveV4DecoderAndSanitizer is BaseDecoderAndSanitizer {
-    //============================== IMMUTABLES ===============================
+    //============================== ERRORS ===============================
 
-    IAaveV4Spoke internal immutable aaveV4Spoke;
-
-    constructor(address _aaveV4Spoke) {
-        aaveV4Spoke = IAaveV4Spoke(_aaveV4Spoke);
-    }
+    error AaveV4DecoderAndSanitizer__ReserveIdTooLarge();
 
     //============================== AAVE V4 ===============================
 
     function supply(uint256 reserveId, uint256, address onBehalfOf)
         external
-        view
+        pure
         virtual
         returns (bytes memory addressesFound)
     {
@@ -39,7 +21,7 @@ abstract contract AaveV4DecoderAndSanitizer is BaseDecoderAndSanitizer {
 
     function borrow(uint256 reserveId, uint256, address onBehalfOf)
         external
-        view
+        pure
         virtual
         returns (bytes memory addressesFound)
     {
@@ -48,7 +30,7 @@ abstract contract AaveV4DecoderAndSanitizer is BaseDecoderAndSanitizer {
 
     function repay(uint256 reserveId, uint256, address onBehalfOf)
         external
-        view
+        pure
         virtual
         returns (bytes memory addressesFound)
     {
@@ -57,7 +39,7 @@ abstract contract AaveV4DecoderAndSanitizer is BaseDecoderAndSanitizer {
 
     function withdraw(uint256 reserveId, uint256, address onBehalfOf)
         external
-        view
+        pure
         virtual
         returns (bytes memory addressesFound)
     {
@@ -66,10 +48,14 @@ abstract contract AaveV4DecoderAndSanitizer is BaseDecoderAndSanitizer {
 
     function _decodeReserveAndAccount(uint256 reserveId, address onBehalfOf)
         internal
-        view
+        pure
         returns (bytes memory addressesFound)
     {
-        IAaveV4Spoke.Reserve memory reserve = aaveV4Spoke.getReserve(reserveId);
-        addressesFound = abi.encodePacked(reserve.underlying, onBehalfOf);
+        if (reserveId >= type(uint160).max) revert AaveV4DecoderAndSanitizer__ReserveIdTooLarge();
+
+        // The manager includes the target Spoke in each Merkle leaf. Encoding reserveId + 1
+        // as an address-shaped sentinel therefore constrains the exact local reserve without
+        // coupling this reusable decoder to one Spoke. Adding one keeps reserve ID zero nonzero.
+        addressesFound = abi.encodePacked(address(uint160(reserveId + 1)), onBehalfOf);
     }
 }
