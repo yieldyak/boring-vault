@@ -3,6 +3,7 @@ pragma solidity 0.8.21;
 
 import {BaseDecoderAndSanitizer, DecoderCustomTypes} from "src/base/DecodersAndSanitizers/BaseDecoderAndSanitizer.sol";
 import {AaveV3DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV3DecoderAndSanitizer.sol";
+import {AaveV4DecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/AaveV4DecoderAndSanitizer.sol";
 import {AesyxBorrowerOperations} from "src/base/DecodersAndSanitizers/Protocols/aesyx/AesyxBorrowerOperations.sol";
 import {AesyxStabilityPool} from "src/base/DecodersAndSanitizers/Protocols/aesyx/AesyxStabilityPool.sol";
 import {AesyxWrapper} from "src/base/DecodersAndSanitizers/Protocols/aesyx/AesyxWrapper.sol";
@@ -26,6 +27,7 @@ import {YakSimpleSwapDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/P
 contract MilkBTCAIDecoderAndSanitizer is
     BaseDecoderAndSanitizer,
     AaveV3DecoderAndSanitizer,
+    AaveV4DecoderAndSanitizer,
     AesyxBorrowerOperations,
     AesyxStabilityPool,
     AesyxWrapper,
