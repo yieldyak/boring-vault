@@ -7,6 +7,7 @@ abstract contract AaveV4DecoderAndSanitizer is BaseDecoderAndSanitizer {
     //============================== ERRORS ===============================
 
     error AaveV4DecoderAndSanitizer__ReserveIdTooLarge();
+    error AaveV4DecoderAndSanitizer__CollateralDisableNotAllowed();
 
     //============================== AAVE V4 ===============================
 
@@ -43,6 +44,16 @@ abstract contract AaveV4DecoderAndSanitizer is BaseDecoderAndSanitizer {
         virtual
         returns (bytes memory addressesFound)
     {
+        addressesFound = _decodeReserveAndAccount(reserveId, onBehalfOf);
+    }
+
+    function setUsingAsCollateral(uint256 reserveId, bool useAsCollateral, address onBehalfOf)
+        external
+        pure
+        virtual
+        returns (bytes memory addressesFound)
+    {
+        if (!useAsCollateral) revert AaveV4DecoderAndSanitizer__CollateralDisableNotAllowed();
         addressesFound = _decodeReserveAndAccount(reserveId, onBehalfOf);
     }
 

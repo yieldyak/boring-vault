@@ -35,6 +35,15 @@ contract AaveV4DecoderAndSanitizerTest is Test {
         assertEq(decoder.withdraw(2, 1e6, ON_BEHALF_OF), abi.encodePacked(address(3), ON_BEHALF_OF));
     }
 
+    function testSetUsingAsCollateralReturnsReserveIdSentinelAndOnBehalfOf() external {
+        assertEq(decoder.setUsingAsCollateral(2, true, ON_BEHALF_OF), abi.encodePacked(address(3), ON_BEHALF_OF));
+    }
+
+    function testSetUsingAsCollateralRejectsDisablingCollateral() external {
+        vm.expectRevert(AaveV4DecoderAndSanitizer.AaveV4DecoderAndSanitizer__CollateralDisableNotAllowed.selector);
+        decoder.setUsingAsCollateral(2, false, ON_BEHALF_OF);
+    }
+
     function testReserveIdZeroUsesNonZeroSentinel() external {
         assertEq(decoder.supply(0, 1 ether, ON_BEHALF_OF), abi.encodePacked(address(1), ON_BEHALF_OF));
     }
