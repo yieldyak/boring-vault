@@ -23,6 +23,7 @@ import {MerklDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols
 import {NativeWrapperDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/NativeWrapperDecoderAndSanitizer.sol";
 import {SparkRewardsDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/SparkRewardsDecoderAndSanitizer.sol";
 import {Silo} from "src/base/DecodersAndSanitizers/Protocols/silo/Silo.sol";
+import {YakMilkDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/YakMilkDecoderAndSanitizer.sol";
 import {YakStrategyDecoderAndSanitizer} from
     "src/base/DecodersAndSanitizers/Protocols/YakStrategyDecoderAndSanitizer.sol";
 import {YakSimpleSwapDecoderAndSanitizer} from
@@ -47,6 +48,7 @@ contract MilkUSDAIDecoderAndSanitizer is
     NativeWrapperDecoderAndSanitizer,
     Silo,
     SparkRewardsDecoderAndSanitizer,
+    YakMilkDecoderAndSanitizer,
     YakStrategyDecoderAndSanitizer,
     YakSimpleSwapDecoderAndSanitizer
 {
