@@ -14,6 +14,7 @@ import {
 import {
     MorphoBlueDecoderAndSanitizer
 } from "src/base/DecodersAndSanitizers/Protocols/MorphoBlueDecoderAndSanitizer.sol";
+import {MerklDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/MerklDecoderAndSanitizer.sol";
 import {YoDecoderAndSanitizer} from "src/base/DecodersAndSanitizers/Protocols/YoDecoderAndSanitizer.sol";
 
 contract IntelligentUSDBaseDecoderAndSanitizer is
@@ -24,6 +25,7 @@ contract IntelligentUSDBaseDecoderAndSanitizer is
     VelodromeDecoderAndSanitizer,
     YakSimpleSwapDecoderAndSanitizer,
     MorphoBlueDecoderAndSanitizer,
+    MerklDecoderAndSanitizer,
     YoDecoderAndSanitizer
 {
     constructor(address _boringVault, address _velodromeNonFungiblePositionManager)
